@@ -116,12 +116,12 @@ namespace SolarPhobia.Application.Tests
         [TearDown]
         public void TearDown()
         {
-            _inputActions?.Dispose();
             _controller?.Dispose();
             if (_cameraGo != null) UnityEngine.Object.DestroyImmediate(_cameraGo);
             if (_playerGo != null) UnityEngine.Object.DestroyImmediate(_playerGo);
             if (_volumeGo != null) UnityEngine.Object.DestroyImmediate(_volumeGo);
             if (_profile != null) ScriptableObject.DestroyImmediate(_profile);
+            if (_inputActions != null) { _inputActions.Dispose(); }
         }
 
         // ═══════════════════════════════════════════════════════════
