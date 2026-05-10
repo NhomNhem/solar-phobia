@@ -81,7 +81,7 @@
                 return OUT;
             }
 
-            half4 frag(Varyings IN) : SV_Target
+            vector<float, 3> frag(Varyings IN) : SV_Target
             {
                 // 1. Tạo hiệu ứng nhấp nhô (Sine Wave Displacement)
                 float timeTime = _Time.y * _WaveSpeed;

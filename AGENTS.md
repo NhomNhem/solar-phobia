@@ -151,6 +151,10 @@ See `Assets/_Project/Domain/Rules/` for:
 - **Duplicate `using` directives**: Avoid declaring the same `using` namespace multiple times in a file. Unity compiler warns CS0105.
 - **R3 reactive patterns**: Use `ReactiveProperty<T>` and `ReadOnlyReactiveProperty<T>` for observable state. Subscribe via `.Subscribe()` and dispose via `CancellationToken` or `Dispose()`.
 - **VContainer `[Inject]` fields**: Must be `internal` visibility, not `private`. Private fields cannot be set by the source generator (VCON0007).
+- **R3 ReadOnlyReactiveProperty.Value**: Does NOT have a `.Value` accessor directly. Add a wrapper property like `public T CurrentStateValue => _currentState.Value` to expose the value.
+- **Unity types in services**: If using `Vector3`, `Vector2`, `Quaternion`, etc., add `using UnityEngine;` to the file.
+- **Test event types**: When mocking IPhaseStateMachine in tests, include `using SolarPhobia.Application.Messages;` for PhaseChangedEvent, DayStartEvent, NightStartEvent, ResolveEvent.
+- **PhaseState enum**: Always check `Assets/_Project/Domain/ValueObjects/PhaseState.cs` for valid values. Common valid states: `Boot`, `DayService`, `Dialogue`, `Order`, `SunsetWarning`, `NightTravel`, `ShrineArrival`, `EndingEvaluation`, `NightSurvival`, `ChoiceLock`.
 
 ## Production & Design Docs
 

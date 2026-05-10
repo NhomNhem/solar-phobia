@@ -49,6 +49,21 @@ _currentPhase
     .Subscribe(_ => EnableNightSystems());
 ```
 
+**Important**: `ReadOnlyReactiveProperty<T>` does NOT expose a `.Value` property directly. To access the current value:
+
+```csharp
+// Interface
+public interface IMyService {
+    MyState CurrentStateValue { get; }  // Wrapper property
+    ReadOnlyReactiveProperty<MyState> CurrentState { get; }  // Observable
+}
+
+// Implementation
+private readonly ReactiveProperty<MyState> _currentState = new(MyState.Idle);
+public MyState CurrentStateValue => _currentState.Value;
+public ReadOnlyReactiveProperty<MyState> CurrentState => _currentState;
+```
+
 ---
 
 ## Input System

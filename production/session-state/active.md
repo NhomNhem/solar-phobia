@@ -355,3 +355,13 @@ design/gdd/shadow-spatial-management.md (approved)
 - **Acceptance criteria**: 6/6 covered
 - **Blockers**: None
 - **Next**: /code-review then /story-done
+
+## Session Extract — /dev-story 2026-05-10
+- **Story**: production/epics/curse-effect-modules/story-001-curse-effect-core.md — Curse Effect Core — Hazard Spawning System
+- **Files created**:
+  - Assets/_Project/Application/Services/Interfaces/ICurseEffectManager.cs (interface + CurseEffectState enum + HazardEvent struct)
+  - Assets/_Project/Application/Services/CurseEffectManager.cs (implementation with R3 state machine)
+  - Assets/_Project/Application/Editor/Tests/CurseEffectCoreTests.cs (21 test methods covering AC-1 through AC-4)
+- **Acceptance criteria**: 4/4 covered (Idle, CurseActive, HazardTriggered, HazardCleared states)
+- **Blockers**: None
+- **Next**: /story-done

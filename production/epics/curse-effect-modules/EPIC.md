@@ -4,7 +4,7 @@
 > **GDD**: design/gdd/curse-effect-modules.md
 > **Architecture Module**: CurseEffectManager (from architecture.md)
 > **Status**: Ready
-> **Stories**: Not yet created — run `/create-stories curse-effect-modules`
+> **Stories**: 5 stories created — see below
 
 ## Overview
 
@@ -34,4 +34,14 @@ This epic is complete when:
 
 ## Next Step
 
-Run `/create-stories curse-effect-modules` to break this epic into implementable stories.
+Run `/story-readiness` on Story 001 to begin implementation.
+
+## Stories
+
+| # | Story | Type | Status |
+|---|-------|------|--------|
+| 001 | Curse Effect Core — Hazard Spawning System | Logic | Ready |
+| 002 | Water Trap Effect (Drag - Linh) | Logic | Ready |
+| 003 | Blood Net Effect (Block - Van) | Logic | Ready |
+| 004 | Illusion Platform Effect (FakeShrine - Minh) | Logic | Ready |
+| 005 | Visual/Audio Signatures Per Curse | Visual/Feel | Ready |
