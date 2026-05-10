@@ -1,6 +1,7 @@
 using System;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
+using SolarPhobia.Shared.InputActions;
 using VContainer;
 using VContainer.Unity;
 
@@ -39,6 +40,9 @@ namespace SolarPhobia.Application.Installers
             builder.Register<Movement2DCalculator>(Lifetime.Singleton).As<IMovement2DCalculator>();
             builder.Register<PlatformerFeelController>(Lifetime.Singleton).As<IPlatformerFeelController>();
             builder.Register<KarmaHazardService>(Lifetime.Singleton).As<IKarmaHazardService>();
+
+            // ── Input Actions (New Input System) ─────────────────────────
+            builder.Register<SolarPhobiaInputActions>(Lifetime.Singleton);
 
         }
     }

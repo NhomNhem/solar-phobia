@@ -39,8 +39,8 @@ namespace SolarPhobia.Shared.InputActions
         }
 
         // ── Public Properties ──────────────────────────────────────
-        /// <summary>Player action map — Move, Sprint, Interact.</summary>
-        public PlayerActions Player => _player;
+    /// <summary>Player action map — Move, Sprint, Interact, Look.</summary>
+    public PlayerActions Player => _player;
 
         /// <summary>UI action map — Click, Navigate, Submit, Cancel.</summary>
         public UIActions UI => _ui;
@@ -63,7 +63,7 @@ namespace SolarPhobia.Shared.InputActions
 
         // ── Player Action Map ──────────────────────────────────────
         /// <summary>
-        /// Player action map: Move (Vector2), Sprint (Button), Interact (Button).
+        /// Player action map: Move (Vector2), Sprint (Button), Interact (Button), Look (Vector2).
         /// Enable/disable independently from the UI map.
         /// </summary>
         public class PlayerActions
@@ -79,12 +79,16 @@ namespace SolarPhobia.Shared.InputActions
             /// <summary>E key / West button — contextual interact.</summary>
             public InputAction Interact { get; }
 
+            /// <summary>Mouse delta / right stick — camera look input (Y-axis only).</summary>
+            public InputAction Look     { get; }
+
             internal PlayerActions(SolarPhobiaInputActions wrapper)
             {
                 _map     = wrapper._asset.FindActionMap("Player", throwIfNotFound: true);
                 Move     = _map.FindAction("Move",     throwIfNotFound: true);
                 Sprint   = _map.FindAction("Sprint",   throwIfNotFound: true);
                 Interact = _map.FindAction("Interact", throwIfNotFound: true);
+                Look     = _map.FindAction("Look",     throwIfNotFound: true);
             }
 
             /// <summary>Enable the Player action map.</summary>
@@ -145,7 +149,8 @@ namespace SolarPhobia.Shared.InputActions
             ""actions"": [
                 { ""name"": ""Move"",     ""type"": ""Value"",  ""id"": ""a1b2c3d4-0001-0002-0001-000000000001"", ""expectedControlType"": ""Vector2"", ""processors"": """", ""interactions"": """", ""initialStateCheck"": true },
                 { ""name"": ""Sprint"",   ""type"": ""Button"", ""id"": ""a1b2c3d4-0001-0003-0001-000000000001"", ""expectedControlType"": ""Button"",  ""processors"": """", ""interactions"": """", ""initialStateCheck"": false },
-                { ""name"": ""Interact"", ""type"": ""Button"", ""id"": ""a1b2c3d4-0001-0004-0001-000000000001"", ""expectedControlType"": ""Button"",  ""processors"": """", ""interactions"": """", ""initialStateCheck"": false }
+                { ""name"": ""Interact"", ""type"": ""Button"", ""id"": ""a1b2c3d4-0001-0004-0001-000000000001"", ""expectedControlType"": ""Button"",  ""processors"": """", ""interactions"": """", ""initialStateCheck"": false },
+                { ""name"": ""Look"",     ""type"": ""Value"",  ""id"": ""a1b2c3d4-0001-0005-0001-000000000001"", ""expectedControlType"": ""Vector2"", ""processors"": """", ""interactions"": """", ""initialStateCheck"": true }
             ],
             ""bindings"": [
                 { ""name"": ""WASD"", ""id"": ""a1b2c3d4-0002-0001-0001-000000000001"", ""path"": ""2DVector"",             ""groups"": """",               ""action"": ""Move"",     ""isComposite"": true,  ""isPartOfComposite"": false },
@@ -157,7 +162,9 @@ namespace SolarPhobia.Shared.InputActions
                 { ""name"": """",     ""id"": ""a1b2c3d4-0003-0001-0001-000000000001"", ""path"": ""<Keyboard>/leftShift"", ""groups"": ""Keyboard&Mouse"", ""action"": ""Sprint"",   ""isComposite"": false, ""isPartOfComposite"": false },
                 { ""name"": """",     ""id"": ""a1b2c3d4-0003-0002-0001-000000000001"", ""path"": ""<Gamepad>/buttonSouth"",""groups"": ""Gamepad"",        ""action"": ""Sprint"",   ""isComposite"": false, ""isPartOfComposite"": false },
                 { ""name"": """",     ""id"": ""a1b2c3d4-0004-0001-0001-000000000001"", ""path"": ""<Keyboard>/e"",         ""groups"": ""Keyboard&Mouse"", ""action"": ""Interact"", ""isComposite"": false, ""isPartOfComposite"": false },
-                { ""name"": """",     ""id"": ""a1b2c3d4-0004-0002-0001-000000000001"", ""path"": ""<Gamepad>/buttonWest"", ""groups"": ""Gamepad"",        ""action"": ""Interact"", ""isComposite"": false, ""isPartOfComposite"": false }
+                { ""name"": """",     ""id"": ""a1b2c3d4-0004-0002-0001-000000000001"", ""path"": ""<Gamepad>/buttonWest"", ""groups"": ""Gamepad"",        ""action"": ""Interact"", ""isComposite"": false, ""isPartOfComposite"": false },
+                { ""name"": """",     ""id"": ""a1b2c3d4-0009-0001-0001-000000000001"", ""path"": ""<Mouse>/delta"",           ""groups"": ""Keyboard&Mouse"", ""action"": ""Look"",     ""isComposite"": false, ""isPartOfComposite"": false },
+                { ""name"": """",     ""id"": ""a1b2c3d4-0009-0002-0001-000000000001"", ""path"": ""<Gamepad>/rightStick"",    ""groups"": ""Gamepad"",        ""action"": ""Look"",     ""isComposite"": false, ""isPartOfComposite"": false }
             ]
         },
         {

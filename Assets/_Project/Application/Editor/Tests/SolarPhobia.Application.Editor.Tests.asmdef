@@ -4,7 +4,13 @@
     "references": [
         "SolarPhobia.Application",
         "SolarPhobia.Domain",
-        "UnityEngine.TestRunner"
+        "SolarPhobia.Shared",
+        "UnityEngine.TestRunner",
+        "VContainer",
+        "R3",
+        "R3.Unity",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"

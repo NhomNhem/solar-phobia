@@ -365,3 +365,13 @@ design/gdd/shadow-spatial-management.md (approved)
 - **Acceptance criteria**: 4/4 covered (Idle, CurseActive, HazardTriggered, HazardCleared states)
 - **Blockers**: None
 - **Next**: /story-done
+
+## Session Extract — /dev-story 2026-05-11
+- **Story**: production/epics/day-night-camera-transition/story-001-r3-driven-camera-controller.md — R3-Driven Camera Controller
+- **Files changed**:
+  - Assets/_Project/Application/Services/Interfaces/IDayNightCameraController.cs (created)
+  - Assets/_Project/Application/Services/DayNightCameraController.cs (created, 492 lines)
+  - Assets/_Project/Application/Editor/Tests/DayNightCameraTransitionTests.cs (created, 605 lines, 41 tests)
+- **Test written**: DayNightCameraTransitionTests.cs (41 test functions)
+- **Blockers**: None
+- **Next**: /code-review Assets/_Project/Application/Services/DayNightCameraController.cs Assets/_Project/Application/Services/Interfaces/IDayNightCameraController.cs then /story-done production/epics/day-night-camera-transition/story-001-r3-driven-camera-controller.md

@@ -4,7 +4,7 @@
 > **GDD**: design/gdd/audio-core-loop.md
 > **Architecture Module**: AudioMixDirector (from architecture.md)
 > **Status**: Ready
-> **Stories**: Not yet created — run `/create-stories audio-state-director`
+> **Stories**: 3 stories created — see below
 
 ## Overview
 
@@ -16,13 +16,16 @@ Audio State Director controls the sonic identity of Solar Phobia's core loop. It
 
 | ADR | Decision Summary | Engine Risk |
 |-----|-----------------|-------------|
-| (None) | No ADR exists for this system | — |
+| ADR-0011: Audio State Director with BroAudio | BroAudio-based AudioMixDirector with R3 phase subscriptions, ambient layer blending, MusicPlayer crossfade | MEDIUM — BroAudio is in-project but post-cutoff |
 
 ## GDD Requirements
 
 | TR-ID | Requirement | ADR Coverage |
 |-------|-------------|--------------|
-| (None tracked) | Day/night audio mix, phase snapshots, threat escalation cues, ambient layers | — |
+| TR-audio-001 | Day/night audio mix snapshots | ADR-0011 ✅ |
+| TR-audio-002 | Phase-gated music transitions | ADR-0011 ✅ |
+| TR-audio-003 | Ambient layer blending (ocean, wind, vocals, threat) | ADR-0011 ✅ |
+| TR-audio-004 | Event-driven SFX (footsteps, cover, hazards, strike) | ADR-0011 ✅ |
 
 ## Definition of Done
 
@@ -31,6 +34,15 @@ This epic is complete when:
 - All acceptance criteria from `design/gdd/audio-core-loop.md` are verified
 - All Visual/Feel stories have evidence docs with sign-off in `production/qa/evidence/`
 
+## Stories
+
+| Story | Type | Status | Acceptance Criteria |
+|-------|------|--------|-------------------|
+| Story 001: Phase-Gated Audio Snapshots | Integration | Ready | Day/Night BGM crossfade via R3, ambient layer blend, ChoiceLock freeze, Resolve stingers |
+| Story 002: Ambient Layer Blending | Integration | Ready | 4 layers (ocean/wind/vocals/threat) with independent volume control |
+| Story 003: Event-Driven SFX | Visual/Feel | Ready | Footsteps, cover, hazards, strike warning, relic pickup, death |
+
 ## Next Step
 
-Run `/create-stories audio-state-director` to break this epic into implementable stories.
+Run `/dev-story production/epics/audio-state-director/story-001-phase-gated-audio-snapshots.md`
+to begin implementation.
