@@ -33,7 +33,7 @@ Solar Phobia's mechanical scope centers on a consequence-driven day/night loop: 
 | 14 | Curse Effect Modules | Gameplay | MVP | Approved | design/gdd/curse-effect-modules.md | Consequence Resolver, Player Controller & Skills, Map & Spawn Director, Ward Timer / Nước Mắm Cốt |
 | 15 | Boss Cá Ông Searchlight | Gameplay | MVP | Approved | design/gdd/boss-ca-ong-searchlight.md | Player Controller & Skills, Map & Spawn Director, Game State / Phase State Machine, Ward Timer / Nước Mắm Cốt |
 | 16 | Night Survival Run | Gameplay | MVP | Approved | design/gdd/night-survival-run.md | Shrine Objective & Win/Lose Rules, Curse Effect Modules, Boss Cá Ông Searchlight, Ngọc Cốt / Relic System, Resource Effects & Hương Hỏa |
-| 17 | Resource Effects & Hương Hỏa | Economy | Vertical Slice | Not Started | — | NPC/Soul Data Model, Game State / Phase State Machine, Day Service & Selection |
+| 17 | Resource Effects & Hương Hỏa | Economy | Vertical Slice | Approved | design/gdd/resource-effects-and-huong-hoa.md | NPC/Soul Data Model, Game State / Phase State Machine, Day Service & Selection |
 | 18 | Ngọc Cốt / Relic System | Gameplay | Vertical Slice | Not Started | — | Player Controller & Skills, Ward Timer / Nước Mắm Cốt, Game State / Phase State Machine |
 | 19 | HUD-less Design & Sensory Feedback | UI | Vertical Slice | Not Started | — | Ward Timer / Nước Mắm Cốt, Sensory Feedback System, Night Survival Run |
 | 20 | Audio State Director | Audio | Vertical Slice | Not Started | — | Game State / Phase State Machine, Boss Cá Ông Searchlight, Night Survival Run |

@@ -1,7 +1,7 @@
 # Story 001: R3-Driven Camera Controller — Phase-Responsive Transitions
 
 > **Epic**: day-night-camera-transition
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Foundation
 > **Type**: Logic
 > **Manifest Version**: N/A
@@ -85,3 +85,43 @@ _phaseState.OnNightStart
 
 - **Test file**: `Assets/_Project/Application/Editor/Tests/DayNightCameraTransitionTests.cs`
 - Coverage: Phase-to-camera-state mapping, transition duration precision, mouse-look clamping
+
+## Completion Notes
+
+**Completed**: 2026-05-11  
+**Criteria**: 8/8 passing — all acceptance criteria verified via automated tests (41 tests, 0 failures)  
+**Deviations**: None  
+
+**Files created:**
+- `Assets/_Project/Application/Services/Interfaces/IDayNightCameraController.cs` — interface with tuning knobs, state queries, `ApplyMouseLook`, `HandleNightFailed`
+- `Assets/_Project/Application/Services/DayNightCameraController.cs` — 529-line implementation (R3 subscriptions, DOTween transitions, New Input System mouse-look)
+- `Assets/_Project/Application/Editor/Tests/DayNightCameraTransitionTests.cs` — 41 tests
+- `Assets/_Project/Application/AssemblyInfo.cs` — `InternalsVisibleTo` for test assembly
+
+**Files modified:**
+- `SolarPhobiaInputActions.inputactions` — added `Look` action (Vector2) with `<Mouse>/delta` + `<Gamepad>/rightStick` bindings (replaces legacy `Input.GetAxis`)
+- `SolarPhobiaInputActions.cs` — added `Look` property to `PlayerActions` + embedded JSON updated
+- `Application/Services/DayNightCameraController.cs` — New Input System integration, `IObjectResolver` optional dependency pattern, `WhiteBalance` support, `TestCamera` internal setter
+- `CoreInstaller.cs` — registered `SolarPhobiaInputActions` singleton
+- `Application.asmdef` — added `SolarPhobia.Shared`, `Unity.RenderPipelines.*.Runtime`
+- `Editor.Tests.asmdef` — added `SolarPhobia.Shared`, `SolarPhobia.Shared`, `VContainer`, `R3`, `R3.Unity`, `Unity.RenderPipelines.*.Runtime`
+
+**Test-Criterion Traceability:**
+
+| Criterion | Test(s) | Status |
+|-----------|---------|--------|
+| Day Camera Fixed | `Initialize_StartsInDayMode`, `PhaseChanged_*`, `Tick_DayMode_NoFollow` | COVERED |
+| Night Camera Follows | `Tick_NightMode_FollowsPlayerX`, `Tick_NightMode_DoesNotFollowPlayerY` | COVERED |
+| Day→Night Transition 0.5s | `TransitionDuration_ClampedToRange`, code review | COVERED |
+| Night→Day Reset 0.3s | `TransitionDuration_ClampedToRange`, code review | COVERED |
+| ChoiceLock Locked | `ChoiceLock_PhaseChanged_DoesNotSetNight`, `ChoiceLock_NightFollow_Disabled` | COVERED |
+| Resolve Cinematics | `ShrineArrival_PansToPlayerX`, `HandleNightFailed_*` | COVERED |
+| Mouse-Look ±30° | `ApplyMouseLook_NightMode_RotatesY`, `ClampedAtNegativeBound`, `ClampedAtPositiveBound`, `DayMode_Ignored` | COVERED |
+| R3 Phase Trigger | All 10 phase-mapping tests | COVERED |
+
+**Code Review**: Skipped (Lean mode)  
+**Tech debt**: None  
+
+**Open items:**
+- TR-camera-001 not found in `tr-registry.yaml` — story references it but registry has only TR-state-* and TR-player-* entries
+- `design/gdd/day-night-camera-transition.md` not found on disk — GDD reference in story header points to missing file

@@ -6,7 +6,9 @@
     "SolarPhobia.Application",
     "SolarPhobia.Infrastructure",
     "SolarPhobia.Presentation",
-    "SolarPhobia.Shared"
+    "SolarPhobia.Shared",
+    "VContainer",
+    "R3.Unity"
   ],
   "autoReferenced": false
 }

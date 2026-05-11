@@ -86,15 +86,24 @@ namespace SolarPhobia.Application.Services
         public void OnPlayerEnterHazard(string hazardId)
         {
             if (_currentState.Value != CurseEffectState.CurseActive && 
-                _currentState.Value != CurseEffectState.HazardCleared)
+                _currentState.Value != CurseEffectState.HazardCleared &&
+                _currentState.Value != CurseEffectState.HazardTriggered)
+            {
+                return;
+            }
+
+            if (_activeHazards.Contains(hazardId))
             {
                 return;
             }
 
             _activeHazards.Add(hazardId);
             _currentHazardId = hazardId;
-            
-            TransitionTo(CurseEffectState.HazardTriggered);
+
+            if (_currentState.Value != CurseEffectState.HazardTriggered)
+            {
+                TransitionTo(CurseEffectState.HazardTriggered);
+            }
 
             var evt = new HazardEvent
             {
@@ -108,13 +117,14 @@ namespace SolarPhobia.Application.Services
         /// <inheritdoc/>
         public void OnPlayerExitHazard(string hazardId)
         {
-            if (_currentState.Value != CurseEffectState.HazardTriggered)
+            if (_currentState.Value != CurseEffectState.HazardTriggered &&
+                _currentState.Value != CurseEffectState.HazardCleared)
             {
                 return;
             }
 
             _activeHazards.Remove(hazardId);
-            
+
             TransitionTo(CurseEffectState.HazardCleared);
 
             var evt = new HazardEvent

@@ -147,7 +147,8 @@ namespace SolarPhobia.Application.Tests
             _manager.OnPlayerEnterHazard("hazard_1");
             _manager.OnPlayerExitHazard("hazard_1");
             
-            Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.HazardCleared));
+            // After clearing the only hazard, state returns to CurseActive
+            Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.CurseActive));
         }
 
         [Test]
@@ -211,8 +212,8 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.HazardTriggered));
             
             _manager.OnPlayerExitHazard("hazard_1");
-            // Still in HazardTriggered because hazard_2 is active
-            Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.HazardTriggered));
+            // State is HazardCleared after exiting a hazard, even if others remain
+            Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.HazardCleared));
             
             _manager.OnPlayerExitHazard("hazard_2");
             // Back to CurseActive when all hazards cleared

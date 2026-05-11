@@ -11,8 +11,9 @@ namespace SolarPhobia.Infrastructure.Services
     /// <summary>
     /// Implementation of Ward Timer service.
     /// Implements TR-state-005: Ward Timer Initialization — Base + (Saved × 30) Formula
+    /// Also implements Application-layer IWardTimerService for cross-layer cost operations.
     /// </summary>
-    public class WardTimerService : Domain.IWardTimerService, IInitializable, ITickable
+    public class WardTimerService : Domain.IWardTimerService, IWardTimerService, IInitializable, ITickable
     {
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly ReactiveProperty<float> _currentWard = new(0f);
@@ -46,6 +47,30 @@ namespace SolarPhobia.Infrastructure.Services
 
         public float MaxWard => _maxWard;
 
+        // ── Application-layer IWardTimerService ─────────────────────
+
+        float IWardTimerService.CurrentWard
+        {
+            get => _currentWard.Value;
+            set => _currentWard.Value = value;
+        }
+
+        public float GetCurrentWard()
+        {
+            return _currentWard.Value;
+        }
+
+        public bool TryApplyCost(float cost)
+        {
+            if (_currentWard.Value <= 0f) return false;
+
+            float newValue = _currentWard.Value - cost;
+            _currentWard.Value = Mathf.Max(0f, newValue);
+            return true;
+        }
+
+        public Observable<float> OnWardChanged => _currentWard;
+
         // ── Constructor ───────────────────────────────────────────
         public WardTimerService(IPhaseStateMachine phaseStateMachine)
         {
@@ -55,7 +80,7 @@ namespace SolarPhobia.Infrastructure.Services
             _isDepleted = false;
 
             // Subscribe to ward changes to update sensory tier
-            _currentWard.Subscribe(OnWardChanged);
+            _currentWard.Subscribe(HandleWardChanged);
         }
 
         // ── IInitializable ────────────────────────────────────────
@@ -123,7 +148,7 @@ namespace SolarPhobia.Infrastructure.Services
         }
 
         // ── Private Methods ───────────────────────────────────────
-        private void OnWardChanged(float newValue)
+        private void HandleWardChanged(float newValue)
         {
             UpdateSensoryTier();
 
