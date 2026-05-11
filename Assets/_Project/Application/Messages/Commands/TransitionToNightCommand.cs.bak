@@ -1,0 +1,14 @@
+using SolarPhobia.Application.Messages.Events;
+
+namespace SolarPhobia.Application.Messages.Commands
+{
+    public class TransitionToNightCommand
+    {
+        public GameSessionState State { get; }
+
+        public TransitionToNightCommand(GameSessionState state)
+        {
+            State = state;
+        }
+    }
+}

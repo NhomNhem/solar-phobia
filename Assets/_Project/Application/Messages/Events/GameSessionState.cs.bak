@@ -1,0 +1,16 @@
+using SolarPhobia.Domain.ValueObjects;
+using System.Collections.Generic;
+
+namespace SolarPhobia.Application.Messages.Events
+{
+    public abstract class GameSessionState
+    {
+        public GamePhase CurrentPhase { get; set; } = GamePhase.BOOT;
+            public KindnessScore KindnessScore { get; set; } = new KindnessScore(0);
+                public int SpiritEssence { get; set; }
+                public string CurrentShrineId { get; set; }
+                public string CurrentDialogueId { get; set; }
+                public string CurrentOrderId { get; set; }
+                public List<string> Flags { get; } = new List<string>();
+                }
+            }

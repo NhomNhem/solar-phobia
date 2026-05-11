@@ -1,0 +1,14 @@
+using SolarPhobia.Application.Messages.Events;
+
+namespace SolarPhobia.Application.Messages.Commands
+{
+    public class StartDayCommand
+    {
+        public GameSessionState State { get; }
+
+        public StartDayCommand(GameSessionState state)
+        {
+            State = state;
+        }
+    }
+}
