@@ -33,27 +33,28 @@ Unity.exe -quit -batchmode -projectPath "I:\unityVers\Solar phobia" -buildTarget
 ## Code Style Guidelines
 
 ### Naming Conventions
-- **Namespaces**: `TinyMonsterArena.Domain`, `NhemBootstrap.Editor.Steps` (PascalCase with dots)
-- **Classes/Interfaces**: `BootstrapWindow`, `IBootstrapStep` (PascalCase, prefix I for interfaces)
-- **Methods**: `CreateGUI`, `Init` (PascalCase)
-- **Private fields**: `_steps`, `_config` (underscore + camelCase)
+- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Services` (PascalCase with dots)
+- **Classes/Interfaces**: `PhaseStateMachine`, `ISoulRepository` (PascalCase, prefix I for interfaces)
+- **Methods**: `TrySetSelection`, `AdvancePhase` (PascalCase)
+- **Private fields**: `_mode`, `_subscriptions`, `_mapDirector` (underscore + camelCase)
+- **Internal injected fields**: `_mapDirector` (used with VContainer `[Inject]`) — must be `internal`, not `private`, for source generator compatibility (VCON0007)
 - **Local variables**: `tempRoot`, `snapshot` (camelCase)
 - **Constants**: `Rng` (static readonly), or UPPER_SNAKE_CASE for true constants
-- **Assembly Definitions**: `TinyMonsterArena.Domain.asmdef` matching namespace
+- **Assembly Definitions**: `SolarPhobia.Domain.asmdef` matching namespace
 
 ### File Structure
 ```csharp
 using System;                    // System imports first
 using System.Collections.Generic;
-using NhemBootStrap.Editor.Core; // Third-party/Project imports after
+using SolarPhobia.Application.Services; // Third-party/Project imports after
 using UnityEditor;
 using UnityEngine;
 
-namespace NhemBootstrap.Editor.Steps {
+namespace SolarPhobia.Application.Systems {
     /// <summary>XML doc comments on public types.</summary>
-    public class StepViewModel {
+    public class PhaseStateMachine {
         // ── Section Separators ──────────────────────────────
-        private List<StepViewModel> _steps;
+        private List<PhaseState> _phases;
 
         /// <summary>XML docs on public members.</summary>
         public void DoWork() {
@@ -77,7 +78,7 @@ namespace NhemBootstrap.Editor.Steps {
 - **var keyword**: Use when type is obvious: `var list = new List<string>();`
 
 ### Error Handling
-- Use **try-finally** for cleanup (see BootstrapPropertyTests.cs:143-146)
+- Use **try-finally** for cleanup
 - Avoid empty catch blocks; log or rethrow with `throw;`
 - Unity-specific: Use `Debug.LogWarning()` or `Debug.LogError()` for diagnostics
 - Test assertions: NUnit `Assert.That()`, `Assert.AreEqual()`, `StringAssert.Contains()`
@@ -86,12 +87,12 @@ namespace NhemBootstrap.Editor.Steps {
 1. System namespaces (`System`, `System.Collections.Generic`, etc.)
 2. Third-party namespaces (`NhemBootstrap`, `Cysharp`, etc.)
 3. Unity namespaces (`UnityEngine`, `UnityEditor`, etc.)
-4. Project namespaces (`TinyMonsterArena.Domain`, etc.)
+4. Project namespaces (`SolarPhobia.Domain`, etc.)
 
 ### Testing Patterns
 - **Framework**: NUnit (Unity Test Framework 1.6.0)
 - **Property-based testing**: Use fixed seed RNG for reproducibility (see `new System.Random(42)`)
-- **Test naming**: `MethodName_Scenario_ExpectedResult` (see BootstrapPropertyTests.cs)
+- **Test naming**: `MethodName_Scenario_ExpectedResult`
 - **XML docs on tests**: Include `<summary>` with "Validates: Requirements X.X" referencing specs
 - **Test file location**: Mirror source structure in `Editor/Tests/` or `Tests/` folders
 
@@ -102,13 +103,90 @@ namespace NhemBootstrap.Editor.Steps {
 - Use `rootNamespace` matching assembly name
 
 ## Key Packages
-- **VContainer**: Dependency injection (jp.hadashikick.vcontainer)
+- **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — `[Inject]` fields must be `internal` (not `private`) for source generator compatibility
+- **R3**: Reactive programming (com.cysharp.r3) — replaces reactive patterns
 - **UniTask**: Async/await for Unity (com.cysharp.unitask)
 - **ZLinq**: LINQ extensions (com.cysharp.zlinq)
 - **DOTween**: Animation tweens (Demigiant)
 - **Odin Inspector**: Editor enhancements (Sirenix)
+- **MessagePipe**: Event/message bus (com.cysharp.messagepipe)
+
+## Scene Folder Structure
+
+**Use only** `Assets/_Project/_Scenes/` for project scenes:
+
+| Folder | Purpose |
+|--------|---------|
+| `_Scenes/Dev/` | Development, testing, and prototype scenes |
+| `_Scenes/Dev/Prototype/` | Prototype test scenes |
+| `_Scenes/Dev/Dialogue/` | Dialogue system development scenes |
+| `_Scenes/Gameplay/` | Main gameplay and level scenes |
+| `_Project/Settings/Scenes/` | URP scene templates only |
+
+**Never use**: `Assets/Scenes/` (deprecated - delete if empty)
+
+## Coding Standards Namespace
+
+Use `SolarPhobia.Rules` namespace for codifiable standards:
+
+```csharp
+using SolarPhobia.Rules;
+
+// Layer attribute for architectural enforcement
+[Layer(NamingConventions.Layers.Domain)]
+public class MyEntity { }
+
+// Scene path constants
+string devScenes = ScenePaths.Scenes.Dev;
+```
+
+See `Assets/_Project/Domain/Rules/` for:
+- `NamingConventions.cs` - Namespace and naming rules
+- `LayerAttributes.cs` - Architectural layer attributes
+- `ScenePaths.cs` - Scene folder path constants
+
+## Unity 6 API Conventions
+
+- **`FindObjectOfType<T>()` / `FindObjectsOfType<T>()`**: **Obsolete** in Unity 6000+. Use `FindFirstObjectByType<T>()` or `FindObjectsByType<T>(FindObjectsSortMode.None)` instead. See `docs/engine-reference/unity/breaking-changes.md`.
+- **Duplicate `using` directives**: Avoid declaring the same `using` namespace multiple times in a file. Unity compiler warns CS0105.
+- **R3 reactive patterns**: Use `ReactiveProperty<T>` and `ReadOnlyReactiveProperty<T>` for observable state. Subscribe via `.Subscribe()` and dispose via `CancellationToken` or `Dispose()`.
+- **VContainer `[Inject]` fields**: Must be `internal` visibility, not `private`. Private fields cannot be set by the source generator (VCON0007).
+- **R3 ReadOnlyReactiveProperty.Value**: Does NOT have a `.Value` accessor directly. Add a wrapper property like `public T CurrentStateValue => _currentState.Value` to expose the value.
+- **Unity types in services**: If using `Vector3`, `Vector2`, `Quaternion`, etc., add `using UnityEngine;` to the file.
+- **Test event types**: When mocking IPhaseStateMachine in tests, include `using SolarPhobia.Application.Messages;` for PhaseChangedEvent, DayStartEvent, NightStartEvent, ResolveEvent.
+- **PhaseState enum**: Always check `Assets/_Project/Domain/ValueObjects/PhaseState.cs` for valid values. Common valid states: `Boot`, `DayService`, `Dialogue`, `Order`, `SunsetWarning`, `NightTravel`, `ShrineArrival`, `EndingEvaluation`, `NightSurvival`, `ChoiceLock`.
+
+## Production & Design Docs
+
+Game design and production artifacts live under `production/`:
+
+| Path | Purpose |
+|------|---------|
+| `production/epics/` | Epic folders with story files per feature area |
+| `production/milestones/` | Milestone plans and scope definitions |
+| `production/sprints/` | Sprint plans and sprint retrospectives |
+| `production/qa/` | Smoke tests, QA evidence, playtest reports |
+| `production/session-state/` | Active session notes |
+| `docs/architecture/` | Architecture Decision Records (ADRs) and master architecture |
+| `design/gdd/` | Game Design Documents per system |
+
+See `docs/architecture/` for ADRs that document technical decisions. Stories reference their governing ADRs and GDD requirements.
 
 ## Git Workflow
 - **Ignore**: Library/, Temp/, Obj/, Build/, Logs/, UserSettings/, *.csproj, *.sln
 - **Track**: Assets/, Packages/, ProjectSettings/
 - See `.gitignore` for complete list
+
+---
+
+## Engine Version Reference
+
+**Unity 6000.3.11f1** — this version is beyond the LLM's training data. Before using engine APIs in HIGH RISK areas:
+
+1. Check `docs/engine-reference/unity/breaking-changes.md` for migration issues
+2. Check `docs/engine-reference/unity/deprecated-apis.md` for APIs to avoid
+3. Check `docs/engine-reference/unity/current-best-practices.md` for recommended patterns
+
+Key risk areas: **VContainer** source generation, **R3** reactive patterns, **UI Toolkit** changes.
+
+@docs/engine-reference/unity/VERSION.md
