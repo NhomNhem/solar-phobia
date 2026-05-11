@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066cf82f8f80d408c856e48fc8f1127b, type: 3}
   m_Name: vFavorites Data
   m_EditorClassIdentifier: VFavorites::VFavorites.VFavoritesData
+<<<<<<< HEAD
+  pages: []
+=======
   pages:
   - items:
     - globalId:
@@ -28,4 +31,5 @@ MonoBehaviour:
   - items: []
     name: Page 2
     _id: 0
+>>>>>>> upstream/main
   rowScale: 1
