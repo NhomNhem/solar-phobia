@@ -1,6 +1,6 @@
 ﻿{
   "name": "SolarPhobia.Domain",
   "rootNamespace": "SolarPhobia.Domain",
-  "references": [],
+  "references": ["R3"],
   "autoReferenced": false
 }

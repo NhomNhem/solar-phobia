@@ -1,0 +1,300 @@
+{
+  "lore_sections": [
+    {
+      "id": "lore_vong_lap_nhan_qua",
+      "title": "Vòng Lặp Nhân-Quả: The Hollow Sun's Cosmic Timer",
+      "title_vn": "Vòng Lặp Nhân-Quả",
+      "section_number": 1,
+      "content_summary": "Cosmological framework explaining the 3-year death cycle, the Hollow Sun's nature, and why the living must witness the dead. Establishes nước mắm cốt mechanics as spiritual necessity.",
+      "canon_level": "Established",
+      "player_visibility": "Discoverable",
+      "word_count": 287,
+      "source_dependencies": [
+        "narrative-brief.md",
+        "game-state-phase-state-machine.md"
+      ],
+      "cross_references": [
+        "lore_ca_ong_from_guardian_to_ghost",
+        "lore_tu_accidental_awakening",
+        "lore_three_keepers_linh_van_minh",
+        "lore_why_only_two_souls"
+      ],
+      "mechanics_grounded": [
+        "3-year cycle (1,095 days)",
+        "nước mắm cốt (15-20 min protection mechanic)",
+        "shrine safety zones (reduced sun damage)",
+        "daily stall management (day phase)",
+        "Hollow Sun daily rise/set cycle"
+      ],
+      "contradictions_flagged": [],
+      "themes": [
+        "cosmic necessity",
+        "memory debt",
+        "threshold",
+        "boundary between life and death",
+        "ritual as survival"
+      ]
+    },
+    {
+      "id": "lore_ca_ong_from_guardian_to_ghost",
+      "title": "Cá Ông: From Guardian to Ghost",
+      "title_vn": "Cá Ông Bộ Xương - Người Giữ Biên Giới",
+      "section_number": 2,
+      "content_summary": "Origin story of the boss creature: Cá Ông as corrupted guardian bound to beach by monks. Driven by hunger and desperation rather than malice. Hints at secret redemption through true-name ritual.",
+      "canon_level": "Established",
+      "player_visibility": "Discoverable (true name hidden)",
+      "word_count": 291,
+      "source_dependencies": [
+        "SOLAR_PHOBIA_ACT1_NARRATIVE_BIBLE.md (Part 5: Boss Context)",
+        "SOLAR_PHOBIA_CHARACTER_SHEETS.md (Cá Ông section)",
+        "lore_vong_lap_nhan_qua.md"
+      ],
+      "cross_references": [
+        "lore_vong_lap_nhan_qua",
+        "lore_three_keepers_linh_van_minh",
+        "lore_tu_accidental_awakening"
+      ],
+      "mechanics_grounded": [
+        "Boss encounter (night survival run)",
+        "Boundary failure consequences",
+        "Spiritual hunger mechanics",
+        "Guardian role (failed threshold-guardian)",
+        "Seekable redemption path (true name: Cá Vương Tử Thúy)"
+      ],
+      "contradictions_flagged": [],
+      "easter_egg": {
+        "hidden_condition": "Player speaks true name 'Cá Vương Tử Thúy' during boss encounter",
+        "outcome": "Boss immediately de-aggros, allows passage without combat",
+        "requires_knowledge": "Vietnamese cosmology, shrine records, or deep lore exploration"
+      },
+      "themes": [
+        "corruption through abandonment",
+        "desperation masquerading as malice",
+        "loss of identity through lost names",
+        "redemption possibility",
+        "guardian's burden"
+      ]
+    },
+    {
+      "id": "lore_tu_accidental_awakening",
+      "title": "Tú's Accidental Awakening: The Night of the Storm",
+      "title_vn": "Tú và Đêm Bão",
+      "section_number": 3,
+      "content_summary": "Ambiguous origin story of Tú as threshold-birth accident. Three narratives (what Tú knows vs. village whispers vs. truth) create intentional ambiguity about Tú's existential status. Explains natural empathy with dead.",
+      "canon_level": "Provisional (intentionally ambiguous)",
+      "player_visibility": "Discoverable (textual hints throughout, never explicitly confirmed)",
+      "word_count": 296,
+      "source_dependencies": [
+        "game-state-phase-state-machine.md (spiritual limits discussion)",
+        "lore_vong_lap_nhan_qua.md",
+        "narrative-brief.md (Tú identity question)"
+      ],
+      "cross_references": [
+        "lore_three_keepers_linh_van_minh",
+        "lore_why_only_two_souls",
+        "lore_vong_lap_nhan_qua"
+      ],
+      "mechanics_grounded": [
+        "Player-as-threshold-being (explains why Tú can interact with ghosts naturally)",
+        "Permanent daytime awareness (Tú never sleeps normally)",
+        "Natural spiritual empathy (no training montage needed)",
+        "Involuntary stall management (compulsion to serve)",
+        "No shadow casting (environmental visual cue—Tú's form is semi-solid)"
+      ],
+      "contradictions_flagged": [],
+      "narrative_design_philosophy": "Intentional ambiguity is a core feature, not a bug. Players should gather circumstantial evidence of Tú's threshold nature (no shadow, old woman's sadness, ghost behavior) without explicit confirmation. Ambiguity is more powerful than answers.",
+      "evidence_for_players_to_find": [
+        "Old woman's trembling hands when looking at Tú",
+        "Ông Văn's whispered prayers thanking that Tú 'never leaves'",
+        "Shrine records mentioning 'threshold birth, 23 years prior'",
+        "Tú casts almost no shadow in high sun",
+        "Ghosts sometimes move through Tú's physical space as if Tú were less solid"
+      ],
+      "themes": [
+        "existential uncertainty",
+        "accidental destiny",
+        "threshold identity",
+        "mother's refusal to let go",
+        "storm-born children",
+        "price of witness"
+      ]
+    },
+    {
+      "id": "lore_three_keepers_linh_van_minh",
+      "title": "The Three Keepers: Linh, Văn, Minh",
+      "title_vn": "Ba Người Giữ Đền Thờ: Linh, Văn, Minh",
+      "section_number": 4,
+      "content_summary": "Individual backstories of the three main NPCs as shrine keepers with distinct roles: Văn (memory), Linh (witness), Minh (boundary). Establishes their traumas, keeper functions, and emotional arcs.",
+      "canon_level": "Established",
+      "player_visibility": "Discoverable (revealed through repeated dialogue and shrine records)",
+      "word_count": 298,
+      "source_dependencies": [
+        "SOLAR_PHOBIA_ACT1_NARRATIVE_BIBLE.md (Part 3: Character Profiles)",
+        "SOLAR_PHOBIA_CHARACTER_SHEETS.md (Ông Văn, Em Linh, Anh Minh sections)",
+        "lore_vong_lap_nhan_qua.md"
+      ],
+      "cross_references": [
+        "lore_vong_lap_nhan_qua",
+        "lore_tu_accidental_awakening",
+        "lore_why_only_two_souls"
+      ],
+      "mechanics_grounded": [
+        "Three NPC slots (stall capacity during day phase: max 3 customers)",
+        "Character arc progression (early visits → mid-game → late-game arc completion)",
+        "Dialogue branching (player choices affect emotional depth)",
+        "Stall-of-witness narrative framing (orders are prayers, service is witnessing)",
+        "Spirit Essence rewards (tied to emotional arc completion)"
+      ],
+      "character_profiles": {
+        "ong_van": {
+          "full_name": "Ông Văn (Uncle Văn)",
+          "role": "Keeper of Memory",
+          "death_date": "5 years prior to game start",
+          "cause_of_death": "Drowned retrieving lost fishing nets in storm",
+          "age_in_death": "60s-70s",
+          "family_status": "Widow (now remarried), two adult children (one in Saigon, one abroad)",
+          "bound_to_shrine_by": "Practical love for family and sea; children never paid respects",
+          "keeper_function": "Reminds other ghosts of their pre-death identity; anchor of memory",
+          "personality_arc": "Gruff → Nostalgic → Peaceful",
+          "visual_design": "Weathered brown shirt, missing two fingers (left hand), burn marks, limping gait",
+          "dialogue_pattern": "Fishing metaphors, regional dialect, contemplative pauses",
+          "first_order": "Strong tea (đặc, đặc) + incense",
+          "second_order": "Mock money (vàng mã) for grandchildren",
+          "reward_for_compassion": "Peace; clarity that 'sea is not cruel, they forgot how to listen'"
+        },
+        "em_linh": {
+          "full_name": "Em Linh (Little Linh)",
+          "role": "Keeper of Witness",
+          "death_date": "2 years prior to game start",
+          "cause_of_death": "Drowned swimming with friends; body never found",
+          "age_in_death": "12-14 years old",
+          "family_status": "Parents performed funeral rites but cannot let go; grief holds her",
+          "bound_to_shrine_by": "Unresolved parental grief (held past 3-year threshold)",
+          "keeper_function": "Sees and names other ghosts; asks questions that matter; emotional center",
+          "personality_arc": "Withdrawn → Bonding → Vulnerable, requesting remembrance",
+          "visual_design": "Blue-gray pallor, wet black hair, dripping áo dài, trails water droplets",
+          "dialogue_pattern": "Soft-spoken, apologetic, curious observations about nature",
+          "first_order": "Flower-scented incense (mother's birthday tradition)",
+          "second_order": "Rice (to feed the fish, so they're not lonely)",
+          "reward_for_compassion": "Asks player to sit by water at shift's end; opens about memory fading"
+        },
+        "anh_minh": {
+          "full_name": "Anh Minh (Elder Minh)",
+          "role": "Keeper of Boundary",
+          "death_date": "Walked into sea in 1978 (approx 49 years prior); lived 1945-1978",
+          "cause_of_death": "Suicide by walking into sea; wearing wedding áo dài",
+          "age_in_death": "30s (appearance frozen at engagement age)",
+          "family_status": "Engaged to Hùng; fiancé conscripted and fled to South during Fall of Saigon (1975); never returned",
+          "bound_to_shrine_by": "Paradox of waiting in two times simultaneously (1975 and present)",
+          "keeper_function": "Guards shrine boundaries; reminds Tú of time constraints; understands endings",
+          "personality_arc": "Hostile → Vulnerability slip (mentioning Hùng) → Deep confession and gratitude",
+          "visual_design": "Torn white-and-gold wedding áo dài, rust stains, severe beauty, flickering form (unstable emotions)",
+          "dialogue_pattern": "Bitter humor, sarcasm, sharp critiques; rage masking loneliness",
+          "first_order": "Strong wine + large pile of mock money (for shrine building)",
+          "second_order": "Quiet time; needs to talk instead of be served",
+          "reward_for_compassion": "Confession about Hùng; cold-hand grip; thanks for being seen; urges Tú to continue work"
+        }
+      },
+      "keeper_bond": {
+        "description": "The three keepers know each other, bound by shared shrine duty",
+        "dynamic": "Not friends, but deeply interdependent; they share the burden of tending",
+        "benefit_of_player_witness": "As Tú serves them with compassion, their forms stabilize, colors become vivid, full stories emerge",
+        "consequence_of_neglect": "Forms glitch, colors fade, distortion increases; they begin to degrade spiritually"
+      },
+      "contradictions_flagged": [],
+      "themes": [
+        "collective burden",
+        "shared witness",
+        "emotional accountability",
+        "boundary-keepers",
+        "three-fold remembrance (memory + witness + boundary)"
+      ]
+    },
+    {
+      "id": "lore_why_only_two_souls",
+      "title": "Why Only Two Souls: The Spiritual Limit",
+      "title_vn": "Tại Sao Chỉ Có Hai Linh Hồn",
+      "section_number": 5,
+      "content_summary": "Cosmological hard limit: exactly two threshold-beings can exist at any time. One slot = Tú (permanent guardian). One slot = rotating visitor (current cycle's most urgent soul). Explores the moral trap of endless compassion and Tú's binding.",
+      "canon_level": "Established",
+      "player_visibility": "Hidden (discoverable only through deep play, shrine records, and careful observation)",
+      "word_count": 293,
+      "source_dependencies": [
+        "game-state-phase-state-machine.md (spiritual limits section)",
+        "lore_vong_lap_nhan_qua.md",
+        "lore_tu_accidental_awakening.md"
+      ],
+      "cross_references": [
+        "lore_vong_lap_nhan_qua",
+        "lore_tu_accidental_awakening",
+        "lore_three_keepers_linh_van_minh"
+      ],
+      "mechanics_grounded": [
+        "Two-soul threshold capacity (hard limit in spiritual system)",
+        "Tú occupies slot 1 permanently (cannot ascend without catastrophe)",
+        "Visitor occupies slot 2 per cycle (current urgent soul needing witness)",
+        "Corruption consequence if visitor unwitnessed (soul becomes hunger, pulls others down)",
+        "Boundary collapse if Tú ascends (no new guardian born in time)",
+        "Three-year cycle repetition (each cycle requires new witness from slot 2)"
+      ],
+      "contradictions_flagged": [],
+      "hidden_mechanics": {
+        "tú_binding": {
+          "description": "Tú cannot ascend without catastrophic consequences",
+          "consequences_if_tú_ascends": [
+            "Threshold slot 1 becomes empty",
+            "New guardian must be born (another threshold birth)",
+            "Without new guardian, boundary fractures",
+            "Unwitnessed dead pour upward",
+            "Living begin to see masses of spirits",
+            "Barrier erodes entirely"
+          ],
+          "practical_implication": "Tú is imprisoned by compassion; freedom means damnation for millions"
+        },
+        "visitor_slot": {
+          "description": "One soul per cycle occupies threshold slot 2",
+          "selection_criteria": "Most spiritually damaged; most unwitnessed; closest to corruption",
+          "current_cycle_visitor": "TBD (game discovers which of the three keepers is most urgent)",
+          "player_choice_impact": "Serving visitor with compassion stabilizes them; neglect allows corruption"
+        }
+      },
+      "player_discovery_breadcrumbs": [
+        "Old woman's resigned expression when explaining shrine duty",
+        "Ông Văn's quiet prayer: 'Please never leave us'",
+        "Shrine records mentioning 'two souls bound, endless cycle'",
+        "Em Linh asking 'Will you come back? I don't want to be alone'",
+        "Anh Minh's comment: 'You serve us like you have no choice'",
+        "Realization during final sequence that Tú cannot leave at end of Act 1"
+      ],
+      "themes": [
+        "prisoner of compassion",
+        "moral trap (no winning move)",
+        "endless duty",
+        "sacrifice without glory",
+        "the cost of being a bridge",
+        "existential binding",
+        "mercy as shackle"
+      ],
+      "narrative_weight": "This is the game's deepest tragedy: not that the dead are trapped, but that the living who choose to tend them become trapped too. Tú must choose every day to stay. Or the dead stay forgotten."
+    }
+  ],
+  "metadata": {
+    "project": "Solar Phobia (Nắng Gắt)",
+    "act": 1,
+    "lore_framework_version": "1.0-APPROVED",
+    "total_sections": 5,
+    "total_word_count": 1465,
+    "narrative_scope": "Foundational cosmology + character traumas + protagonist binding + spiritual mechanics",
+    "canon_status": "All sections Established or Provisional (intentional ambiguity in Tú's section)",
+    "player_visibility_mix": [
+      "1 Discoverable (Vòng Lặp)",
+      "1 Discoverable + Hidden (Cá Ông true name)",
+      "1 Discoverable w/ Intentional Ambiguity (Tú)",
+      "1 Discoverable (Three Keepers)",
+      "1 Hidden/Deep Discovery (Two Souls limit)"
+    ],
+    "consistency_notes": "All 5 sections cross-reference each other. Mechanics are grounded in approved GDDs. Vietnamese terminology preserved with English glosses. No contradictions detected.",
+    "approval_date": "2026-05-07",
+    "approved_by": "User + World-Builder + Writer"
+  }
+}

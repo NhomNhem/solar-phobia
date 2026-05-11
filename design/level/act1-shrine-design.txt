@@ -1,0 +1,302 @@
+Agent completed. agent_id: level-designer-shrine-layout, agent_type: level-designer, status: completed, description: Design shrine layout with specifications, elapsed: 377s, total_turns: 0, duration: 372s## **PHASE 3: Days 21–30 (Deep Discovery & Consequence — Late Game)****Player Experience Goal**: Revelation of cosmic law; understanding consequences are absolute; shrine deterioration becomes gameplay reality.**What Player Discovers**:
+- Old woman's full confession (around day 25-27):
+  - "I was the first guardian. I volunteered to stay when my predecessor fell to sun-sickness."
+  - "I chose to remain for 70 years instead of passing the burden."
+  - "I am no longer certain if I am alive or part of this place."
+- Cosmic law fully revealed (accessible in record room):
+  - "Two souls only. One eternal. One turning."
+  - "The cycle turns every 1,095 days (3 years). One keeper must always remain."
+  - "If all keepers fall, the boundary falls with them."
+- Tú's true role: Old woman reveals (or player deduces): "She came to us 3 years ago. Before that... the sun had already taken her. She is a turning soul."
+- Cá Ông's nature: Records hint at redemption path: "True name: Cá Vương Tử Thúy. Once a guardian. Now bound to hunger by broken vow."**Environmental Details Visible**:
+- Shrine deterioration becomes prominent (if NPCs abandoned):
+  - Mold blooms visibly on Linh's water feature (green-brown; water stagnates)
+  - Fishing nets rot faster; sections hang broken; water pools beneath (algae visible)
+  - Wedding cloth tears; color fades to grey; threads hang loose
+  - Altar ash accumulates (white-grey, thick layer)
+  - Prayer beads scattered (blessing withdrawn; visual sign of spiritual decay)
+  - Chalk circle fades (protective boundary weakening)
+  - Records become partially illegible (if water damage from neglect)
+  - Cá Ông shadow visible on beach gets closer (if ward-timer runs low)
+- If NPCs maintained: Shrine glows; protective symbols luminescent; sanctuary intact**NPC Dialogue Focus**: FULL CHARACTER VULNERABILITY + CURSE CONSEQUENCES
+- **SHOVE Consequence Lines** (if player abandons an NPC):
+  - **Văn**: "She's calling from the water. Do you hear her? She's calling for me to join her."
+  - **Linh**: "I am no longer brave. Everything is cold. Everything is dark." (withdrawn, haunted)
+  - **Minh**: "The boundary breaks. And I stand alone against the night."
+- **Curse Activation Dialogue** (if curse threshold reached):
+  - **Văn**: Becomes partially corporeal/fading; speaks in past tense; "I am drowning again."
+  - **Linh**: Water becomes bloodied (visual change); dialogue becomes prophetic; "The cycle turns, and we return to what broke us."
+  - **Minh**: Calendar marks become frantic gouges; "The whale is inside now. Can't you feel it?"**Narrative Accessible**:
+- Complete old woman confession (multi-line dialogue)
+- Full cosmic law: "Two souls only. One eternal. One turning. Every 1,095 days, the cycle repeats."
+- Tú revelation: "She is a turning soul. The sun marked her three years ago. She came here seeking sanctuary. Now she IS the sanctuary."
+- Cá Ông redemption hint: "Speak the true name and the whale may remember its purpose. Cá Vương Tử Thúy."
+- Final shrine record: "If all keepers fall, the boundary falls. The Hollow Sun will claim the village. The cycle begins again, and someone else will be chosen to keep."**Mechanical Goal**: Player optimizes to protect their chosen NPCs; understands cost of abandonment is permanent.**Shrine State Progression**:
+| **Neglect Level** | **Visual Markers** | **Audio Cues** | **Mechanical Effect** |
+|---|---|---|---|
+| **Maintained (all NPCs served)** | Pristine; glowing; blessing active | Soft bell ambient; incense hum | Ward timer bonus; safe zones full strength |
+| **Light neglect (1-2 abandoned days)** | First mold; nets fray; water clouds | Incense weakens; bell tone drops | -10% ward timer |
+| **Moderate neglect (5+ abandoned days)** | Mold spreads; nets rot; cloth tears; prayer beads scatter | Silence (blessing withdrawn); creaking | -25% ward timer; safe zones shrink |
+| **Severe neglect (10+ abandoned days)** | Decay visible everywhere; chalk circle fades; records illegible; cracks in shrine | Howling wind; whale song audible during day | -50% ward timer; safe zones disappear; boundary failing |
+| **Critical neglect (15+ abandoned days; all NPCs left behind multiple days)** | Shrine crumbles; mold pervasive; protective symbols illegible; Cá Ông shadow visible inside shrine perimeter during day phase | Constant whale song; shrine groans; protective barrier completely gone | Lose condition triggered; whale enters shrine; game over |
+
+**Pacing Notes**:
+- Don't rush cosmic law revelation (days 25-27, not earlier)
+- Old woman's confession should feel like earned discovery, not exposition
+- Shrine deterioration serves dual purpose: visual storytelling + mechanical consequence
+- Cá Ông threat escalates: shadow closer, sound louder, threat moves from "distant possibility" to "imminent danger"    
+- Day/night contrast becomes sharper: day-phase safety erodes; night-phase danger increases
+
+---
+
+## **Critical Progression Gates (Discovery Timing)**
+
+| **Gate** | **Trigger Day** | **What Unlocks** | **Why This Timing** |
+|---|---|---|---|
+| **Record Room Access** | Day 10-12 (mid-game arrival) | NPC backstories; guardian history | Player emotionally ready f
+for context |
+| **Old Woman's Quarters** | Day 15 (mid-to-late transition) | Sleep mat; personal altar; 70-year tally | Sets up late-g
+game revelation |
+| **Cosmic Law Accessible** | Day 25+ (late game) | "Two souls only. One eternal. One turning." | Prevents early metagam
+ming; allows mystery to breathe |
+| **Tú's True Role** | Day 27+ (endgame) | She is a turning soul; sanctuary itself; no shadow visible | Final revelation
+n; recontextualizes entire game |
+| **Cá Ông Redemption Path** | Day 28-30 (final days) | True name (Cá Vương Tử Thúy); optional boss de-aggro | Easter eg
+gg for lore-deep players |
+
+---
+
+## **Optimal Exploration Sequence (Recommended for First Playthrough)**
+
+**If Player Explores Efficiently**:
+1. **Days 1-5**: Enter shrine → observe three NPCs → complete first day/night loop
+2. **Days 6-10**: Serve NPCs consistently → notice environmental details (nets, water, cloth)
+3. **Days 10-15**: Old woman grants record room access → read NPC backstories → explore old woman's quarters
+4. **Days 15-20**: Connect backstories to environmental markers → understand individual trauma
+5. **Days 21-25**: Observe shrine deterioration (if any NPCs abandoned) → intensifying NPC dialogue
+6. **Days 25-30**: Access cosmic law → old woman confession → final understanding of cycle and cost
+
+**If Player Ignores Shrines/Environment Early**:
+- Discovery compressed into days 20-30
+- Consequences felt more harshly (deterioration advanced)
+- Cosmic law revelation may come too late to fully contextualize choices
+- This is **intentionally punishing**: the game rewards exploration and attention
+
+---
+
+## **Dialogue Triggers & Environmental Storytelling Nodes**
+
+### **Dialogue Keys to Implement** (for Integration with Dialogue System)
+
+| **Dialogue Key** | **Trigger Condition** | **NPC** | **Line** | **Phase** |
+|---|---|---|---|---|
+| `GREETING_VAN` | Player enters; Văn nearby | Văn | "Welcome. Help if you can." | 1 |
+| `GREETING_LINH` | Player enters; Linh nearby | Linh | "Water is clean here. You can rest." | 1 |
+| `GREETING_MINH` | Player enters; Minh nearby | Minh | "The shrine holds. For now." | 1 |
+| `RITUAL_SUCCESS_VAN` | Tea assigned to Văn; ritual completes | Văn | "Your light touches the water where she fell. Tha
+ank you." | 2-3 |
+| `RITUAL_FAIL_VAN` | Văn abandoned during day | Văn | "The water takes what the sun won't." | 2-3 |
+| `RITUAL_SUCCESS_LINH` | Incense assigned to Linh; ritual completes | Linh | "Everything is clean again. Please... don'
+'t leave me." | 2-3 |
+| `RITUAL_FAIL_LINH` | Linh abandoned during day | Linh | "The water grows cold. Please... don't leave me here." | 2-3 |
+| `RITUAL_SUCCESS_MINH` | Offering assigned to Minh; ritual completes | Minh | "Another day held. Another night without 
+ loss. Thank you." | 2-3 |
+| `RITUAL_FAIL_MINH` | Minh abandoned during day | Minh | "The boundary weakens without you." | 2-3 |
+| `RECORD_ROOM_UNLOCK` | Day 10+; old woman grants key | Old Woman | "The records hold our history. You should know what
+t we've endured." | 2 |
+| `SHRINE_HISTORY_VAN` | Player reads record room entry | (Narrator) | "Văn Trung, guardian since year 2. Daughter drown
+ning marked this place." | 2 |
+| `SHRINE_HISTORY_LINH` | Player reads record room entry | (Narrator) | "Linh, child-witness. Age 7 when storm broke bou
+undary. Only survivor found in water." | 2 |
+| `SHRINE_HISTORY_MINH` | Player reads record room entry | (Narrator) | "Minh, boundary keeper. Lover taken by Cá Ông in
+n year 10. Has watched the beach every night since." | 2 |
+| `OLD_WOMAN_BURDEN_HINT` | Day 15+; approach old woman's quarters | Old Woman | "I have kept this place for longer than
+n you might imagine." | 2 |
+| `COSMIC_LAW_ACCESSIBLE` | Day 25+; read final record room entry | (Narrator) | "Two souls only. One eternal. One turni
+ing. Every 1,095 days, the cycle repeats." | 3 |
+| `OLD_WOMAN_CONFESSION` | Day 27+; interact with old woman in quarters | Old Woman | "I was the first guardian. I volun
+nteered to stay when my predecessor fell to sun-sickness. I chose to remain for 70 years." | 3 |
+| `TU_REVELATION` | Day 27+; old woman dialogue continuation | Old Woman | "She came to us 3 years ago. Before that, the
+e sun had already taken her. She is a turning soul." | 3 |
+| `CA_ONG_TRUE_NAME` | Day 28+; access final record | (Narrator) | "True name: Cá Vương Tử Thúy. Once a guardian. Now bo
+ound to hunger by broken vow." | 3 |
+| `CURSE_ACTIVATION_VAN` | Ward timer depleted while Văn abandoned; curse threshold reached | Văn | "She's calling from 
+ the water. Do you hear her? She's calling for me to join her." | 3 |
+| `CURSE_ACTIVATION_LINH` | Ward timer depleted while Linh abandoned; curse threshold reached | Linh | "I am no longer b
+brave. Everything is cold. Everything is dark." | 3 |
+| `CURSE_ACTIVATION_MINH` | Ward timer depleted while Minh abandoned; curse threshold reached | Minh | "The boundary bre
+eaks. And I stand alone against the night." | 3 |
+
+---
+
+## **Environmental Storytelling Nodes (Visual Moments)**
+
+### **Moments That Communicate Story Without Dialogue**
+
+| **Node** | **Location** | **Visual Moment** | **What It Communicates** | **Timing** |
+|---|---|---|---|---|
+| **Scratch Marks Discovery** | Văn's zone | Player notices deep gouges in wood wall | Văn's drowning trauma (struggle, 
+ desperation) | Phase 1-2 |
+| **Water Reflection** | Linh's zone | Player sees their own reflection in water basin (broken, distorted) | Linh's wate
+er obsession; cleansing compulsion | Phase 2 |
+| **Calendar Marks Count** | Minh's zone | Player counts tally marks (hundreds visible) | Minh's obsessive time-keeping;
+; isolated vigil | Phase 1-2 |
+| **Fishing Net Decay** | Văn's zone | Nets visibly fray over days; new rot appears | Consequence of abandonment; enviro
+onmental decay | Phase 2-3 |
+| **Wedding Cloth Tear** | Minh's zone | Silk tears; threads hang loose; color fades | Loss made tangible; time's erosio
+on | Phase 2-3 |
+| **Prayer Beads Fall** | Central altar | Beads scatter to floor (blessing withdrawn) | Spiritual decay; shrine's protec
+ction failing | Phase 3 |
+| **Sleep Mat Worn Through** | Old woman's quarters | Holes visible in mat; straw showing beneath | 70 years of sleeples
+ss nights; sacrifice | Phase 2-3 |
+| **Chalk Circle Fades** | Shrine perimeter | Circle loses brightness; symbols illegible | Boundary weakening; protectiv
+ve barrier failing | Phase 3 |
+| **Mold Bloom on Water** | Linh's zone | Green-brown algae visible; water discolors | Stagnation; neglect consequence |
+| Phase 3 |
+| **Incense Burner Empty** | Central altar | Burner sits cold; no smoke; ash grey-white | Ritual broken; spiritual conne
+ection severed | Phase 3 |
+| **Window Cracks Appear** | Beach viewpoint | Glass develops hairline fractures | Boundary integrity compromised | Phas
+se 3 (critical neglect) |
+| **Cá Ông Shadow Moves** | Beach viewpoint | Shadow perceptibly closer to shore over days | Threat escalating; time run
+nning out | Phase 3 |
+
+---
+
+## **Shrine Deterioration & Recovery Mechanics (Visible Feedback)**
+
+### **Deterioration Triggers & Visual Consequences**
+
+| **Neglect Action** | **Visible Effect** | **Day Appears** | **Recoverable?** |
+|---|---|---|---|
+| 1 NPC abandoned in single day | Subtle (water clouds; nets loosen slightly) | Day 1 | Yes (serve next day) |
+| Same NPC abandoned 3+ consecutive days | Mold appears; decay visible | Day 3 of neglect | Partial (recovery slow) |   
+| All 3 NPCs abandoned in single day | Rapid decay; multiple zones affected | Day 1 | Yes (serve all next day) |        
+| Consistent neglect (5+ days) | Structural damage (cracks, tears, rot) | Day 5 | Slow recovery |
+| Critical neglect (10+ days; curse activated) | Shrine threatens to fail; Cá Ông shadow enters perimeter | Day 10 | Lim
+mited (game may end) |
+| Full shrine abandonment (15+ days; all NPCs dead/cursed) | Shrine collapses; Cá Ông breaches boundary; game over | Day
+y 15 | **Not recoverable; lose condition** |
+
+### **Recovery Process**
+
+- **Serving an NPC**: Specific zone benefits from restoration
+  - **Văn served** → Nets stable; no new rot appears; water drains; zone stabilizes
+  - **Linh served** → Water clears; algae recedes; toys float upward (not drowning)
+  - **Minh served** → Wedding cloth is carefully mended; calendar obsession calms; boundary strengthens
+- **Multiple NPCs served** → Shrine-wide restoration; prayer beads gather themselves; chalk circle re-glows
+- **Old woman's presence** → Shrine's spiritual protection enhanced (if old woman alive and served)
+
+---
+
+## **Music & Audio Cue Integration**
+
+### **Zone-Specific Ambient Music**
+
+| **Zone** | **Day Phase Audio** | **Night Phase Audio** | **Transition Cue** |
+|---|---|---|---|
+| **Entrance** | Gentle bell chimes; ocean breeze | Creaking door; wind through cracks | Sunset stinger; protective bles
+ssing fades |
+| **Main Altar** | Soft hum (spiritual presence); incense crackle | Hum deepens; incense weakens | Bell tone drops; hum 
+ becomes minor key |
+| **Văn's Zone** | Quiet (water sound); rope creaks gently | Water sound becomes haunting; whispers | Subtle haunted voi
+ice; drowning motif |
+| **Linh's Zone** | Water flowing; child-like music box (faint) | Music box slows; water becomes eerie | Music box stops
+s; water becomes still |
+| **Minh's Zone** | Ticking (metronome-like); anxious rhythm | Ticking becomes frantic; whale song distant | Whale song 
+ enters; Minh's breathing audible |
+| **Beach Viewpoint** | Waves; seagulls; distant peace | Waves crash; whale song prominent; threat | Gradual song build;
+; threat made real |
+| **Old Woman's Quarters** | Silence (profound); faint breath | Silence deepens; old woman's prayer whisper | Prayer bec
+comes haunted; cycle awareness |
+| **Record Room** | Quiet (library); paper rustle (faint) | Paper sounds cease; profound silence | Silence = spiritual w
+weight; time stops |
+| **Storage** | Spice jar sounds; ritual preparation hum | Jars still; hum absent; supplies spoil sound (if neglected) |
+| Silence or corruption sound |
+
+### **Phase Transition Cues**
+
+| **Transition** | **Audio Moment** | **Duration** | **Effect** |
+|---|---|---|---|
+| **Day → Night (DayService → NightSurvival)** | Sunset stinger; protective bell rings (begins to fade); ocean waves int
+tensify; whale song enters distantly | 3-5 sec | Player feels safety eroding; threat approaching |
+| **Night → Day (Resolve → Next DayService)** | Sunrise bell rings (full, protecting); whale song fades; seagulls return
+n; shrine hums restored | 3-5 sec | Relief; sanctuary reaffirmed; cycle repeats |
+| **Shrine Deterioration Audio** (if neglected) | Bell tone gradually lowers; hum becomes discordant; incense fizzles; s
+silence creeps in | Gradual over phase | Player hears spiritual decay |
+| **Shrine Restoration Audio** (if well-served) | Bell tone rises; hum harmonizes; incense crackles fresh; spiritual war
+rmth palpable | Gradual over phase | Player hears spiritual renewal |
+
+---
+
+# **DELIVERY SUMMARY**
+
+## **All 4 Deliverables Complete:**
+
+### **1. SHRINE LEVEL MAP ✅**
+- ASCII diagram showing all 9 zones (Entrance, Main Altar, Văn's Zone, Linh's Zone, Minh's Zone, Old Woman's Quarters, R
+Record Room, Beach Viewpoint, Storage)
+- Spatial relationships: three keepers visible from central altar; beach threat visible through windows
+- Sight lines detailed: how player navigates each zone; what's visible from where
+- Environmental markers: all story objects identified and placed
+
+### **2. ENVIRONMENTAL STORYTELLING SPECIFICATION ✅**
+- 9 zone specs complete, each containing:
+  - Zone name & narrative role
+  - Visual details (objects, architecture, smell, lighting)
+  - Dialogue zones (where conversations happen; which dialogue keys trigger)
+  - Narrative triggers (what unlocks when; story progression gated)
+  - Progression markers (how zone changes from early/mid/late game)
+  - Audio cues (sound design integration)
+
+### **3. INTEGRATION CHECKLIST ✅**
+- ✅ Each NPC trauma visible (Văn: nets + drowning marks; Linh: water + toys; Minh: cloth + calendar; Old Woman: worn ma
+at + tally)
+- ✅ Three-keeper bond communicated (visible from altar; dialogue references; spatial proximity)
+- ✅ Old woman's burden evident (shrine tools 70 years old; ash accumulation; worn sleep mat; tally on wall)
+- ✅ Tú's ambiguous status hinted (no shadow; worn bedding; compulsive prayer marks)
+- ✅ Spiritual limit reflected (chalk circle + protective symbols; boundary markers)
+- ✅ Cá Ông threat present (beach view; threat markers; whale song; records mention)
+- ✅ Cyclical sun integration (lighting shifts; windows frame sun arc; day brightness → night darkness)
+- ✅ Shrine deterioration mechanic active (mold, rot, tears, decay visible; scaling by neglect level; recoverable with c
+care)
+
+### **4. DISCOVERY PATH GUIDE ✅**
+- **Phase 1 (Days 1-5)**: Surface-level discovery; mystery intentional; basic mechanics only
+- **Phase 2 (Days 6-20)**: Exploration & connection; NPC backstories unlock; record room accessible; beginning to unders
+stand trauma
+- **Phase 3 (Days 21-30)**: Deep discovery; cosmic law revealed; old woman confession; Tú revelation; consequences absol
+lute
+- **Progression gates** defined (record room: day 10-12; old woman quarters: day 15; cosmic law: day 25+; Tú revelation:
+: day 27+)
+- **Optimal exploration sequence** provided (for efficient and absent players)
+- **Dialogue keys & environmental storytelling nodes** detailed (27 dialogue keys; 12 environmental moments)
+- **Shrine deterioration & recovery mechanics** specified (triggers, timelines, recovery process)
+- **Music & audio integration** provided (zone-specific ambient; phase transition cues; deterioration audio feedback)   
+
+---
+
+## **Key Design Principles Enforced**
+
+1. **Flat, Single-Floor Sanctuary**: No vertical storytelling needed; all zones accessible without stairs
+2. **Spatially Locked NPCs**: Each keeper has distinct, permanent zone (Văn NW, Linh center, Minh NE, Old Woman SW)     
+3. **Dynamic Availability Based on Story State**: NPCs present/absent based on player choices and phase progression     
+4. **Shrine Deterioration Visible & Reversible**: Environmental feedback for player neglect; mechanic + storytelling rei
+inforces consequence-driven design
+5. **Distant Threat (Cá Ông)**: Never enters shrine perimeter during day phase; always visible through window; threat is
+s ambient, not combat-forced
+6. **Environmental Storytelling Over Exposition**: Objects tell trauma; decay tells consequence; discovery is player-pac
+ced exploration
+7. **Cycles & Repetition**: Sun rises/sets; bell rings/fades; chalk circle brightens/fades; player feels time's weight  
+
+---
+
+**Now ready for:**
+- **Art Director**: Create visual assets for each zone (worn shrine materials, mold effects, decay states)
+- **Audio Director**: Implement zone ambient tracks and phase transition cues
+- **Narrative Director**: Write NPC dialogue (27+ keys); integrate with story progression gates
+- **Systems Designer**: Implement deterioration triggers; connect to Game State Machine phases
+- **Level Builders/Engine**: Construct shrine geometry in engine; place zones; set up environmental storytelling nodes  
+
+This spec is **production-ready for shrine implementation**.
+___BEGIN___COMMAND_DONE_MARKER___0
+PS I:\unityVers\Solar phobia>

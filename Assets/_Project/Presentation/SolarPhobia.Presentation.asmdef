@@ -4,7 +4,11 @@
   "references": [
     "SolarPhobia.Domain",
     "SolarPhobia.Application",
-    "SolarPhobia.Shared"
+    "SolarPhobia.Shared",
+    "Unity.InputSystem",
+    "UnityEngine.UIElements",
+    "VContainer",
+    "R3.Unity"
   ],
   "autoReferenced": false
 }

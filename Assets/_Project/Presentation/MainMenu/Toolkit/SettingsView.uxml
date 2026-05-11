@@ -1,0 +1,92 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" version="2024.1" editor-extension-mode="False">
+    <ui:VisualElement class="settings-panel">
+        <ui:VisualElement class="settings-header">
+            <ui:Label text="Settings" name="settings-title" class="settings-title"/>
+            <ui:Button text="X" name="settings-close" class="settings-close"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="settings-tabs">
+            <ui:RadioButtonGroup name="settings-tab-group" class="settings-tab-group">
+                <ui:RadioButton label="Audio" value="audio" name="tab-audio" class="settings-tab settings-tab--active"/>
+                <ui:RadioButton label="Video" value="video" name="tab-video" class="settings-tab"/>
+                <ui:RadioButton label="Controls" value="controls" name="tab-controls" class="settings-tab"/>
+            </ui:RadioButtonGroup>
+        </ui:VisualElement>
+        <ui:VisualElement class="settings-content">
+            <ui:VisualElement class="settings-tab-content settings-tab-content--audio">
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Master Volume" name="label-master-volume" class="settings-label"/>
+                    <ui:Slider value="0.75" min="0" max="1" name="master-volume" class="settings-slider"/>
+                    <ui:Label text="75%" name="value-master-volume" class="settings-value settings-value--volume"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Music Volume" name="label-music-volume" class="settings-label"/>
+                    <ui:Slider value="0.60" min="0" max="1" name="music-volume" class="settings-slider"/>
+                    <ui:Label text="60%" name="value-music-volume" class="settings-value settings-value--volume"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="SFX Volume" name="label-sfx-volume" class="settings-label"/>
+                    <ui:Slider value="0.80" min="0" max="1" name="sfx-volume" class="settings-slider"/>
+                    <ui:Label text="80%" name="value-sfx-volume" class="settings-value settings-value--volume"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Ambient Volume" name="label-ambient-volume" class="settings-label"/>
+                    <ui:Slider value="0.50" min="0" max="1" name="ambient-volume" class="settings-slider"/>
+                    <ui:Label text="50%" name="value-ambient-volume" class="settings-value settings-value--volume"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Subtitles" name="label-subtitles" class="settings-label"/>
+                    <ui:Toggle value="true" name="subtitles" class="settings-toggle"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Text Size" name="label-text-size" class="settings-label"/>
+                    <ui:DropdownField value="Medium" name="text-size" class="settings-dropdown"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-tab-content settings-tab-content--video" style="display: none;">
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Resolution" name="label-resolution" class="settings-label"/>
+                    <ui:DropdownField value="1920x1080" name="resolution" class="settings-dropdown settings-dropdown--resolution"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Window Mode" name="label-window-mode" class="settings-label"/>
+                    <ui:DropdownField value="Fullscreen" name="window-mode" class="settings-dropdown"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Quality" name="label-quality" class="settings-label"/>
+                    <ui:DropdownField value="Ultra" name="quality" class="settings-dropdown"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="V-Sync" name="label-vsync" class="settings-label"/>
+                    <ui:Toggle value="true" name="vsync" class="settings-toggle"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Camera Shake" name="label-camera-shake" class="settings-label"/>
+                    <ui:Toggle value="true" name="camera-shake" class="settings-toggle"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Motion Blur" name="label-motion-blur" class="settings-label"/>
+                    <ui:Toggle value="false" name="motion-blur" class="settings-toggle"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="UI Scaling" name="label-ui-scale" class="settings-label"/>
+                    <ui:Slider value="1" min="1" max="2" name="ui-scale" class="settings-slider"/>
+                    <ui:Label text="1.0x" name="value-ui-scale" class="settings-value settings-value--volume"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="settings-tab-content settings-tab-content--controls" style="display: none;">
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Input Device" name="label-input-device" class="settings-label"/>
+                    <ui:DropdownField value="Keyboard/Mouse" name="input-device" class="settings-dropdown"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Invert Y-Axis" name="label-invert-y" class="settings-label"/>
+                    <ui:Toggle value="false" name="invert-y" class="settings-toggle"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row">
+                    <ui:Label text="Gamepad Vibration" name="label-gamepad-vibration" class="settings-label"/>
+                    <ui:Toggle value="true" name="gamepad-vibration" class="settings-toggle"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

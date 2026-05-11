@@ -3,7 +3,7 @@ using SolarPhobia.Domain;
 
 namespace SolarPhobia.Application.UseCases
 {
-    public class TransitionToNightUseCase
+    public abstract class TransitionToNightUseCase
     {
         public void Execute(TransitionToNightCommand command)
         {

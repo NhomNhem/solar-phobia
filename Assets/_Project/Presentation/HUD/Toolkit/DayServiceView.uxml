@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="DayServiceView.uss" />
+    <ui:VisualElement name="day-service-root" class="day-service-root">
+        <ui:Label name="title-label" class="panel-title" text="Day Service — Choose" />
+
+        <ui:VisualElement name="soul-cards-container" class="soul-cards-container">
+            <ui:VisualElement name="card-linh" class="soul-card" data-soul-id="linh">
+                <ui:Label name="soul-name-linh" class="soul-name" text="Em Linh" />
+                <ui:Label name="soul-state-linh" class="soul-state" text="Unselected" />
+                <ui:Label name="ritual-icon-linh" class="ritual-icon" text="" />
+            </ui:VisualElement>
+            <ui:VisualElement name="card-van" class="soul-card" data-soul-id="van">
+                <ui:Label name="soul-name-van" class="soul-name" text="Ông Văn" />
+                <ui:Label name="soul-state-van" class="soul-state" text="Unselected" />
+                <ui:Label name="ritual-icon-van" class="ritual-icon" text="" />
+            </ui:VisualElement>
+            <ui:VisualElement name="card-minh" class="soul-card" data-soul-id="minh">
+                <ui:Label name="soul-name-minh" class="soul-name" text="Anh Minh" />
+                <ui:Label name="soul-state-minh" class="soul-state" text="Unselected" />
+                <ui:Label name="ritual-icon-minh" class="ritual-icon" text="" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="ritual-source-container" class="ritual-source-container">
+            <ui:VisualElement name="ritual-tea" class="ritual-source" data-ritual-type="Tea">
+                <ui:Label name="ritual-tea-label" class="ritual-source-label" text="☕ Tea" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ritual-incense" class="ritual-source" data-ritual-type="Incense">
+                <ui:Label name="ritual-incense-label" class="ritual-source-label" text="🪔 Incense" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ritual-offering" class="ritual-source" data-ritual-type="Offering">
+                <ui:Label name="ritual-offering-label" class="ritual-source-label" text="🎁 Offering" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:Label name="validation-status" class="validation-status" text="Select 2 to save, 1 to abandon." />
+
+        <ui:VisualElement name="confirm-container" class="confirm-container">
+            <ui:Button name="confirm-button" class="confirm-button" text="Confirm" disabled="true" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="choice-lock-overlay" class="choice-lock-overlay" style="display: none;">
+            <ui:Label name="lock-text" class="lock-text" text="Selection Locked" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

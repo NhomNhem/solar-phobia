@@ -1,0 +1,18 @@
+{
+  "name": "SolarPhobia.Tests.Integration.PlayerController",
+  "rootNamespace": "SolarPhobia.Tests.Integration.PlayerController",
+  "references": [
+    "SolarPhobia.Domain",
+    "SolarPhobia.Application",
+    "SolarPhobia.Presentation",
+    "UnityEngine.TestRunner",
+    "UnityEngine.UIElements",
+    "VContainer",
+    "R3.Unity"
+  ],
+  "autoReferenced": false,
+  "includePlatforms": [
+    "Editor"
+  ],
+  "allowUnsafeCode": false
+}

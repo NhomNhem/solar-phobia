@@ -5,7 +5,9 @@
     "SolarPhobia.Domain",
     "SolarPhobia.Application",
     "SolarPhobia.Shared",
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "VContainer",
+    "R3.Unity"
   ],
   "autoReferenced": false
 }

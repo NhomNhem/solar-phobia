@@ -1,0 +1,26 @@
+{
+    "name": "SolarPhobia.Application.Editor.Tests",
+    "rootNamespace": "SolarPhobia.Application.Tests",
+    "references": [
+        "SolarPhobia.Application",
+        "SolarPhobia.Domain",
+        "SolarPhobia.Shared",
+        "UnityEngine.TestRunner",
+        "VContainer",
+        "R3",
+        "R3.Unity",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,6 +1,8 @@
 ﻿{
   "name": "SolarPhobia.Shared",
   "rootNamespace": "SolarPhobia.Shared",
-  "references": [],
+  "references": [
+    "Unity.InputSystem"
+  ],
   "autoReferenced": false
 }

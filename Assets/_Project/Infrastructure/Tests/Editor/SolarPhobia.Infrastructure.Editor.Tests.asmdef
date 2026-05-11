@@ -1,0 +1,21 @@
+{
+    "name": "SolarPhobia.Infrastructure.Editor.Tests",
+    "rootNamespace": "SolarPhobia.Infrastructure.Tests",
+    "references": [
+        "SolarPhobia.Infrastructure",
+        "SolarPhobia.Application",
+        "SolarPhobia.Domain",
+        "UnityEngine.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
