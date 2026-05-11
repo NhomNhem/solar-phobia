@@ -1,48 +1,42 @@
 using System;
 using System.Collections.Generic;
+using R3;
+using SolarPhobia.Application.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
-// using Unity.InputSystem; // TODO: fix assembly reference
-using UnityEngine.SceneManagement;
+using VContainer;
 
 namespace SolarPhobia.Presentation.MainMenu
 {
-    public class MainMenuController : MonoBehaviour
+    public class MainMenuController : MonoBehaviour, IDisposable
     {
-        public enum ScreenState
-        {
-            MainMenu,
-            Settings,
-            Credits,
-            QuitConfirm
-        }
-
         public static event Action OnNewGameRequested;
         public static event Action OnContinueRequested;
         public static event Action OnQuitRequested;
 
+        [Inject] internal IMainMenuApplicationService _mainMenuService;
         [SerializeField] private UIDocument _document;
 
+        // ── UI Root ────────────────────────────────────────────────────
         private VisualElement _root;
         private VisualElement _settingsPanel;
         private VisualElement _creditsPanel;
         private VisualElement _dialogOverlay;
 
+        // ── Main Menu Buttons ──────────────────────────────────────────
         private Button _btnNewGame;
         private Button _btnContinue;
         private Button _btnSettings;
         private Button _btnCredits;
         private Button _btnQuit;
-        private Button _btnCloseSettingsBtn;
-        private Button _btnBackCredits;
-        private Button _btnConfirmQuitBtn;
-        private Button _btnCancelQuitBtn;
 
+        // ── Settings ───────────────────────────────────────────────────
+        private Button _btnCloseSettings;
         private RadioButtonGroup _settingsTabs;
         private VisualElement _tabAudio;
         private VisualElement _tabVideo;
         private VisualElement _tabControls;
-
+        private VisualElement _tabAccessibility;
         private Slider _sliderMasterVolume;
         private Slider _sliderMusicVolume;
         private Slider _sliderSfxVolume;
@@ -54,26 +48,44 @@ namespace SolarPhobia.Presentation.MainMenu
         private Toggle _toggleMotionBlur;
         private Toggle _toggleInvertY;
         private Toggle _toggleGamepadVibration;
+        private Toggle _toggleHighContrast;
+        private Toggle _toggleReduceMotion;
+        private Toggle _toggleColorblindCues;
         private DropdownField _dropdownResolution;
         private DropdownField _dropdownWindowMode;
         private DropdownField _dropdownQuality;
         private DropdownField _dropdownTextSize;
         private DropdownField _dropdownInputDevice;
 
+        // ── Credits ────────────────────────────────────────────────────
+        private Button _btnBackCredits;
+
+        // ── Dialog ─────────────────────────────────────────────────────
+        private Label _dialogTitle;
+        private Label _dialogMessage;
+        private Button _btnConfirmDialog;
+        private Button _btnCancelDialog;
+
+        // ── Labels ─────────────────────────────────────────────────────
         private Label _labelTitle;
         private Label _labelSubtitle;
         private Label _labelVersion;
         private Label _settingsTitle;
-        private Button _btnCloseSettings;
         private Label _creditsTitle;
-        private Label _dialogTitle;
-        private Label _dialogMessage;
-        private Button _btnConfirmQuit;
-        private Button _btnCancelQuit;
+        private Label _valueMasterVolume;
+        private Label _valueMusicVolume;
+        private Label _valueSfxVolume;
+        private Label _valueAmbientVolume;
+        private Label _valueUiScale;
 
-        private ScreenState _currentScreen = ScreenState.MainMenu;
-        private List<Button> _menuButtons;
-        private int _focusedButtonIndex = 0;
+        // ── State/Subscriptions ────────────────────────────────────────
+        private readonly List<Button> _menuButtons = new();
+        private IDisposable _stateSubscription;
+        private IDisposable _newGameSubscription;
+        private IDisposable _continueSubscription;
+        private IDisposable _quitSubscription;
+        private MainMenuUiState _latestState;
+        private MainMenuScreenState _lastRenderedScreen;
 
         private void Awake()
         {
@@ -81,41 +93,78 @@ namespace SolarPhobia.Presentation.MainMenu
             {
                 _document = FindFirstObjectByType<UIDocument>();
             }
-            
+
             if (_document == null)
             {
-                Debug.LogError("MainMenuController: No UIDocument found in scene!");
+                Debug.LogError("[MainMenuController] UIDocument is required.");
+                enabled = false;
                 return;
             }
-            
+
+            if (_mainMenuService == null)
+            {
+                _mainMenuService = new MainMenuApplicationService();
+            }
+
             _root = _document.rootVisualElement;
             CacheElements();
             BindEvents();
-            LoadSettings();
+            BindService();
             ApplyLocalizedText();
             LocalizationKeys.OnLanguageChanged += OnLanguageChanged;
         }
 
         private void OnDestroy()
         {
+            Dispose();
             LocalizationKeys.OnLanguageChanged -= OnLanguageChanged;
+        }
+
+        private void Update()
+        {
+            if (_latestState == null)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton1))
+            {
+                if (_latestState.ScreenState == MainMenuScreenState.VideoApplyConfirm)
+                {
+                    _mainMenuService.CancelVideoApply();
+                    return;
+                }
+
+                _mainMenuService.Back();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.JoystickButton0))
+            {
+                if (_latestState.ScreenState == MainMenuScreenState.QuitConfirm ||
+                    _latestState.ScreenState == MainMenuScreenState.NewGameConfirm ||
+                    _latestState.ScreenState == MainMenuScreenState.VideoApplyConfirm)
+                {
+                    OnDialogConfirm();
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            _stateSubscription?.Dispose();
+            _newGameSubscription?.Dispose();
+            _continueSubscription?.Dispose();
+            _quitSubscription?.Dispose();
+            (_mainMenuService as IDisposable)?.Dispose();
         }
 
         private void OnLanguageChanged()
         {
             ApplyLocalizedText();
-        }
-
-        private void OnEnable()
-        {
-            CheckSaveFile();
-            SetScreen(ScreenState.MainMenu);
-        }
-
-        private void Update()
-        {
-            // TODO: Fix Input System reference - commented out for now
-            // Input System polling disabled temporarily
+            if (_latestState != null)
+            {
+                RenderState(_latestState);
+            }
         }
 
         private void CacheElements()
@@ -125,6 +174,7 @@ namespace SolarPhobia.Presentation.MainMenu
             _btnSettings = _root.Q<Button>("settings");
             _btnCredits = _root.Q<Button>("credits");
             _btnQuit = _root.Q<Button>("quit");
+            _menuButtons.AddRange(new[] { _btnNewGame, _btnContinue, _btnSettings, _btnCredits, _btnQuit });
 
             _settingsPanel = _root.Q<VisualElement>("settings-panel");
             _btnCloseSettings = _settingsPanel?.Q<Button>("settings-close");
@@ -132,6 +182,7 @@ namespace SolarPhobia.Presentation.MainMenu
             _tabAudio = _settingsPanel?.Q<VisualElement>("settings-tab-content--audio");
             _tabVideo = _settingsPanel?.Q<VisualElement>("settings-tab-content--video");
             _tabControls = _settingsPanel?.Q<VisualElement>("settings-tab-content--controls");
+            _tabAccessibility = _settingsPanel?.Q<VisualElement>("settings-tab-content--accessibility");
 
             _sliderMasterVolume = _settingsPanel?.Q<Slider>("master-volume");
             _sliderMusicVolume = _settingsPanel?.Q<Slider>("music-volume");
@@ -144,377 +195,348 @@ namespace SolarPhobia.Presentation.MainMenu
             _toggleMotionBlur = _settingsPanel?.Q<Toggle>("motion-blur");
             _toggleInvertY = _settingsPanel?.Q<Toggle>("invert-y");
             _toggleGamepadVibration = _settingsPanel?.Q<Toggle>("gamepad-vibration");
+            _toggleHighContrast = _settingsPanel?.Q<Toggle>("high-contrast");
+            _toggleReduceMotion = _settingsPanel?.Q<Toggle>("reduce-motion");
+            _toggleColorblindCues = _settingsPanel?.Q<Toggle>("colorblind-cues");
             _dropdownResolution = _settingsPanel?.Q<DropdownField>("resolution");
             _dropdownWindowMode = _settingsPanel?.Q<DropdownField>("window-mode");
             _dropdownQuality = _settingsPanel?.Q<DropdownField>("quality");
             _dropdownTextSize = _settingsPanel?.Q<DropdownField>("text-size");
             _dropdownInputDevice = _settingsPanel?.Q<DropdownField>("input-device");
 
+            if (_dropdownResolution != null)
+            {
+                _dropdownResolution.choices = new List<string>(SettingsDefaults.RESOLUTIONS);
+            }
+
+            if (_dropdownWindowMode != null)
+            {
+                _dropdownWindowMode.choices = new List<string>(SettingsDefaults.WINDOW_MODES);
+            }
+
+            if (_dropdownQuality != null)
+            {
+                _dropdownQuality.choices = new List<string>(SettingsDefaults.QUALITY_LEVELS);
+            }
+
+            if (_dropdownTextSize != null)
+            {
+                _dropdownTextSize.choices = new List<string>(SettingsDefaults.TEXT_SIZES);
+            }
+
+            if (_dropdownInputDevice != null)
+            {
+                _dropdownInputDevice.choices = new List<string>(SettingsDefaults.INPUT_DEVICES);
+            }
+
             _creditsPanel = _root.Q<VisualElement>("credits-panel");
             _btnBackCredits = _creditsPanel?.Q<Button>("credits-back");
 
             _dialogOverlay = _root.Q<VisualElement>("dialog-overlay");
-            _btnConfirmQuit = _dialogOverlay?.Q<Button>("confirm-quit");
-            _btnCancelQuit = _dialogOverlay?.Q<Button>("cancel-quit");
+            _dialogTitle = _dialogOverlay?.Q<Label>("dialog-title");
+            _dialogMessage = _dialogOverlay?.Q<Label>("dialog-message");
+            _btnConfirmDialog = _dialogOverlay?.Q<Button>("confirm-quit");
+            _btnCancelDialog = _dialogOverlay?.Q<Button>("cancel-quit");
 
             _labelTitle = _root.Q<Label>("title");
             _labelSubtitle = _root.Q<Label>("subtitle");
             _labelVersion = _root.Q<Label>("version");
-
             _settingsTitle = _root.Q<Label>("settings-title");
-            _btnCloseSettingsBtn = _settingsPanel?.Q<Button>("settings-close");
             _creditsTitle = _root.Q<Label>("credits-title");
-            _dialogTitle = _root.Q<Label>("dialog-title");
-            _dialogMessage = _root.Q<Label>("dialog-message");
-            _btnConfirmQuitBtn = _dialogOverlay?.Q<Button>("confirm-quit");
-            _btnCancelQuitBtn = _dialogOverlay?.Q<Button>("cancel-quit");
-
-            _menuButtons = new List<Button> { _btnNewGame, _btnContinue, _btnSettings, _btnCredits, _btnQuit };
+            _valueMasterVolume = _settingsPanel?.Q<Label>("value-master-volume");
+            _valueMusicVolume = _settingsPanel?.Q<Label>("value-music-volume");
+            _valueSfxVolume = _settingsPanel?.Q<Label>("value-sfx-volume");
+            _valueAmbientVolume = _settingsPanel?.Q<Label>("value-ambient-volume");
+            _valueUiScale = _settingsPanel?.Q<Label>("value-ui-scale");
         }
 
         private void BindEvents()
         {
-            _btnNewGame?.RegisterCallback<ClickEvent>(_ => OnNewGame());
-            _btnContinue?.RegisterCallback<ClickEvent>(_ => OnContinue());
-            _btnSettings?.RegisterCallback<ClickEvent>(_ => OnSettings());
-            _btnCredits?.RegisterCallback<ClickEvent>(_ => OnCredits());
-            _btnQuit?.RegisterCallback<ClickEvent>(_ => OnQuit());
+            _btnNewGame?.RegisterCallback<ClickEvent>(_ => _mainMenuService.RequestNewGame());
+            _btnContinue?.RegisterCallback<ClickEvent>(_ => _mainMenuService.RequestContinue());
+            _btnSettings?.RegisterCallback<ClickEvent>(_ => _mainMenuService.OpenSettings());
+            _btnCredits?.RegisterCallback<ClickEvent>(_ => _mainMenuService.OpenCredits());
+            _btnQuit?.RegisterCallback<ClickEvent>(_ => _mainMenuService.RequestQuit());
+            _btnCloseSettings?.RegisterCallback<ClickEvent>(_ => _mainMenuService.Back());
+            _btnBackCredits?.RegisterCallback<ClickEvent>(_ => _mainMenuService.Back());
 
-            _btnCloseSettings?.RegisterCallback<ClickEvent>(_ => CloseSettings());
-            _btnBackCredits?.RegisterCallback<ClickEvent>(_ => CloseCredits());
-            _btnConfirmQuit?.RegisterCallback<ClickEvent>(_ => ConfirmQuit());
-            _btnCancelQuit?.RegisterCallback<ClickEvent>(_ => CancelQuit());
+            _btnConfirmDialog?.RegisterCallback<ClickEvent>(_ => OnDialogConfirm());
+            _btnCancelDialog?.RegisterCallback<ClickEvent>(_ => OnDialogCancel());
 
-            _settingsTabs?.RegisterValueChangedCallback(evt =>
-            {
-                int idx = evt.newValue;
-                string[] tabs = { "audio", "video", "controls" };
-                if (idx >= 0 && idx < tabs.Length)
-                    ShowSettingsTab(tabs[idx]);
-            });
+            _settingsTabs?.RegisterValueChangedCallback(evt => _mainMenuService.SetSettingsTab(evt.newValue));
 
-            _sliderMasterVolume?.RegisterValueChangedCallback(evt =>
-            {
-                AudioListener.volume = evt.newValue;
-                PlayerPrefs.SetFloat(PlayerPrefsKeys.MASTER_VOLUME, evt.newValue);
-            });
-            _sliderMusicVolume?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetFloat(PlayerPrefsKeys.MUSIC_VOLUME, evt.newValue);
-            });
-            _sliderSfxVolume?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetFloat(PlayerPrefsKeys.SFX_VOLUME, evt.newValue);
-            });
-            _sliderAmbientVolume?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetFloat(PlayerPrefsKeys.AMBIENT_VOLUME, evt.newValue);
-            });
-            _sliderUiScale?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetFloat(PlayerPrefsKeys.UI_SCALE, evt.newValue);
-                ApplyUiScale(evt.newValue);
-            });
+            _sliderMasterVolume?.RegisterValueChangedCallback(evt => _mainMenuService.SetMasterVolume(evt.newValue));
+            _sliderMusicVolume?.RegisterValueChangedCallback(evt => _mainMenuService.SetMusicVolume(evt.newValue));
+            _sliderSfxVolume?.RegisterValueChangedCallback(evt => _mainMenuService.SetSfxVolume(evt.newValue));
+            _sliderAmbientVolume?.RegisterValueChangedCallback(evt => _mainMenuService.SetAmbientVolume(evt.newValue));
+            _sliderUiScale?.RegisterValueChangedCallback(evt => _mainMenuService.SetUiScale(evt.newValue));
 
-            _toggleSubtitles?.RegisterValueChangedCallback(evt =>
+            _toggleSubtitles?.RegisterValueChangedCallback(evt => _mainMenuService.SetSubtitles(evt.newValue));
+            _toggleVSync?.RegisterValueChangedCallback(evt => _mainMenuService.SetVSync(evt.newValue));
+            _toggleCameraShake?.RegisterValueChangedCallback(evt => _mainMenuService.SetCameraShake(evt.newValue));
+            _toggleMotionBlur?.RegisterValueChangedCallback(evt => _mainMenuService.SetMotionBlur(evt.newValue));
+            _toggleInvertY?.RegisterValueChangedCallback(evt => _mainMenuService.SetInvertY(evt.newValue));
+            _toggleGamepadVibration?.RegisterValueChangedCallback(evt => _mainMenuService.SetGamepadVibration(evt.newValue));
+            _toggleHighContrast?.RegisterValueChangedCallback(evt => _mainMenuService.SetHighContrast(evt.newValue));
+            _toggleReduceMotion?.RegisterValueChangedCallback(evt => _mainMenuService.SetReduceMotion(evt.newValue));
+            _toggleColorblindCues?.RegisterValueChangedCallback(evt => _mainMenuService.SetColorblindCues(evt.newValue));
+
+            _dropdownResolution?.RegisterValueChangedCallback(evt => _mainMenuService.SetResolution(evt.newValue));
+            _dropdownWindowMode?.RegisterValueChangedCallback(evt => _mainMenuService.SetWindowMode(evt.newValue));
+            _dropdownQuality?.RegisterValueChangedCallback(evt => _mainMenuService.SetQuality(evt.newValue));
+            _dropdownTextSize?.RegisterValueChangedCallback(evt => _mainMenuService.SetTextSize(evt.newValue));
+            _dropdownInputDevice?.RegisterValueChangedCallback(evt => _mainMenuService.SetInputDevice(evt.newValue));
+        }
+
+        private void BindService()
+        {
+            _mainMenuService.Initialize();
+
+            _stateSubscription = _mainMenuService.CurrentState.Subscribe(RenderState);
+            _newGameSubscription = _mainMenuService.OnStartNewGameRequested.Subscribe(_ => OnNewGameRequested?.Invoke());
+            _continueSubscription = _mainMenuService.OnContinueRequested.Subscribe(_ => OnContinueRequested?.Invoke());
+            _quitSubscription = _mainMenuService.OnQuitConfirmed.Subscribe(_ =>
             {
-                PlayerPrefs.SetInt(PlayerPrefsKeys.SUBTITLES_ENABLED, evt.newValue ? 1 : 0);
-            });
-            _toggleVSync?.RegisterValueChangedCallback(evt =>
-            {
-                QualitySettings.vSyncCount = evt.newValue ? 1 : 0;
-                PlayerPrefs.SetInt(PlayerPrefsKeys.V_SYNC, evt.newValue ? 1 : 0);
-            });
-            _toggleCameraShake?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetInt(PlayerPrefsKeys.CAMERA_SHAKE, evt.newValue ? 1 : 0);
-            });
-            _toggleMotionBlur?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetInt(PlayerPrefsKeys.MOTION_BLUR, evt.newValue ? 1 : 0);
-            });
-            _toggleInvertY?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetInt(PlayerPrefsKeys.INVERT_Y_AXIS, evt.newValue ? 1 : 0);
-            });
-            _toggleGamepadVibration?.RegisterValueChangedCallback(evt =>
-            {
-                PlayerPrefs.SetInt(PlayerPrefsKeys.GAMEPAD_VIBRATION, evt.newValue ? 1 : 0);
+                OnQuitRequested?.Invoke();
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
             });
 
-            _dropdownResolution?.RegisterValueChangedCallback(evt => OnResolutionChanged(evt.newValue));
-            _dropdownWindowMode?.RegisterValueChangedCallback(evt => OnWindowModeChanged(evt.newValue));
-            _dropdownQuality?.RegisterValueChangedCallback(evt => OnQualityChanged(evt.newValue));
-            _dropdownTextSize?.RegisterValueChangedCallback(evt =>
+        }
+
+        private void RenderState(MainMenuUiState state)
+        {
+            if (state == null)
             {
-                PlayerPrefs.SetString(PlayerPrefsKeys.TEXT_SIZE, evt.newValue);
-            });
-            _dropdownInputDevice?.RegisterValueChangedCallback(evt =>
+                return;
+            }
+
+            _latestState = state;
+
+            _settingsPanel.style.display = state.ScreenState == MainMenuScreenState.Settings ? DisplayStyle.Flex : DisplayStyle.None;
+            _creditsPanel.style.display = state.ScreenState == MainMenuScreenState.Credits ? DisplayStyle.Flex : DisplayStyle.None;
+
+            var showDialog =
+                state.ScreenState == MainMenuScreenState.QuitConfirm ||
+                state.ScreenState == MainMenuScreenState.NewGameConfirm ||
+                state.ScreenState == MainMenuScreenState.VideoApplyConfirm;
+            _dialogOverlay.style.display = showDialog ? DisplayStyle.Flex : DisplayStyle.None;
+
+            _btnContinue.SetEnabled(state.HasSave);
+            _btnContinue.text = state.HasSave
+                ? string.Format(LocalizationKeys.Get(LocalizationKeys.BUTTON_CONTINUE_DAY_FORMAT), state.SaveDay)
+                : LocalizationKeys.Get(LocalizationKeys.BUTTON_CONTINUE);
+
+            _settingsTabs.value = (int)state.ActiveTab;
+            _tabAudio.style.display = state.ActiveTab == MainMenuSettingsTab.Audio ? DisplayStyle.Flex : DisplayStyle.None;
+            _tabVideo.style.display = state.ActiveTab == MainMenuSettingsTab.Video ? DisplayStyle.Flex : DisplayStyle.None;
+            _tabControls.style.display = state.ActiveTab == MainMenuSettingsTab.Controls ? DisplayStyle.Flex : DisplayStyle.None;
+            _tabAccessibility.style.display = state.ActiveTab == MainMenuSettingsTab.Accessibility ? DisplayStyle.Flex : DisplayStyle.None;
+
+            var settings = state.Settings;
+            _sliderMasterVolume.value = settings.MasterVolume;
+            _sliderMusicVolume.value = settings.MusicVolume;
+            _sliderSfxVolume.value = settings.SfxVolume;
+            _sliderAmbientVolume.value = settings.AmbientVolume;
+            _sliderUiScale.value = settings.UiScale;
+            _toggleSubtitles.value = settings.Subtitles;
+            _toggleVSync.value = settings.VSync;
+            _toggleCameraShake.value = settings.CameraShake;
+            _toggleMotionBlur.value = settings.MotionBlur;
+            _toggleInvertY.value = settings.InvertY;
+            _toggleGamepadVibration.value = settings.GamepadVibration;
+            _toggleHighContrast.value = settings.HighContrast;
+            _toggleReduceMotion.value = settings.ReduceMotion;
+            _toggleColorblindCues.value = settings.ColorblindCues;
+            _dropdownTextSize.value = settings.TextSize;
+            _dropdownInputDevice.value = settings.InputDevice;
+            _dropdownResolution.value = settings.Resolution;
+            _dropdownWindowMode.value = settings.WindowMode;
+            _dropdownQuality.value = settings.Quality;
+
+            _root.style.scale = new StyleScale(new Vector3(settings.UiScale, settings.UiScale, 1f));
+
+            if (_valueMasterVolume != null)
             {
-                PlayerPrefs.SetString(PlayerPrefsKeys.INPUT_DEVICE, evt.newValue);
-            });
+                _valueMasterVolume.text = $"{Mathf.RoundToInt(settings.MasterVolume * 100f)}%";
+            }
+
+            if (_valueMusicVolume != null)
+            {
+                _valueMusicVolume.text = $"{Mathf.RoundToInt(settings.MusicVolume * 100f)}%";
+            }
+
+            if (_valueSfxVolume != null)
+            {
+                _valueSfxVolume.text = $"{Mathf.RoundToInt(settings.SfxVolume * 100f)}%";
+            }
+
+            if (_valueAmbientVolume != null)
+            {
+                _valueAmbientVolume.text = $"{Mathf.RoundToInt(settings.AmbientVolume * 100f)}%";
+            }
+
+            if (_valueUiScale != null)
+            {
+                _valueUiScale.text = $"{settings.UiScale:0.0}x";
+            }
+
+            ApplyDialogLocalization(state.ScreenState);
+            ApplyFocusForState(state.ScreenState);
+        }
+
+        private void ApplyDialogLocalization(MainMenuScreenState screenState)
+        {
+            switch (screenState)
+            {
+                case MainMenuScreenState.NewGameConfirm:
+                    _dialogTitle.text = LocalizationKeys.Get(LocalizationKeys.NEWGAME_TITLE);
+                    _dialogMessage.text = LocalizationKeys.Get(LocalizationKeys.NEWGAME_MESSAGE);
+                    _btnConfirmDialog.text = LocalizationKeys.Get(LocalizationKeys.NEWGAME_CONFIRM);
+                    _btnCancelDialog.text = LocalizationKeys.Get(LocalizationKeys.QUIT_CANCEL);
+                    break;
+                case MainMenuScreenState.VideoApplyConfirm:
+                    _dialogTitle.text = LocalizationKeys.Get(LocalizationKeys.VIDEO_APPLY_TITLE);
+                    _dialogMessage.text = LocalizationKeys.Get(LocalizationKeys.VIDEO_APPLY_MESSAGE);
+                    _btnConfirmDialog.text = LocalizationKeys.Get(LocalizationKeys.VIDEO_APPLY_CONFIRM);
+                    _btnCancelDialog.text = LocalizationKeys.Get(LocalizationKeys.VIDEO_APPLY_CANCEL);
+                    break;
+                default:
+                    _dialogTitle.text = LocalizationKeys.Get(LocalizationKeys.QUIT_TITLE);
+                    _dialogMessage.text = LocalizationKeys.Get(LocalizationKeys.QUIT_MESSAGE);
+                    _btnConfirmDialog.text = LocalizationKeys.Get(LocalizationKeys.QUIT_CONFIRM);
+                    _btnCancelDialog.text = LocalizationKeys.Get(LocalizationKeys.QUIT_CANCEL);
+                    break;
+            }
+        }
+
+        private void OnDialogConfirm()
+        {
+            var state = _latestState;
+            if (state == null)
+            {
+                return;
+            }
+
+            switch (state.ScreenState)
+            {
+                case MainMenuScreenState.NewGameConfirm:
+                    _mainMenuService.ConfirmNewGameOverwrite();
+                    break;
+                case MainMenuScreenState.VideoApplyConfirm:
+                    _mainMenuService.ConfirmVideoApply();
+                    break;
+                default:
+                    _mainMenuService.ConfirmQuit();
+                    break;
+            }
+        }
+
+        private void OnDialogCancel()
+        {
+            var state = _latestState;
+            if (state == null)
+            {
+                return;
+            }
+
+            if (state.ScreenState == MainMenuScreenState.VideoApplyConfirm)
+            {
+                _mainMenuService.CancelVideoApply();
+                return;
+            }
+
+            _mainMenuService.CancelDialog();
         }
 
         private void ApplyLocalizedText()
         {
-            if (_labelTitle != null) _labelTitle.text = LocalizationKeys.Get(LocalizationKeys.TITLE);
-            if (_labelSubtitle != null) _labelSubtitle.text = LocalizationKeys.Get(LocalizationKeys.SUBTITLE);
-            if (_labelVersion != null) _labelVersion.text = LocalizationKeys.Get(LocalizationKeys.VERSION);
+            _labelTitle.text = LocalizationKeys.Get(LocalizationKeys.TITLE);
+            _labelSubtitle.text = LocalizationKeys.Get(LocalizationKeys.SUBTITLE);
+            _labelVersion.text = LocalizationKeys.Get(LocalizationKeys.VERSION);
+            _btnNewGame.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_NEWGAME);
+            _btnSettings.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_SETTINGS);
+            _btnCredits.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_CREDITS);
+            _btnQuit.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_QUIT);
+            _settingsTitle.text = LocalizationKeys.Get(LocalizationKeys.SETTINGS_TITLE);
+            _creditsTitle.text = LocalizationKeys.Get(LocalizationKeys.CREDITS_TITLE);
+            _btnCloseSettings.text = LocalizationKeys.Get(LocalizationKeys.SETTINGS_CLOSE);
+            _btnBackCredits.text = LocalizationKeys.Get(LocalizationKeys.CREDITS_BACK);
 
-            if (_btnNewGame != null) _btnNewGame.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_NEWGAME);
-            if (_btnSettings != null) _btnSettings.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_SETTINGS);
-            if (_btnCredits != null) _btnCredits.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_CREDITS);
-            if (_btnQuit != null) _btnQuit.text = LocalizationKeys.Get(LocalizationKeys.BUTTON_QUIT);
-
-            if (_settingsTitle != null) _settingsTitle.text = LocalizationKeys.Get(LocalizationKeys.SETTINGS_TITLE);
-            if (_creditsTitle != null) _creditsTitle.text = LocalizationKeys.Get(LocalizationKeys.CREDITS_TITLE);
-            if (_dialogTitle != null) _dialogTitle.text = LocalizationKeys.Get(LocalizationKeys.QUIT_TITLE);
-            if (_dialogMessage != null) _dialogMessage.text = LocalizationKeys.Get(LocalizationKeys.QUIT_MESSAGE);
-            if (_btnConfirmQuitBtn != null) _btnConfirmQuitBtn.text = LocalizationKeys.Get(LocalizationKeys.QUIT_CONFIRM);
-            if (_btnCancelQuitBtn != null) _btnCancelQuitBtn.text = LocalizationKeys.Get(LocalizationKeys.QUIT_CANCEL);
-
-            if (_sliderMasterVolume != null && _sliderMasterVolume.parent != null)
-            {
-                var label = _sliderMasterVolume.parent.Q<Label>(null, "settings-label");
-                if (label != null) label.text = LocalizationKeys.Get(LocalizationKeys.LABEL_MASTER_VOLUME);
-            }
+            SetLabelText("tab-audio", LocalizationKeys.Get(LocalizationKeys.TAB_AUDIO));
+            SetLabelText("tab-video", LocalizationKeys.Get(LocalizationKeys.TAB_VIDEO));
+            SetLabelText("tab-controls", LocalizationKeys.Get(LocalizationKeys.TAB_CONTROLS));
+            SetLabelText("tab-accessibility", LocalizationKeys.Get(LocalizationKeys.TAB_ACCESSIBILITY));
+            SetLabelText("label-master-volume", LocalizationKeys.Get(LocalizationKeys.LABEL_MASTER_VOLUME));
+            SetLabelText("label-music-volume", LocalizationKeys.Get(LocalizationKeys.LABEL_MUSIC_VOLUME));
+            SetLabelText("label-sfx-volume", LocalizationKeys.Get(LocalizationKeys.LABEL_SFX_VOLUME));
+            SetLabelText("label-ambient-volume", LocalizationKeys.Get(LocalizationKeys.LABEL_AMBIENT_VOLUME));
+            SetLabelText("label-subtitles", LocalizationKeys.Get(LocalizationKeys.LABEL_SUBTITLES));
+            SetLabelText("label-text-size", LocalizationKeys.Get(LocalizationKeys.LABEL_TEXT_SIZE));
+            SetLabelText("label-resolution", LocalizationKeys.Get(LocalizationKeys.LABEL_RESOLUTION));
+            SetLabelText("label-window-mode", LocalizationKeys.Get(LocalizationKeys.LABEL_WINDOW_MODE));
+            SetLabelText("label-quality", LocalizationKeys.Get(LocalizationKeys.LABEL_QUALITY));
+            SetLabelText("label-vsync", LocalizationKeys.Get(LocalizationKeys.LABEL_VSYNC));
+            SetLabelText("label-camera-shake", LocalizationKeys.Get(LocalizationKeys.LABEL_CAMERA_SHAKE));
+            SetLabelText("label-motion-blur", LocalizationKeys.Get(LocalizationKeys.LABEL_MOTION_BLUR));
+            SetLabelText("label-ui-scale", LocalizationKeys.Get(LocalizationKeys.LABEL_UI_SCALE));
+            SetLabelText("label-input-device", LocalizationKeys.Get(LocalizationKeys.LABEL_INPUT_DEVICE));
+            SetLabelText("label-invert-y", LocalizationKeys.Get(LocalizationKeys.LABEL_INVERT_Y));
+            SetLabelText("label-gamepad-vibration", LocalizationKeys.Get(LocalizationKeys.LABEL_GAMEPAD_VIBRATION));
+            SetLabelText("label-high-contrast", LocalizationKeys.Get(LocalizationKeys.LABEL_HIGH_CONTRAST));
+            SetLabelText("label-reduce-motion", LocalizationKeys.Get(LocalizationKeys.LABEL_REDUCE_MOTION));
+            SetLabelText("label-colorblind-cues", LocalizationKeys.Get(LocalizationKeys.LABEL_COLORBLIND_CUES));
         }
 
-        private void LoadSettings()
+        private void ApplyFocusForState(MainMenuScreenState screenState)
         {
-            float master = PlayerPrefs.GetFloat(PlayerPrefsKeys.MASTER_VOLUME, PlayerPrefsKeys.Defaults.MASTER_VOLUME);
-            if (_sliderMasterVolume != null) _sliderMasterVolume.value = master;
-            AudioListener.volume = master;
-
-            if (_sliderMusicVolume != null) _sliderMusicVolume.value = PlayerPrefs.GetFloat(PlayerPrefsKeys.MUSIC_VOLUME, PlayerPrefsKeys.Defaults.MUSIC_VOLUME);
-            if (_sliderSfxVolume != null) _sliderSfxVolume.value = PlayerPrefs.GetFloat(PlayerPrefsKeys.SFX_VOLUME, PlayerPrefsKeys.Defaults.SFX_VOLUME);
-            if (_sliderAmbientVolume != null) _sliderAmbientVolume.value = PlayerPrefs.GetFloat(PlayerPrefsKeys.AMBIENT_VOLUME, PlayerPrefsKeys.Defaults.AMBIENT_VOLUME);
-            if (_sliderUiScale != null) { _sliderUiScale.value = PlayerPrefs.GetFloat(PlayerPrefsKeys.UI_SCALE, PlayerPrefsKeys.Defaults.UI_SCALE); ApplyUiScale(_sliderUiScale.value); }
-
-            if (_toggleSubtitles != null) _toggleSubtitles.value = PlayerPrefs.GetInt(PlayerPrefsKeys.SUBTITLES_ENABLED, 1) == 1;
-            if (_toggleVSync != null) { _toggleVSync.value = PlayerPrefs.GetInt(PlayerPrefsKeys.V_SYNC, 1) == 1; QualitySettings.vSyncCount = _toggleVSync.value ? 1 : 0; }
-            if (_toggleCameraShake != null) _toggleCameraShake.value = PlayerPrefs.GetInt(PlayerPrefsKeys.CAMERA_SHAKE, 1) == 1;
-            if (_toggleMotionBlur != null) _toggleMotionBlur.value = PlayerPrefs.GetInt(PlayerPrefsKeys.MOTION_BLUR, 0) == 1;
-            if (_toggleInvertY != null) _toggleInvertY.value = PlayerPrefs.GetInt(PlayerPrefsKeys.INVERT_Y_AXIS, 0) == 1;
-            if (_toggleGamepadVibration != null) _toggleGamepadVibration.value = PlayerPrefs.GetInt(PlayerPrefsKeys.GAMEPAD_VIBRATION, 1) == 1;
-
-            if (_dropdownResolution != null)
+            if (screenState == _lastRenderedScreen)
             {
-                _dropdownResolution.choices = new List<string>(SettingsDefaults.RESOLUTIONS);
-                _dropdownResolution.value = $"{Screen.width}x{Screen.height}";
+                return;
             }
-            if (_dropdownWindowMode != null)
-            {
-                _dropdownWindowMode.choices = new List<string>(SettingsDefaults.WINDOW_MODES);
-                _dropdownWindowMode.value = GetCurrentWindowMode();
-            }
-            if (_dropdownQuality != null)
-            {
-                _dropdownQuality.choices = new List<string>(SettingsDefaults.QUALITY_LEVELS);
-                int ql = PlayerPrefs.GetInt(PlayerPrefsKeys.QUALITY_LEVEL, PlayerPrefsKeys.Defaults.QUALITY_LEVEL);
-                ql = Mathf.Clamp(ql, 0, SettingsDefaults.QUALITY_LEVELS.Length - 1);
-                _dropdownQuality.value = SettingsDefaults.QUALITY_LEVELS[ql];
-            }
-            if (_dropdownTextSize != null)
-            {
-                _dropdownTextSize.choices = new List<string>(SettingsDefaults.TEXT_SIZES);
-                _dropdownTextSize.value = PlayerPrefs.GetString(PlayerPrefsKeys.TEXT_SIZE, PlayerPrefsKeys.Defaults.TEXT_SIZE);
-            }
-            if (_dropdownInputDevice != null)
-            {
-                _dropdownInputDevice.choices = new List<string>(SettingsDefaults.INPUT_DEVICES);
-                _dropdownInputDevice.value = PlayerPrefs.GetString(PlayerPrefsKeys.INPUT_DEVICE, PlayerPrefsKeys.Defaults.INPUT_DEVICE);
-            }
-        }
 
-        private void CheckSaveFile()
-        {
-            bool hasSave = PlayerPrefs.GetInt(PlayerPrefsKeys.HAS_SAVE, 0) == 1;
-            if (_btnContinue != null)
+            _lastRenderedScreen = screenState;
+            switch (screenState)
             {
-                _btnContinue.SetEnabled(hasSave);
-                if (hasSave)
-                {
-                    int day = PlayerPrefs.GetInt(PlayerPrefsKeys.SAVE_DAY_NUMBER, 1);
-                    _btnContinue.text = $"{LocalizationKeys.Get(LocalizationKeys.BUTTON_CONTINUE)} (Day {day})";
-                }
-            }
-        }
-
-        private void SetScreen(ScreenState state)
-        {
-            _currentScreen = state;
-
-            if (_settingsPanel != null) _settingsPanel.style.display = state == ScreenState.Settings ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_creditsPanel != null) _creditsPanel.style.display = state == ScreenState.Credits ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_dialogOverlay != null) _dialogOverlay.style.display = state == ScreenState.QuitConfirm ? DisplayStyle.Flex : DisplayStyle.None;
-
-            if (state == ScreenState.MainMenu)
-            {
-                FocusButton(0);
-            }
-            else if (state == ScreenState.Credits)
-            {
-                if (_btnBackCredits != null) _btnBackCredits.Focus();
-            }
-            else if (state == ScreenState.QuitConfirm)
-            {
-                if (_btnCancelQuit != null) _btnCancelQuit.Focus();
-            }
-        }
-
-        private void NavigateMenu(int direction)
-        {
-            if (_currentScreen != ScreenState.MainMenu) return;
-            if (_menuButtons == null) return;
-
-            _focusedButtonIndex = (_focusedButtonIndex + direction + _menuButtons.Count) % _menuButtons.Count;
-            FocusButton(_focusedButtonIndex);
-        }
-
-        private void FocusButton(int index)
-        {
-            if (_menuButtons == null) return;
-            if (index >= 0 && index < _menuButtons.Count && _menuButtons[index] != null)
-                _menuButtons[index].Focus();
-        }
-
-        private void ActivateFocusedButton()
-        {
-            if (_menuButtons == null) return;
-            if (_focusedButtonIndex >= 0 && _focusedButtonIndex < _menuButtons.Count && _menuButtons[_focusedButtonIndex] != null)
-                _menuButtons[_focusedButtonIndex].SendEvent(new ClickEvent());
-        }
-
-        private void HandleEscape()
-        {
-            switch (_currentScreen)
-            {
-                case ScreenState.MainMenu:
-                    SetScreen(ScreenState.QuitConfirm);
+                case MainMenuScreenState.MainMenu:
+                    _btnNewGame?.Focus();
                     break;
-                case ScreenState.Settings:
-                    CloseSettings();
+                case MainMenuScreenState.Settings:
+                    _btnCloseSettings?.Focus();
                     break;
-                case ScreenState.Credits:
-                    CloseCredits();
+                case MainMenuScreenState.Credits:
+                    _btnBackCredits?.Focus();
                     break;
-                case ScreenState.QuitConfirm:
-                    CancelQuit();
+                default:
+                    _btnCancelDialog?.Focus();
                     break;
             }
         }
 
-        private void ApplyUiScale(float scale)
+        private void SetLabelText(string elementName, string text)
         {
-            if (_root != null)
-                _root.style.scale = new StyleScale(new UnityEngine.Vector3(scale, scale, 1f));
-        }
-
-        private void ShowSettingsTab(string tabId)
-        {
-            if (_tabAudio != null) _tabAudio.style.display = tabId == "audio" ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_tabVideo != null) _tabVideo.style.display = tabId == "video" ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_tabControls != null) _tabControls.style.display = tabId == "controls" ? DisplayStyle.Flex : DisplayStyle.None;
-        }
-
-        private void OnNewGame()
-        {
-            OnNewGameRequested?.Invoke();
-            Debug.Log("[MainMenu] New Game requested");
-        }
-
-        private void OnContinue()
-        {
-            if (_btnContinue != null && _btnContinue.enabledInHierarchy)
+            var label = _root.Q<Label>(elementName);
+            if (label != null)
             {
-                OnContinueRequested?.Invoke();
-                Debug.Log("[MainMenu] Continue requested");
+                label.text = text;
+                return;
             }
-        }
 
-        private void OnSettings()
-        {
-            SetScreen(ScreenState.Settings);
-            ShowSettingsTab("audio");
-        }
-
-        private void OnCredits()
-        {
-            SetScreen(ScreenState.Credits);
-        }
-
-        private void OnQuit()
-        {
-            SetScreen(ScreenState.QuitConfirm);
-        }
-
-        private void CloseSettings()
-        {
-            SetScreen(ScreenState.MainMenu);
-        }
-
-        private void CloseCredits()
-        {
-            SetScreen(ScreenState.MainMenu);
-        }
-
-        private void ConfirmQuit()
-        {
-            OnQuitRequested?.Invoke();
-            Debug.Log("[MainMenu] Quit confirmed");
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
-
-        private void CancelQuit()
-        {
-            SetScreen(ScreenState.MainMenu);
-        }
-
-        private void OnResolutionChanged(string value)
-        {
-            var parts = value.Split('x');
-            if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int h))
+            var button = _root.Q<Button>(elementName);
+            if (button != null)
             {
-                Screen.SetResolution(w, h, Screen.fullScreenMode);
-                PlayerPrefs.SetInt(PlayerPrefsKeys.RESOLUTION_WIDTH, w);
-                PlayerPrefs.SetInt(PlayerPrefsKeys.RESOLUTION_HEIGHT, h);
+                button.text = text;
+                return;
             }
-        }
 
-        private void OnWindowModeChanged(string mode)
-        {
-            Screen.fullScreenMode = mode switch
+            var radioButton = _root.Q<RadioButton>(elementName);
+            if (radioButton != null)
             {
-                "Fullscreen" => FullScreenMode.ExclusiveFullScreen,
-                "Borderless" => FullScreenMode.FullScreenWindow,
-                _ => FullScreenMode.Windowed
-            };
-            PlayerPrefs.SetString(PlayerPrefsKeys.WINDOW_MODE, mode);
-        }
-
-        private void OnQualityChanged(string value)
-        {
-            int index = Array.IndexOf(SettingsDefaults.QUALITY_LEVELS, value);
-            if (index >= 0)
-            {
-                QualitySettings.SetQualityLevel(index, true);
-                PlayerPrefs.SetInt(PlayerPrefsKeys.QUALITY_LEVEL, index);
+                radioButton.label = text;
             }
-        }
-
-        private string GetCurrentWindowMode()
-        {
-            return Screen.fullScreenMode switch
-            {
-                FullScreenMode.ExclusiveFullScreen => "Fullscreen",
-                FullScreenMode.FullScreenWindow => "Borderless",
-                _ => "Windowed"
-            };
         }
     }
 }
