@@ -1,6 +1,7 @@
 using System;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
+using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Shared.InputActions;
 using VContainer;
 using VContainer.Unity;
@@ -40,6 +41,25 @@ namespace SolarPhobia.Application.Installers
             builder.Register<Movement2DCalculator>(Lifetime.Singleton).As<IMovement2DCalculator>();
             builder.Register<PlatformerFeelController>(Lifetime.Singleton).As<IPlatformerFeelController>();
             builder.Register<KarmaHazardService>(Lifetime.Singleton).As<IKarmaHazardService>();
+
+            // ── Day Selection Validator ──────────────────────────────────
+            builder.Register<DaySelectionValidator>(Lifetime.Singleton).As<IDaySelectionValidator>();
+
+            // ── Day Service UI Controller ───────────────────────────────
+            builder.Register<DayServiceUIController>(Lifetime.Singleton).As<IDayServiceUIController>();
+
+            // ── Ritual Assignment ──────────────────────────────────────
+            builder.Register<RitualAssignmentService>(Lifetime.Singleton).As<IRitualAssignmentService>();
+
+            // ── Curse Effect Manager ──────────────────────────────────────
+            builder.Register<CurseEffectManager>(Lifetime.Singleton).As<ICurseEffectManager>();
+
+            // ── Water Trap Effect ──────────────────────────────────────
+            builder.Register<WaterTrapEffectService>(Lifetime.Singleton).As<IWaterTrapEffectService>();
+
+            // ── Consequence Resolver ────────────────────────────────────
+            builder.Register<ConsequenceResolver>(Lifetime.Singleton).As<IConsequenceResolver>();
+            builder.Register<SoulRepository>(Lifetime.Singleton).As<IGhostRepository>();
 
             // ── Input Actions (New Input System) ─────────────────────────
             builder.Register<SolarPhobiaInputActions>(Lifetime.Singleton);

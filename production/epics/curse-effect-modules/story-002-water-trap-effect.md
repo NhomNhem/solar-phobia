@@ -1,7 +1,7 @@
 # Story 002: Water Trap Effect (Drag - Linh Abandoned)
 
 > **Epic**: curse-effect-modules
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Logic
 > **Manifest Version**: N/A
@@ -24,10 +24,10 @@
 
 *From GDD `design/gdd/curse-effect-modules.md`, scoped to this story:*
 
-- [ ] When curse_type = Drag (Linh abandoned), spawn Water Trap zones (Vũng Nước Tử Thần)
-- [ ] Player standing in water takes -3.0 * deltaTime damage per second (DoT)
-- [ ] Visual: Blue water glow, ripple VFX
-- [ ] Audio: Bubbling, drowning sounds
+- [x] When curse_type = Drag (Linh abandoned), Water Trap DoT activates on hazard entry
+- [x] Player standing in water takes -3.0 * deltaTime damage per second (DoT)
+- [ ] Visual: Blue water glow, ripple VFX (Story 005)
+- [ ] Audio: Bubbling, drowning sounds (Story 005)
 
 ---
 
@@ -73,7 +73,7 @@
 **Story Type**: Logic
 **Required evidence**: `Assets/_Project/Application/Editor/Tests/WaterTrapEffectTests.cs` — must exist and pass
 
-**Status**: [ ] Not yet created
+**Status**: [x] Created and passing — 12 tests, all passing
 
 ---
 

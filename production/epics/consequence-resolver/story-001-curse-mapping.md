@@ -1,7 +1,7 @@
 # Story 001: Curse Mapping — Abandoned Soul to NightOutcomeState
 
 > **Epic**: consequence-resolver
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Feature
 > **Type**: Logic
 > **Manifest Version**: N/A
@@ -105,3 +105,11 @@ public class CursePayload
 
 - **Test file**: `Assets/_Project/Application/Editor/Tests/ConsequenceResolverTests.cs`
 - Coverage: All three mappings, duplicate write rejection, invalid ID fallback, payload structure
+
+---
+## Completion Notes
+**Completed**: 2026-05-11
+**Criteria**: 6/6 passing (14 automated tests, all passing)
+**Deviations**: Advisory — lowercase mapping keys vs GDD capitalized names; NightOutcomeState vs ADR's CurseType
+**Test Evidence**: Logic — `Assets/_Project/Application/Editor/Tests/ConsequenceResolverTests.cs` (14/14 passing)
+**Code Review**: Skipped (Lean mode)

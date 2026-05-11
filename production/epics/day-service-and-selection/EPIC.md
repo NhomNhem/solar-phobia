@@ -22,7 +22,15 @@ Day Service & Selection is the moral core of Solar Phobia's day phase—the mome
 
 | TR-ID | Requirement | ADR Coverage |
 |-------|-------------|--------------|
-| (None tracked) | Selection UI, soul cards, validation, confirmation flow, "2 saved, 1 abandoned" rule | — |
+| TR-day-service-001 (unregistered) | Selection UI, soul cards, validation, confirmation flow, "2 saved, 1 abandoned" rule | — |
+
+## Stories
+
+| # | Story | Type | Status | ADR |
+|---|-------|------|--------|-----|
+| 001 | Selection Logic & Validation | Logic | Complete | None |
+| 002 | Selection UI & Confirm Flow | Integration | Ready | None |
+| 003 | Ritual Assignment | Integration | Ready | None |
 
 ## Definition of Done
 

@@ -121,8 +121,7 @@ namespace SolarPhobia.Application.Tests
             if (_playerGo != null) UnityEngine.Object.DestroyImmediate(_playerGo);
             if (_volumeGo != null) UnityEngine.Object.DestroyImmediate(_volumeGo);
             if (_profile != null) ScriptableObject.DestroyImmediate(_profile);
-            if (_inputActions != null) { _inputActions.Dispose(); }
-        }
+            }
 
         // ═══════════════════════════════════════════════════════════
         // ── Initialization ─────────────────────────────────────────

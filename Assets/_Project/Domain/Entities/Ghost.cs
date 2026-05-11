@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
+﻿// Assets/_Project/Domain/Entities/Ghost.cs
+using System.Collections.Generic;
+using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Domain
 {
+    /// <summary>
+    /// NPC ghost entity with soul data, day selection, and night outcome tracking.
+    /// </summary>
     public class Ghost
     {
-        public string Id { get; set; }
-        public string DisplayName { get; set; }
+        public string Id { get; }
+        public string DisplayName { get; }
         public int VisitCount { get; set; }
         public int Satisfaction { get; private set; }
+        public NightOutcomeState NightOutcome { get; set; }
 
         public List<string> DialogueNodes { get; } = new List<string>();
 
@@ -17,6 +23,7 @@ namespace SolarPhobia.Domain
             DisplayName = displayName;
             VisitCount = 0;
             Satisfaction = 100;
+            NightOutcome = NightOutcomeState.None;
         }
 
         public void ApplyKindness(int delta)
@@ -26,4 +33,3 @@ namespace SolarPhobia.Domain
         }
     }
 }
-
