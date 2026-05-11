@@ -28,9 +28,9 @@
     top: 0;
     bottom: 0;
     background-color: var(--paper-white);
-    background-image: url("project://database/Assets/2D%20Fantasy%20sprite%20bundle/Ice%20and%20snow%20pack/Sprites/Snow%20Background%20B.png?fileID=21300000&guid=930a0feb41da83f46b230bb93ae65814&type=3#Snow Background B");
+    background-image: none;
     background-repeat: no-repeat no-repeat;
-    background-size: 1920px 1080px;
+    background-size: 100% 100%;
     align-items: center;
     justify-content: center;
 }
@@ -42,9 +42,9 @@
     top: 0;
     bottom: 0;
     background-color: var(--paper-white);
-    background-image: url("project://database/Assets/Layer%20Lab/GUI%20Pro-FantasyRPG/ResourcesData/Sprites/Demo/Demo_Background/BackGround_Sample_07_Dark.png?fileID=21300000&guid=aa96b0fe49f9b414ba505f8e7fd8babb&type=3#BackGround_Sample_07_Dark");
+    background-image: none;
     background-repeat: no-repeat no-repeat;
-    background-size: 1920px 1080px;
+    background-size: 100% 100%;
     opacity: 0.05;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .mainmenu-title {
-    font-size: 129px;
+    font-size: 72px;
     -unity-font-style: bold;
     color: var(--charcoal-black);
     letter-spacing: 4px;

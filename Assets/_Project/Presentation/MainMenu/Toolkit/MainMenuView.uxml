@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" version="2024.1" editor-extension-mode="False">
-    <Style src="project://database/Assets/_Project/Presentation/MainMenu/Toolkit/MainMenuView.uss?fileID=7433441132597879392&amp;guid=027ad9c6356f7674d9f3f02e5583e4c1&amp;type=3#MainMenuView"/>
+    <ui:Style src="unity-theme://default"/>
+    <ui:Style src="project://database/Assets/_Project/Presentation/MainMenu/Toolkit/MainMenuView.uss?fileID=7433441132597879392&amp;guid=027ad9c6356f7674d9f3f02e5583e4c1&amp;type=3#MainMenuView"/>
     <ui:VisualElement focusable="false" class="mainmenu-root">
         <ui:VisualElement class="mainmenu-background"/>
         <ui:VisualElement class="mainmenu-title-container">
@@ -19,17 +20,18 @@
         <ui:VisualElement class="settings-panel" style="display: none;" name="settings-panel">
             <ui:VisualElement class="settings-header">
                 <ui:Label text="Settings" name="settings-title" class="settings-title"/>
-                <ui:Button text="X" name="settings-close" class="settings-close"/>
+                <ui:Button text="Close" name="settings-close" class="settings-close"/>
             </ui:VisualElement>
             <ui:VisualElement class="settings-tabs">
-                <ui:RadioButtonGroup name="settings-tab-group" class="settings-tab-group">
-                    <ui:RadioButton label="Audio" value="audio" name="tab-audio" class="settings-tab settings-tab--active"/>
-                    <ui:RadioButton label="Video" value="video" name="tab-video" class="settings-tab"/>
-                    <ui:RadioButton label="Controls" value="controls" name="tab-controls" class="settings-tab"/>
-                </ui:RadioButtonGroup>
-            </ui:VisualElement>
+                    <ui:RadioButtonGroup name="settings-tab-group" class="settings-tab-group">
+                        <ui:RadioButton label="Audio" value="audio" name="tab-audio" class="settings-tab settings-tab--active"/>
+                        <ui:RadioButton label="Video" value="video" name="tab-video" class="settings-tab"/>
+                        <ui:RadioButton label="Controls" value="controls" name="tab-controls" class="settings-tab"/>
+                        <ui:RadioButton label="Accessibility" value="accessibility" name="tab-accessibility" class="settings-tab"/>
+                    </ui:RadioButtonGroup>
+                </ui:VisualElement>
             <ui:VisualElement class="settings-content">
-                <ui:VisualElement class="settings-tab-content settings-tab-content--audio">
+                <ui:VisualElement class="settings-tab-content settings-tab-content--audio" name="settings-tab-content--audio">
                     <ui:VisualElement class="settings-row">
                         <ui:Label text="Master Volume" name="label-master-volume" class="settings-label"/>
                         <ui:Slider value="0.75" min="0" max="1" name="master-volume" class="settings-slider"/>
@@ -59,7 +61,7 @@
                         <ui:DropdownField value="Medium" name="text-size" class="settings-dropdown"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement class="settings-tab-content settings-tab-content--video" style="display: none;">
+                <ui:VisualElement class="settings-tab-content settings-tab-content--video" style="display: none;" name="settings-tab-content--video">
                     <ui:VisualElement class="settings-row">
                         <ui:Label text="Resolution" name="label-resolution" class="settings-label"/>
                         <ui:DropdownField value="1920x1080" name="resolution" class="settings-dropdown settings-dropdown--resolution"/>
@@ -90,7 +92,7 @@
                         <ui:Label text="1.0x" name="value-ui-scale" class="settings-value settings-value--volume"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement class="settings-tab-content settings-tab-content--controls" style="display: none;">
+                <ui:VisualElement class="settings-tab-content settings-tab-content--controls" style="display: none;" name="settings-tab-content--controls">
                     <ui:VisualElement class="settings-row">
                         <ui:Label text="Input Device" name="label-input-device" class="settings-label"/>
                         <ui:DropdownField value="Keyboard/Mouse" name="input-device" class="settings-dropdown"/>
@@ -104,9 +106,23 @@
                         <ui:Toggle value="true" name="gamepad-vibration" class="settings-toggle"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
+                <ui:VisualElement class="settings-tab-content settings-tab-content--accessibility" style="display: none;" name="settings-tab-content--accessibility">
+                    <ui:VisualElement class="settings-row">
+                        <ui:Label text="High Contrast" name="label-high-contrast" class="settings-label"/>
+                        <ui:Toggle value="false" name="high-contrast" class="settings-toggle"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="settings-row">
+                        <ui:Label text="Reduce Motion" name="label-reduce-motion" class="settings-label"/>
+                        <ui:Toggle value="false" name="reduce-motion" class="settings-toggle"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="settings-row">
+                        <ui:Label text="Colorblind Cues" name="label-colorblind-cues" class="settings-label"/>
+                        <ui:Toggle value="false" name="colorblind-cues" class="settings-toggle"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement class="credits-panel" style="display: none;">
+        <ui:VisualElement class="credits-panel" style="display: none;" name="credits-panel">
             <ui:VisualElement class="credits-header">
                 <ui:Label text="Credits" name="credits-title" class="credits-title"/>
                 <ui:Button text="Back" name="credits-back" class="credits-back"/>
@@ -117,7 +133,7 @@
                 </ui:ScrollView>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement class="dialog-overlay" style="display: none;">
+        <ui:VisualElement class="dialog-overlay" style="display: none;" name="dialog-overlay">
             <ui:VisualElement class="dialog-container">
                 <ui:Label text="Quit to Desktop?" name="dialog-title" class="dialog-title"/>
                 <ui:Label text="Your progress is auto-saved." name="dialog-message" class="dialog-message"/>
