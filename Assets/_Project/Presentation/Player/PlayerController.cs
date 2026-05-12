@@ -1,6 +1,8 @@
 // Assets/_Project/Presentation/Player/PlayerController.cs
 using System;
 using R3;
+using SolarPhobia.Application.Map.Directors;
+using SolarPhobia.Application.Player.Warnings;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;

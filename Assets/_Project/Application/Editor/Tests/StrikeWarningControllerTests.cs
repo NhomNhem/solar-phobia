@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Map.Generation;
+using SolarPhobia.Application.Map.Directors;
+using SolarPhobia.Application.Player.Warnings;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Tests
@@ -18,7 +20,7 @@ namespace SolarPhobia.Application.Tests
         public Observable<string> OnExitCover => Observable.Empty<string>();
 
         public void Initialize(int seed) { }
-        public SolarPhobia.Application.Services.Map.ChunkData GenerateChunk(int index) => default;
+        public ChunkData GenerateChunk(int index) => default;
 
         public void UpdatePlayerPosition(Float2 position, Bounds2D bounds)
         {

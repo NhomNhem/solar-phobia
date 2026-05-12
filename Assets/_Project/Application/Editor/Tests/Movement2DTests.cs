@@ -1,6 +1,6 @@
 // Assets/_Project/Application/Editor/Tests/Movement2DTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Player.Movement;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Tests

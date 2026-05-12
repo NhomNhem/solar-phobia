@@ -1,7 +1,7 @@
 using System;
 using NhemDangFugBixs.NhemLogging;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Player.Warnings;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using UnityEngine.UIElements;

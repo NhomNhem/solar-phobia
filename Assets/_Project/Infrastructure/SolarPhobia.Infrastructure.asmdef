@@ -6,6 +6,7 @@
     "SolarPhobia.Application",
     "SolarPhobia.Shared",
     "NhemDangFugBixs.Logging",
+    "Unity.Cinemachine",
     "Unity.InputSystem",
     "VContainer",
     "R3.Unity",

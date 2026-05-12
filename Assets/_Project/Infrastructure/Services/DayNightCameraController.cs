@@ -4,6 +4,7 @@ using DG.Tweening;
 using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Messages;
+using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
@@ -112,7 +113,7 @@ namespace SolarPhobia.Infrastructure.Services
         }
 
         /// <summary>Override camera reference for testing. When set, Initialize skips Camera.main lookup.</summary>
-        public Camera TestCamera
+        public global::UnityEngine.Camera TestCamera
         {
             set
             {
@@ -122,7 +123,7 @@ namespace SolarPhobia.Infrastructure.Services
         }
 
         // ── Private State ──────────────────────────────────────────
-        private Camera _camera;
+        private global::UnityEngine.Camera _camera;
         private Transform _cameraTransform;
         private Transform _playerTransform;
         private Vector3 _dayPosition;
@@ -150,7 +151,7 @@ namespace SolarPhobia.Infrastructure.Services
         {
             if (_camera == null)
             {
-                _camera = Camera.main;
+                _camera = global::UnityEngine.Camera.main;
             }
 
             if (_camera == null)

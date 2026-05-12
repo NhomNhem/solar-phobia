@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Map.Directors;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Tests
