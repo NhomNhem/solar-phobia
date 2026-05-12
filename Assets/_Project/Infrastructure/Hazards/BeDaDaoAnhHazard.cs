@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Infrastructure.Hazards
 {
     /// <summary>
     /// Bệ Đá Ảo Ảnh hazard - collapses for 0.2s when player enters trigger.

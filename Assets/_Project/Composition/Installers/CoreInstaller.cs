@@ -1,6 +1,7 @@
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Repositories;
+using SolarPhobia.Infrastructure.Hazards;
 using SolarPhobia.Shared.Configuration;
 using SolarPhobia.Shared.InputActions;
 using SolarPhobia.Infrastructure.Services;
@@ -44,6 +45,7 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<CursorController>(Lifetime.Singleton).As<ICursorController>();
             builder.Register<Movement2DCalculator>(Lifetime.Singleton).As<IMovement2DCalculator>();
             builder.Register<PlatformerFeelController>(Lifetime.Singleton).As<IPlatformerFeelController>();
+            builder.Register<KarmaHazardRuntime>(Lifetime.Singleton).As<IKarmaHazardRuntime>();
             builder.Register<KarmaHazardService>(Lifetime.Singleton).As<IKarmaHazardService>();
 
             // ── Camera Service ───────────────────────────────────────────────

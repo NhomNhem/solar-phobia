@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 using SolarPhobia.Shared.Configuration;
@@ -19,12 +18,12 @@ namespace SolarPhobia.Application.Services
     {
         // ── Dependencies ──────────────────────────────
         private readonly GameplayBalanceConfig _balanceConfig;
+        private readonly IKarmaHazardRuntime _hazardRuntime;
         private PhaseState _currentPhaseValue;
         private IDisposable _phaseSubscription;
 
         // ── State ──────────────────────────────
         private readonly ReactiveProperty<KarmaHazardData> _hazardSpawned = new();
-        private readonly List<GameObject> _activeHazards = new();
 
         /// <summary>
         /// Observable that triggers when a hazard is spawned.
@@ -35,14 +34,18 @@ namespace SolarPhobia.Application.Services
         /// Initializes a new instance of the KarmaHazardService class.
         /// </summary>
         public KarmaHazardService(IPhaseStateMachine phaseStateMachine)
-            : this(phaseStateMachine, GameplayBalanceConfig.CreateDefault())
+            : this(phaseStateMachine, GameplayBalanceConfig.CreateDefault(), new NullKarmaHazardRuntime())
         {
         }
 
         [Inject]
-        public KarmaHazardService(IPhaseStateMachine phaseStateMachine, GameplayBalanceConfig balanceConfig)
+        public KarmaHazardService(
+            IPhaseStateMachine phaseStateMachine,
+            GameplayBalanceConfig balanceConfig,
+            IKarmaHazardRuntime hazardRuntime)
         {
             _balanceConfig = balanceConfig ?? GameplayBalanceConfig.CreateDefault();
+            _hazardRuntime = hazardRuntime ?? new NullKarmaHazardRuntime();
             _phaseSubscription = phaseStateMachine.CurrentPhase
                 .Subscribe(newPhase => _currentPhaseValue = newPhase);
         }
@@ -67,10 +70,8 @@ namespace SolarPhobia.Application.Services
                 EffectValue = effectValue
             };
 
-            GameObject hazard = SpawnHazardPrefab(hazardType, position, effectValue);
-            if (hazard != null)
+            if (_hazardRuntime.TrySpawn(hazardType, position, effectValue))
             {
-                _activeHazards.Add(hazard);
                 _hazardSpawned.Value = hazardData;
             }
         }
@@ -78,21 +79,7 @@ namespace SolarPhobia.Application.Services
         /// <inheritdoc/>
         public void ClearHazards()
         {
-            foreach (var hazard in _activeHazards)
-            {
-                if (hazard != null)
-                {
-#if UNITY_EDITOR
-                    if (!UnityEngine.Application.isPlaying)
-                    {
-                        GameObject.DestroyImmediate(hazard);
-                        continue;
-                    }
-#endif
-                    GameObject.Destroy(hazard);
-                }
-            }
-            _activeHazards.Clear();
+            _hazardRuntime.ClearAll();
         }
 
         /// <summary>
@@ -136,27 +123,6 @@ namespace SolarPhobia.Application.Services
         }
 
         // ── Private Methods ──────────────────────────────
-        private GameObject SpawnHazardPrefab(string hazardType, Vector3 position, float effectValue)
-        {
-            GameObject hazard = new GameObject($"KarmaHazard_{hazardType}");
-            hazard.transform.position = position;
-
-            switch (hazardType)
-            {
-                case "LuoiMau":
-                    hazard.AddComponent<LuoiMauHazard>().Initialize(effectValue);
-                    break;
-                case "VungNuoc":
-                    hazard.AddComponent<VungNuocHazard>().Initialize(effectValue);
-                    break;
-                case "BeDaDaoAnh":
-                    hazard.AddComponent<BeDaDaoAnhHazard>().Initialize(effectValue);
-                    break;
-            }
-
-            return hazard;
-        }
-
         private bool IsNightSurvivalPhase()
         {
             return _currentPhaseValue == PhaseState.NightSurvival;
@@ -181,6 +147,18 @@ namespace SolarPhobia.Application.Services
             _phaseSubscription?.Dispose();
             _hazardSpawned?.Dispose();
             ClearHazards();
+        }
+
+        private sealed class NullKarmaHazardRuntime : IKarmaHazardRuntime
+        {
+            public bool TrySpawn(string hazardType, Vector3 position, float effectValue)
+            {
+                return true;
+            }
+
+            public void ClearAll()
+            {
+            }
         }
     }
 }

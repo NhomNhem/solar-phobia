@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Infrastructure.Hazards
 {
     /// <summary>
     /// Lưới Máu hazard - applies movement speed reduction while player is in zone.

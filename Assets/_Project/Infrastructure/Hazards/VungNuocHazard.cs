@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Infrastructure.Hazards
 {
     /// <summary>
     /// Vũng Nước hazard - applies damage-over-time while player is standing in it.
