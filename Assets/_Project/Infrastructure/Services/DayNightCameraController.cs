@@ -26,7 +26,7 @@ namespace SolarPhobia.Infrastructure.Services
     /// </summary>
     public class DayNightCameraController : IDayNightCameraController, IInitializable, ITickable, IDisposable
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+        [Inject] public INhemLogger _logger = new NhemUnityLogger();
 
         // ── Tuning Knob Ranges ──────────────────────────────────────
         public const float MinDayDistance = 3f;

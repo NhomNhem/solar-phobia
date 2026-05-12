@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,6 +6,30 @@ using NUnit.Framework;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -26,7 +50,7 @@ namespace SolarPhobia.Application.Tests
             _validator = new DaySelectionValidator();
         }
 
-        // ── Helpers ────────────────────────────────────────────────
+        // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private static SoulSelectionState S(string soulId, DaySelectionState state) =>
             new(soulId, state);
@@ -37,9 +61,9 @@ namespace SolarPhobia.Application.Tests
 
         private static SoulSelectionState Unselected(string soulId) => S(soulId, DaySelectionState.Unselected);
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-1: Selection Validation (2 Saved, 1 Abandoned)
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void Validate_2Saved1Abandoned_IsValid()
@@ -76,9 +100,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(result.AbandonedCount, Is.EqualTo(1));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-6: Invalid Pattern Block
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void Validate_3Saved0Abandoned_IsInvalid()
@@ -159,9 +183,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(result.IsValid, Is.False);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-5: Auto-Complete
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void AutoComplete_FreshStart_LinhAndVanSaved_MinhAbandoned()
@@ -240,9 +264,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(result[0].State, Is.EqualTo(DaySelectionState.Saved));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // State Tracking
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void SoulSelectionState_TracksSoulId()
@@ -268,9 +292,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(state.State, Is.EqualTo(DaySelectionState.Unselected));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-8: Performance (within 0.05ms)
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void Validate_CompletesWithinBudget()
@@ -292,7 +316,7 @@ namespace SolarPhobia.Application.Tests
 
             double avgMicroseconds = (sw.Elapsed.TotalMilliseconds * 1000.0) / iterations;
             Assert.That(avgMicroseconds, Is.LessThan(50.0),
-                $"Average validate took {avgMicroseconds:F3}μs, expected <50μs (0.05ms)");
+                $"Average validate took {avgMicroseconds:F3}Î¼s, expected <50Î¼s (0.05ms)");
         }
 
         [Test]
@@ -315,12 +339,12 @@ namespace SolarPhobia.Application.Tests
 
             double avgMicroseconds = (sw.Elapsed.TotalMilliseconds * 1000.0) / iterations;
             Assert.That(avgMicroseconds, Is.LessThan(50.0),
-                $"Average auto-complete took {avgMicroseconds:F3}μs, expected <50μs (0.05ms)");
+                $"Average auto-complete took {avgMicroseconds:F3}Î¼s, expected <50Î¼s (0.05ms)");
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // Edge Cases
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void Validate_EmptyList_IsInvalid()
@@ -383,3 +407,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

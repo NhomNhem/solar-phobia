@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -8,6 +8,30 @@ using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -36,9 +60,9 @@ namespace SolarPhobia.Application.Tests
             _controller.Dispose();
         }
 
-        // ═══════════════════════════════════════════════════════════
-        // AC-4: Phase Gating — UI Visibility
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // AC-4: Phase Gating â€” UI Visibility
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void PhaseGating_DayService_ShowsUI()
@@ -93,9 +117,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.IsConfirmEnabledValue, Is.False);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-3: Selection Toggle Flow
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void ToggleSelection_UnselectedToSaved()
@@ -143,9 +167,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.LastValidation.SavedCount, Is.Zero);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-3: Confirm Flow
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void ConfirmFlow_2Saved1Abandoned_ReturnsTrue()
@@ -206,9 +230,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.IsConfirmEnabledValue, Is.False);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-7: Consequence Payload (abandoned soul ID)
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void ConsequencePayload_AbandonedSoulId_IsCorrect()
@@ -239,9 +263,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(saved, Has.Member("minh"));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-9: Cross-System (SoulRepository integration)
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void CrossSystem_SoulRepoUpdatedOnToggle()
@@ -268,9 +292,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_soulRepo.GetSoul("minh").DaySelection, Is.EqualTo(DaySelectionState.Abandoned));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // AC-10: UI Feedback (Confirm button state)
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void UIFeedback_ConfirmDisabledInitially()
@@ -314,9 +338,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.LastValidation.ErrorMessage, Is.Not.Null);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // ChoiceLock Transition
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void ChoiceLock_Confirm_TransitionsToChoiceLock()
@@ -346,9 +370,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.LastConfirmedPayloadValue.AbandonedSoulId, Is.EqualTo("minh"));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // Edge Cases
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         [Test]
         public void Reset_ClearsConfirmedPayload()
@@ -365,9 +389,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.IsUIVisibleValue, Is.False);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
         // Helpers
-        // ═══════════════════════════════════════════════════════════
+        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
         private List<string> GetLocalSaved()
         {
@@ -439,3 +463,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

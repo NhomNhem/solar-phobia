@@ -1,22 +1,46 @@
-// Assets/_Project/Application/Editor/Tests/CoverDensityTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/CoverDensityTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Map.Analysis;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-map-006 — Cover Density Validation.
-    /// Story 005: cover_density = mo_thuong_count / lane_length (target 0.02–0.08).
+    /// Validates: TR-map-006 â€” Cover Density Validation.
+    /// Story 005: cover_density = mo_thuong_count / lane_length (target 0.02â€“0.08).
     /// </summary>
     [TestFixture]
     public class CoverDensityTests
     {
-        // ── AC-1: Valid density range ──────────────────────────────
+        // â”€â”€ AC-1: Valid density range â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_DensityInRange_IsValid_True()
         {
-            // 14 mounds / 200 units = 0.07 → in range [0.02, 0.08]
+            // 14 mounds / 200 units = 0.07 â†’ in range [0.02, 0.08]
             bool result = CoverDensityValidator.IsValid(14, 200f);
 
             Assert.IsTrue(result);
@@ -25,19 +49,19 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC1_DefaultCount_OnTypicalLane_IsValid()
         {
-            // Default 14 mounds on 200-unit lane = 0.07 ✓
+            // Default 14 mounds on 200-unit lane = 0.07 âœ“
             bool result = CoverDensityValidator.IsValid(
                 CoverDensityValidator.DefaultMoThuongCount, 200f);
 
             Assert.IsTrue(result);
         }
 
-        // ── AC-2: Below minimum → invalid ─────────────────────────
+        // â”€â”€ AC-2: Below minimum â†’ invalid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_BelowMinDensity_IsValid_False()
         {
-            // 1 mound / 200 units = 0.005 < 0.02 → invalid
+            // 1 mound / 200 units = 0.005 < 0.02 â†’ invalid
             bool result = CoverDensityValidator.IsValid(1, 200f);
 
             Assert.IsFalse(result, "Density below minimum must be invalid");
@@ -51,18 +75,18 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(result);
         }
 
-        // ── AC-3: Above maximum → invalid ─────────────────────────
+        // â”€â”€ AC-3: Above maximum â†’ invalid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC3_AboveMaxDensity_IsValid_False()
         {
-            // 100 mounds / 200 units = 0.5 > 0.08 → invalid
+            // 100 mounds / 200 units = 0.5 > 0.08 â†’ invalid
             bool result = CoverDensityValidator.IsValid(100, 200f);
 
             Assert.IsFalse(result, "Density above maximum must be invalid");
         }
 
-        // ── AC-4: Edge cases ───────────────────────────────────────
+        // â”€â”€ AC-4: Edge cases â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC4_ZeroLaneLength_IsValid_False()
@@ -75,7 +99,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC4_ExactlyAtMinDensity_IsValid_True()
         {
-            // 4 mounds / 200 units = 0.02 = MinDensity → valid (inclusive)
+            // 4 mounds / 200 units = 0.02 = MinDensity â†’ valid (inclusive)
             bool result = CoverDensityValidator.IsValid(4, 200f);
 
             Assert.IsTrue(result, "Exactly at minimum density must be valid");
@@ -84,13 +108,13 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC4_ExactlyAtMaxDensity_IsValid_True()
         {
-            // 16 mounds / 200 units = 0.08 = MaxDensity → valid (inclusive)
+            // 16 mounds / 200 units = 0.08 = MaxDensity â†’ valid (inclusive)
             bool result = CoverDensityValidator.IsValid(16, 200f);
 
             Assert.IsTrue(result, "Exactly at maximum density must be valid");
         }
 
-        // ── CalculateDensity ───────────────────────────────────────
+        // â”€â”€ CalculateDensity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void CalculateDensity_ReturnsCorrectValue()
@@ -108,7 +132,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0f, density);
         }
 
-        // ── MinCountForLane ────────────────────────────────────────
+        // â”€â”€ MinCountForLane â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void MinCountForLane_Returns4_For200Units()
@@ -126,3 +150,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

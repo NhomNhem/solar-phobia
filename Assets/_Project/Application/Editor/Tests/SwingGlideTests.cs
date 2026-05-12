@@ -1,14 +1,38 @@
-// Assets/_Project/Application/Editor/Tests/SwingGlideTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/SwingGlideTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Player.Movement;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 3.1 — Swing + Glide skills.
+    /// Validates: Master GDD V5.0 Section 3.1 â€” Swing + Glide skills.
     /// Story 004-v2: Swing (-2s Ward) + Glide (-1s/sec Ward).
     /// </summary>
     [TestFixture]
@@ -29,7 +53,7 @@ namespace SolarPhobia.Application.Tests
             _ctrl.OnWardCostIncurred.Subscribe(c => _wardCosts.Add(c));
         }
 
-        // ── Swing: AC-1 — Left Click near anchor activates Swing ──
+        // â”€â”€ Swing: AC-1 â€” Left Click near anchor activates Swing â”€â”€
 
         [Test]
         public void Swing_Input_NightMode_SufficientWard_SetsSwinging_True()
@@ -121,7 +145,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(2, _wardCosts.Count);
         }
 
-        // ── Glide: AC-2 — Hold while airborne activates Glide ─────
+        // â”€â”€ Glide: AC-2 â€” Hold while airborne activates Glide â”€â”€â”€â”€â”€
 
         [Test]
         public void Glide_HoldInput_Airborne_NightMode_SufficientWard_SetsGliding_True()
@@ -205,3 +229,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

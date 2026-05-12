@@ -1,10 +1,34 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
 using System;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Editor.Tests
 {
@@ -28,7 +52,7 @@ namespace SolarPhobia.Application.Editor.Tests
             _phaseMachine?.Dispose();
         }
 
-        // ── AC-1: Win Detection + Phase Transition ─────────────────
+        // â”€â”€ AC-1: Win Detection + Phase Transition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_WithinRange_NightSurvival_TransitionsToShrineArrival()
@@ -51,7 +75,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(received, Is.Not.Null);
         }
 
-        // ── AC-3: Phase Gate ───────────────────────────────────────
+        // â”€â”€ AC-3: Phase Gate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC3_NonNightPhase_Ignored()
@@ -70,7 +94,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.TryTriggerShrineArrival(2.0f), Is.False);
         }
 
-        // ── AC-4: Proximity Gate ───────────────────────────────────
+        // â”€â”€ AC-4: Proximity Gate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC4_OutsideRange_Ignored()
@@ -81,7 +105,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_phaseMachine.CurrentState, Is.EqualTo(PhaseState.NightSurvival));
         }
 
-        // ── AC-5: One-Shot Behavior ────────────────────────────────
+        // â”€â”€ AC-5: One-Shot Behavior â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC5_OnlyFiresOncePerRun()
@@ -99,7 +123,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(retry, Is.False);
         }
 
-        // ── Edge Cases ─────────────────────────────────────────────
+        // â”€â”€ Edge Cases â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void EdgeCase_NegativeDistance_TriggersWin()
@@ -117,7 +141,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.DoesNotThrow(() => _service.TryTriggerShrineArrival(2.0f));
         }
 
-        // ── Test Doubles ───────────────────────────────────────────
+        // â”€â”€ Test Doubles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private class TestPhaseStateMachine : IPhaseStateMachine, IDisposable
         {
@@ -171,3 +195,4 @@ namespace SolarPhobia.Application.Editor.Tests
         }
     }
 }
+

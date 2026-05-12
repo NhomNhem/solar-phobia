@@ -1,14 +1,38 @@
-// Assets/_Project/Application/Editor/Tests/DayActionTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/DayActionTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 2.1 — Day Phase Swap + Shove.
+    /// Validates: Master GDD V5.0 Section 2.1 â€” Day Phase Swap + Shove.
     /// Story 007-v2: Day Phase Swap (Space) + Shove (F).
     /// </summary>
     [TestFixture]
@@ -28,7 +52,7 @@ namespace SolarPhobia.Application.Tests
             _ctrl.OnShove.Subscribe(v => _shoveEvents.Add(v));
         }
 
-        // ── Swap (Space) ──────────────────────────────────────────
+        // â”€â”€ Swap (Space) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void Swap_DayUI_SpaceInput_FiresSwapEvent()
@@ -73,7 +97,7 @@ namespace SolarPhobia.Application.Tests
                 "Each Space press fires a separate Swap event");
         }
 
-        // ── Shove (F) ─────────────────────────────────────────────
+        // â”€â”€ Shove (F) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void Shove_DayUI_FInput_FiresShoveEvent()
@@ -107,7 +131,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0, _shoveEvents.Count);
         }
 
-        // ── Both actions same frame ───────────────────────────────
+        // â”€â”€ Both actions same frame â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void BothInputs_SameFrame_FiresBothEvents()
@@ -118,7 +142,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1, _shoveEvents.Count, "Shove must fire");
         }
 
-        // ── Swap does not fire Shove and vice versa ───────────────
+        // â”€â”€ Swap does not fire Shove and vice versa â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void SwapInput_DoesNotFireShove()
@@ -137,3 +161,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

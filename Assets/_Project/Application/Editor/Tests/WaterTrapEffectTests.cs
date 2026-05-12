@@ -1,10 +1,34 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Consequences;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -42,7 +66,7 @@ namespace SolarPhobia.Application.Tests
             _curseManager?.Dispose();
         }
 
-        // ── AC-1: Water trap damage per second ─────────────────────
+        // â”€â”€ AC-1: Water trap damage per second â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_WaterTrapApplies_3DamagePerSecond()
@@ -76,7 +100,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_service.IsActive, Is.False);
         }
 
-        // ── AC-2: DoT applies continuously ─────────────────────────
+        // â”€â”€ AC-2: DoT applies continuously â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_DoTAppliesContinuously_OverMultipleSeconds()
@@ -127,7 +151,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_service.TotalDamageApplied, Is.EqualTo(4.5f).Within(0.001f));
         }
 
-        // ── Edge Cases ─────────────────────────────────────────────
+        // â”€â”€ Edge Cases â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void EdgeCase_OnlyDragCurse_TriggersWaterTrap()
@@ -185,7 +209,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_wardTimer.TotalCostApplied, Is.EqualTo(0f));
         }
 
-        // ── Test Doubles ───────────────────────────────────────────
+        // â”€â”€ Test Doubles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private class TestWardTimerService : IWardTimerService
         {
@@ -257,3 +281,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

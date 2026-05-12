@@ -22,7 +22,7 @@ namespace SolarPhobia.Presentation.Player
     [RequireComponent(typeof(UIDocument))]
     public class StrikeWarningView : MonoBehaviour
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+        [Inject] public INhemLogger _logger = new NhemUnityLogger();
 
         // ── Inspector ──────────────────────────────────────────────
         [SerializeField] private string _warningIconName = "warning-icon";
@@ -32,7 +32,7 @@ namespace SolarPhobia.Presentation.Player
         private IDisposable   _subscription;
 
         // ── Dependencies (injected via VContainer) ─────────────────
-        [Inject] internal IStrikeWarningController _controller;
+        [Inject] public IStrikeWarningController _controller;
 
         // ── Unity Lifecycle ────────────────────────────────────────
         private void Start()

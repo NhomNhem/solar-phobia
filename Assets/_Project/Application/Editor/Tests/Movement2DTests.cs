@@ -1,13 +1,37 @@
-// Assets/_Project/Application/Editor/Tests/Movement2DTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/Movement2DTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Player.Movement;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 — A/D Movement (2D side-scroller).
-    /// Story 002-v2: A/D Movement — 2D Rigidbody Night Traversal + Day Walk.
+    /// Validates: Master GDD V5.0 â€” A/D Movement (2D side-scroller).
+    /// Story 002-v2: A/D Movement â€” 2D Rigidbody Night Traversal + Day Walk.
     ///
     /// Tests Movement2DCalculator formula in isolation.
     /// No Rigidbody2D, no scene, no Unity physics required.
@@ -25,7 +49,7 @@ namespace SolarPhobia.Application.Tests
             _calc = new Movement2DCalculator();
         }
 
-        // ── AC-1: Night A/D drives horizontal velocity ─────────────
+        // â”€â”€ AC-1: Night A/D drives horizontal velocity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_Night_RightInput_ProducesPositiveVelocityX()
@@ -64,7 +88,7 @@ namespace SolarPhobia.Application.Tests
                 "Displacement must scale linearly with deltaTime");
         }
 
-        // ── AC-2: Night effective_speed = base_move_speed ──────────
+        // â”€â”€ AC-2: Night effective_speed = base_move_speed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_Night_DefaultSpeed_Is5()
@@ -82,7 +106,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(5.0f, disp, 0.001f);
         }
 
-        // ── AC-3: Night movement blocked outside NightMovement ──────
+        // â”€â”€ AC-3: Night movement blocked outside NightMovement â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC3_DayUI_NightVelocity_ReturnsZero()
@@ -101,7 +125,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0f, velocity, 0.001f);
         }
 
-        // ── AC-4: Day A/D slow walk on X-axis ──────────────────────
+        // â”€â”€ AC-4: Day A/D slow walk on X-axis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC4_Day_RightInput_ProducesPositiveDisplacement()
@@ -128,7 +152,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0f, disp, 0.001f);
         }
 
-        // ── AC-5: Day speed configurable, slower than night ─────────
+        // â”€â”€ AC-5: Day speed configurable, slower than night â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC5_Day_DefaultSpeed_Is2()
@@ -153,7 +177,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1.5f, disp, 0.001f);
         }
 
-        // ── AC-6: base_move_speed configurable ──────────────────────
+        // â”€â”€ AC-6: base_move_speed configurable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC6_NightSpeed_Configurable()
@@ -197,7 +221,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(Movement2DCalculator.MaxDayMoveSpeed, _calc.DayMoveSpeed);
         }
 
-        // ── Disabled mode ────────────────────────────────────────────
+        // â”€â”€ Disabled mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void Disabled_Displacement_ReturnsZero()
@@ -208,7 +232,7 @@ namespace SolarPhobia.Application.Tests
                 "Disabled mode must produce zero displacement");
         }
 
-        // ── Day vs Night speed difference ────────────────────────────
+        // â”€â”€ Day vs Night speed difference â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void NightDisplacement_GreaterThan_DayDisplacement_SameInput()
@@ -220,7 +244,7 @@ namespace SolarPhobia.Application.Tests
                 "Night movement must be faster than day movement");
         }
 
-        // ── DeltaTime scaling ─────────────────────────────────────────
+        // â”€â”€ DeltaTime scaling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void Day_Displacement_ScalesWithDeltaTime()
@@ -232,3 +256,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

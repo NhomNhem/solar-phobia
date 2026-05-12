@@ -1,14 +1,38 @@
-// Assets/_Project/Application/Editor/Tests/CoverDetection2DTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/CoverDetection2DTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Map.Cover;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 3.2 — Cover Detection 2D (Mộ Gió trigger overlap).
+    /// Validates: Master GDD V5.0 Section 3.2 â€” Cover Detection 2D (Má»™ GiÃ³ trigger overlap).
     /// Story 006-v2: Cover Detection 2D.
     /// </summary>
     [TestFixture]
@@ -28,7 +52,7 @@ namespace SolarPhobia.Application.Tests
             _detector.OnFalseSafeMoundEntered.Subscribe(v => _falseSafeMoundEvents.Add(v));
         }
 
-        // ── AC-1: MoThuong overlap → IsInCover = true ─────────────
+        // â”€â”€ AC-1: MoThuong overlap â†’ IsInCover = true â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_MoThuong_Enter_NightMode_SetsInCover_True()
@@ -57,7 +81,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsTrue(_coverEvents[_coverEvents.Count - 1]);
         }
 
-        // ── AC-2: Exit trigger → IsInCover = false ────────────────
+        // â”€â”€ AC-2: Exit trigger â†’ IsInCover = false â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_Exit_FiresCoverEvent_False()
@@ -71,7 +95,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_coverEvents[_coverEvents.Count - 1]);
         }
 
-        // ── AC-3: ReactiveProperty fires on state change only ──────
+        // â”€â”€ AC-3: ReactiveProperty fires on state change only â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC3_StayInCover_NoRepeatEvent()
@@ -79,13 +103,13 @@ namespace SolarPhobia.Application.Tests
             _detector.NotifyOverlapEnter(CoverDetector2D.TagMoThuong, PlayerInputMode.NightMovement);
             int baseline = _coverEvents.Count;
 
-            // Enter again while already in cover — no state change
+            // Enter again while already in cover â€” no state change
             _detector.NotifyOverlapEnter(CoverDetector2D.TagMoThuong, PlayerInputMode.NightMovement);
 
             Assert.AreEqual(baseline, _coverEvents.Count, "No event when state unchanged");
         }
 
-        // ── AC-4: Cover check disabled outside NightSurvival ──────
+        // â”€â”€ AC-4: Cover check disabled outside NightSurvival â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC4_DayUI_Enter_NoStateChange()
@@ -111,14 +135,14 @@ namespace SolarPhobia.Application.Tests
             _detector.NotifyOverlapEnter(CoverDetector2D.TagMoThuong, PlayerInputMode.NightMovement);
             Assert.IsTrue(_detector.IsInCover.CurrentValue);
 
-            // Phase changes — cover state must not be cleared
+            // Phase changes â€” cover state must not be cleared
             _detector.NotifyOverlapEnter(CoverDetector2D.TagMoThuong, PlayerInputMode.DayUI);
 
             Assert.IsTrue(_detector.IsInCover.CurrentValue,
                 "Cover state must not change when check is skipped");
         }
 
-        // ── AC-5: FalseSafeMound → cover + warning ─────────────────
+        // â”€â”€ AC-5: FalseSafeMound â†’ cover + warning â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC5_FalseSafeMound_Enter_SetsInCover_True()
@@ -155,7 +179,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_detector.IsInCover.CurrentValue);
         }
 
-        // ── Unknown tags silently ignored ─────────────────────────
+        // â”€â”€ Unknown tags silently ignored â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void UnknownTag_Enter_NoStateChange()
@@ -173,7 +197,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_detector.IsInCover.CurrentValue);
         }
 
-        // ── Tag constants ─────────────────────────────────────────
+        // â”€â”€ Tag constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void TagConstants_MatchExpectedUnityTagNames()
@@ -183,3 +207,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

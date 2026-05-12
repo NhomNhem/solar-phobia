@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Consequences;
@@ -16,9 +16,33 @@ using PhaseDayPhaseTimelineService = SolarPhobia.Application.Phase.Timeline.DayP
 using NightToDayResetService = SolarPhobia.Application.Phase.Reset.NightToDayResetService;
 using ApplicationWardTimerService = SolarPhobia.Application.Services.IWardTimerService;
 using PhaseWardTimerService = SolarPhobia.Infrastructure.Services.WardTimerService;
-using NgocCotService = SolarPhobia.Application.Services.NgocCotService;
-using RitualAssignmentService = SolarPhobia.Application.Services.RitualAssignmentService;
+using NgocCotService = SolarPhobia.Application.Resources.NgocCotService;
+using RitualAssignmentService = SolarPhobia.Application.Rituals.RitualAssignmentService;
 using WardDeathTriggerService = SolarPhobia.Application.Services.Objective.WardDeathTriggerService;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -329,3 +353,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

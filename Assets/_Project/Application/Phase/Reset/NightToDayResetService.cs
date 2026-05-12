@@ -1,13 +1,16 @@
 using System;
 using R3;
 using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Day;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Hazards;
 using SolarPhobia.Application.Phase.Day;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Phase.Timeline;
 using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Rituals;
+using SolarPhobia.Application.Shrines;
 using SolarPhobia.Application.Services.Interfaces;
 using SolarPhobia.Domain.Services;
 using SolarPhobia.Domain.ValueObjects;

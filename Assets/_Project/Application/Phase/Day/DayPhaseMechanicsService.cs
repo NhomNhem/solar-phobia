@@ -3,6 +3,7 @@ using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Player.Events;
 using SolarPhobia.Domain.ValueObjects;
 using VContainer;
 
@@ -14,7 +15,7 @@ namespace SolarPhobia.Application.Phase.Day
     /// </summary>
     public class DayPhaseMechanicsService : IDayPhaseMechanicsService
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+        [Inject] public INhemLogger _logger = new NhemUnityLogger();
 
         // ── R3 Reactive Events ─────────────────────────────────────────
         private readonly Subject<SwapEvent> _swapSubject = new();

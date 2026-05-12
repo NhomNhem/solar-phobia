@@ -8,7 +8,7 @@ namespace SolarPhobia.Infrastructure.Services
 {
     public class BroAudioService : IAudioService
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+        [Inject] public INhemLogger _logger = new NhemUnityLogger();
 
         // NOTE: In a real implementation, these strings should correspond to
         // SoundIDs or names configured in the BroAudio Library Manager.

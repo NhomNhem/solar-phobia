@@ -1,6 +1,7 @@
 using System;
 using R3;
 using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Player.Events;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Phase.Day

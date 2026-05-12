@@ -1,15 +1,39 @@
-// Assets/_Project/Application/Editor/Tests/MapSpawnDirectorInterfaceTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/MapSpawnDirectorInterfaceTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Map.Directors;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-map-007 — IMapSpawnDirector Player Controller signals.
-    /// Story 006: IMapSpawnDirector Interface — cover/strike overlap events.
+    /// Validates: TR-map-007 â€” IMapSpawnDirector Player Controller signals.
+    /// Story 006: IMapSpawnDirector Interface â€” cover/strike overlap events.
     /// </summary>
     [TestFixture]
     public class MapSpawnDirectorInterfaceTests
@@ -32,7 +56,7 @@ namespace SolarPhobia.Application.Tests
             _director.OnExitCover.Subscribe(t    => _coverExitEvents.Add(t));
         }
 
-        // ── OnStrikeWarning ────────────────────────────────────────
+        // â”€â”€ OnStrikeWarning â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void OnStrikeWarning_FiresTrue_WhenNotified()
@@ -53,7 +77,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_strikeWarnings[1]);
         }
 
-        // ── OnEnterCover ───────────────────────────────────────────
+        // â”€â”€ OnEnterCover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void OnEnterCover_FiresWithTag_WhenNotified()
@@ -72,7 +96,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual("FalseSafeMound", _coverEnterEvents[0]);
         }
 
-        // ── OnExitCover ────────────────────────────────────────────
+        // â”€â”€ OnExitCover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void OnExitCover_FiresWithTag_WhenNotified()
@@ -83,7 +107,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual("MoThuong", _coverExitEvents[0]);
         }
 
-        // ── UpdatePlayerPosition ───────────────────────────────────
+        // â”€â”€ UpdatePlayerPosition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void UpdatePlayerPosition_DoesNotThrow()
@@ -98,7 +122,7 @@ namespace SolarPhobia.Application.Tests
             );
         }
 
-        // ── Interface completeness ─────────────────────────────────
+        // â”€â”€ Interface completeness â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void IMapSpawnDirector_HasOnStrikeWarning()
@@ -132,3 +156,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

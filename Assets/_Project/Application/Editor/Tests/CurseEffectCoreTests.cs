@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Consequences;
@@ -6,6 +6,30 @@ using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -33,7 +57,7 @@ namespace SolarPhobia.Application.Tests
             _manager?.Dispose();
         }
 
-        // ── AC-1: Idle state when not night phase ──────────────────────────────
+        // â”€â”€ AC-1: Idle state when not night phase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_InitialState_IsIdle_WhenNotNightSurvival()
@@ -57,7 +81,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.Idle));
         }
 
-        // ── AC-2: CurseActive state receives curse ──────────────────────────────
+        // â”€â”€ AC-2: CurseActive state receives curse â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_TransitionsToCurseActive_WhenNightSurvivalAndCurseReceived()
@@ -104,7 +128,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.CurseActive));
         }
 
-        // ── AC-3: HazardTriggered on player entry ──────────────────────────────
+        // â”€â”€ AC-3: HazardTriggered on player entry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC3_TransitionsToHazardTriggered_WhenPlayerEntersHazardZone()
@@ -139,7 +163,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.Idle));
         }
 
-        // ── AC-4: HazardCleared on player exit ──────────────────────────────
+        // â”€â”€ AC-4: HazardCleared on player exit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC4_TransitionsToHazardCleared_WhenPlayerExitsHazardZone()
@@ -190,7 +214,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.CurseActive));
         }
 
-        // ── Additional edge case tests ──────────────────────────────
+        // â”€â”€ Additional edge case tests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void EdgeCase_TransitionsToIdle_WhenNightPhaseEnds()
@@ -222,7 +246,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_manager.CurrentStateValue, Is.EqualTo(CurseEffectState.CurseActive));
         }
 
-        // ── Test Helpers ──────────────────────────────
+        // â”€â”€ Test Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private class TestPhaseStateMachine : IPhaseStateMachine
         {
@@ -270,3 +294,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

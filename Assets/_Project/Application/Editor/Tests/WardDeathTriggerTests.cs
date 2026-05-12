@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
@@ -6,6 +6,30 @@ using SolarPhobia.Application.Services;
 using SolarPhobia.Application.Services.Objective;
 using SolarPhobia.Domain.ValueObjects;
 using System;
+
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
 
 namespace SolarPhobia.Application.Editor.Tests
 {
@@ -124,7 +148,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_phaseMachine.TransitionCount, Is.EqualTo(2));
         }
 
-        // ── Test Doubles ───────────────────────────────────────────
+        // â”€â”€ Test Doubles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private class TestWardTimer : SolarPhobia.Domain.IWardTimerService
         {
@@ -202,3 +226,4 @@ namespace SolarPhobia.Application.Editor.Tests
             }
         }
     }
+

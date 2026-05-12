@@ -13,7 +13,7 @@ namespace SolarPhobia.Application.Player.Warnings
     /// </summary>
     public class StrikeWarningController : IStrikeWarningController
     {
-        [Inject] internal INhemLogger _logger;
+        [Inject] public INhemLogger _logger;
 
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly ReactiveProperty<bool> _isWarningActive = new(false);

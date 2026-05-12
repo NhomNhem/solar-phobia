@@ -1,4 +1,4 @@
-using R3;
+﻿using R3;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain;
@@ -8,12 +8,36 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using VContainer;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Presentation.HUD
 {
     public class WardCountdownView : MonoBehaviour
     {
-        [Inject] internal SolarPhobia.Domain.IWardTimerService _wardTimer;
-        [Inject] internal IPhaseStateMachine _phaseStateMachine;
+        [Inject] public SolarPhobia.Domain.IWardTimerService _wardTimer;
+        [Inject] public IPhaseStateMachine _phaseStateMachine;
 
         private UIDocument _document;
         private Label _timerLabel;
@@ -93,3 +117,4 @@ namespace SolarPhobia.Presentation.HUD
         }
     }
 }
+

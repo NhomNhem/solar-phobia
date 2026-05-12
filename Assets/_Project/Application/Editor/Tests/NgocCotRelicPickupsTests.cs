@@ -1,12 +1,36 @@
-// Assets/_Project/Application/Editor/Tests/NgocCotRelicPickupsTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/NgocCotRelicPickupsTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Services;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-state-005 — Ngọc Cốt relic pickups increase Ward drain multiplicatively.
+    /// Validates: TR-state-005 â€” Ngá»c Cá»‘t relic pickups increase Ward drain multiplicatively.
     /// </summary>
     public class NgocCotRelicPickupsTests
     {
@@ -24,7 +48,7 @@ namespace SolarPhobia.Application.Tests
             _ngocCotService?.ResetForNight();
         }
 
-        // ── Bone Count Tracking ─────────────────────────────────
+        // â”€â”€ Bone Count Tracking â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void BoneCount_StartsAtZero()
@@ -70,7 +94,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0, _ngocCotService.BoneCount);
         }
 
-        // ── Bone Multiplier Formula ─────────────────────────────
+        // â”€â”€ Bone Multiplier Formula â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void BoneMultiplier_Returns1_WhenNoBones()
@@ -102,7 +126,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1.75f, _ngocCotService.BoneMultiplier);
         }
 
-        // ── AC-1: First pickup increases drain by 25% ───────────
+        // â”€â”€ AC-1: First pickup increases drain by 25% â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_FirstPickup_IncreasesDrainFrom1d0_To1d25()
@@ -113,7 +137,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1.25f, service.BoneMultiplier);
         }
 
-        // ── AC-2: Second pickup adds additional 25% ─────────────
+        // â”€â”€ AC-2: Second pickup adds additional 25% â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_SecondPickup_IncreasesDrainFrom1d25_To1d5()
@@ -125,7 +149,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1.5f, service.BoneMultiplier);
         }
 
-        // ── AC-3: Third pickup caps at maximum, fourth ignored ──
+        // â”€â”€ AC-3: Third pickup caps at maximum, fourth ignored â”€â”€
 
         [Test]
         public void AC3_ThirdPickup_CapsDrainAt1d75()
@@ -154,7 +178,7 @@ namespace SolarPhobia.Application.Tests
 
     /// <summary>
     /// Validates: WardTimerService drain rate calculation with bone + hallucination multipliers.
-    /// Formula: baseDrainRate × (1 + boneCount × 0.25) × (1 + hallucinationMultiplier)
+    /// Formula: baseDrainRate Ã— (1 + boneCount Ã— 0.25) Ã— (1 + hallucinationMultiplier)
     /// </summary>
     public class WardDrainRateCalculationTests
     {
@@ -213,3 +237,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

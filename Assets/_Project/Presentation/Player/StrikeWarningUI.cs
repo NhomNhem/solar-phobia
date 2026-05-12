@@ -18,10 +18,10 @@ namespace SolarPhobia.Presentation.Player
     /// </summary>
     public class StrikeWarningUI : MonoBehaviour, IInitializable, IDisposable
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+        [Inject] public INhemLogger _logger = new NhemUnityLogger();
 
         // ── Injected Dependencies ──────────────────────────────────
-        [Inject] internal IStrikeWarningController _strikeWarningController;
+        [Inject] public IStrikeWarningController _strikeWarningController;
 
         // ── UI Elements ────────────────────────────────────────────
         private VisualElement _rootElement;

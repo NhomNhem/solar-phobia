@@ -1,12 +1,36 @@
-// Assets/_Project/Application/Editor/Tests/PlatformerFeelTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/PlatformerFeelTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Player.Movement;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 3.1 — Coyote Time (0.1s) + Jump Buffering (0.15s).
+    /// Validates: Master GDD V5.0 Section 3.1 â€” Coyote Time (0.1s) + Jump Buffering (0.15s).
     /// Story 005-v2: Platformer Feel.
     /// </summary>
     [TestFixture]
@@ -23,7 +47,7 @@ namespace SolarPhobia.Application.Tests
             _ctrl = new PlatformerFeelController();
         }
 
-        // ── Defaults ──────────────────────────────────────────────
+        // â”€â”€ Defaults â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void DefaultCoyoteTime_Is0p1Seconds()
@@ -37,7 +61,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0.15f, PlatformerFeelController.DefaultJumpBufferTime);
         }
 
-        // ── Coyote Time ───────────────────────────────────────────
+        // â”€â”€ Coyote Time â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void CoyoteJump_Available_JustAfterLeavingGround()
@@ -78,7 +102,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void CoyoteJump_NotAvailable_WhenNeverGrounded()
         {
-            // Start airborne — no coyote window
+            // Start airborne â€” no coyote window
             _ctrl.Tick(false, false, PlayerInputMode.NightMovement, DeltaSmall);
 
             Assert.IsFalse(_ctrl.IsCoyoteJumpAvailable);
@@ -111,7 +135,7 @@ namespace SolarPhobia.Application.Tests
                 "Coyote window must reset after landing");
         }
 
-        // ── Jump Buffering ────────────────────────────────────────
+        // â”€â”€ Jump Buffering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void JumpBuffer_Active_WhenJumpPressedAirborne()
@@ -156,7 +180,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_ctrl.IsJumpBuffered);
         }
 
-        // ── Phase gate ────────────────────────────────────────────
+        // â”€â”€ Phase gate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void CoyoteAndBuffer_Reset_OutsideNightMovement()
@@ -172,7 +196,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_ctrl.IsJumpBuffered, "Buffer must reset outside Night");
         }
 
-        // ── Direct jump (grounded + input) ────────────────────────
+        // â”€â”€ Direct jump (grounded + input) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void DirectJump_Grounded_JumpInput_ShouldJump_True()
@@ -190,7 +214,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(shouldJump);
         }
 
-        // ── Configurable windows ──────────────────────────────────
+        // â”€â”€ Configurable windows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void CoyoteTime_Configurable()
@@ -215,3 +239,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+

@@ -1,4 +1,4 @@
-// Assets/_Project/Application/Editor/Tests/PlayerStateMachineTests.cs
+﻿// Assets/_Project/Application/Editor/Tests/PlayerStateMachineTests.cs
 using System;
 using System.Linq;
 using NUnit.Framework;
@@ -9,13 +9,37 @@ using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: ADR-0003-v2 + TR-player-009 — PlayerStateMachine FSM Foundation.
-    /// Story 009: PlayerStateMachine Core — FSM Foundation.
+    /// Validates: ADR-0003-v2 + TR-player-009 â€” PlayerStateMachine FSM Foundation.
+    /// Story 009: PlayerStateMachine Core â€” FSM Foundation.
     ///
-    /// Pure C# logic — no Unity scene or physics dependencies.
+    /// Pure C# logic â€” no Unity scene or physics dependencies.
     /// </summary>
     [TestFixture]
     public class PlayerStateMachineTests
@@ -44,7 +68,7 @@ namespace SolarPhobia.Application.Tests
             _fsm.Initialize();
         }
 
-        // ── AC-1: Idle → Moving on A/D input ─────────────────────
+        // â”€â”€ AC-1: Idle â†’ Moving on A/D input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_IdleToMoving_TransitionAllowed()
@@ -67,7 +91,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_fsm.CurrentStateValue, Is.EqualTo(EPlayerState.Moving));
         }
 
-        // ── AC-2: Moving → Sprinting on Shift held ──────────────
+        // â”€â”€ AC-2: Moving â†’ Sprinting on Shift held â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_MovingToSprinting_TransitionAllowed()
@@ -100,7 +124,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(can, Is.False);
         }
 
-        // ── AC-3: Falling → Gliding on Jump held while airborne ─
+        // â”€â”€ AC-3: Falling â†’ Gliding on Jump held while airborne â”€
 
         [Test]
         public void AC3_FallingToGliding_TransitionAllowed()
@@ -140,7 +164,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(can, Is.True);
         }
 
-        // ── AC-4: Low Ward triggers Exhausted ────────────────────
+        // â”€â”€ AC-4: Low Ward triggers Exhausted â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC4_AnyStateToExhausted_TransitionAllowed()
@@ -190,7 +214,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(can, Is.True);
         }
 
-        // ── AC-5: State change emits event ─────────────────────
+        // â”€â”€ AC-5: State change emits event â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC5_TryTransitionTo_EmitsPlayerStateChangedEvent()
@@ -244,7 +268,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(observed, Is.True);
         }
 
-        // ── AC-6: Invalid transitions rejected ──────────────────
+        // â”€â”€ AC-6: Invalid transitions rejected â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC6_ExhaustedToDashing_IsRejected()
@@ -298,7 +322,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_fsm.CanTransitionTo(EPlayerState.Gliding), Is.False);
         }
 
-        // ── FSM invariant checks ─────────────────────────────────
+        // â”€â”€ FSM invariant checks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void Initialize_SetsIdleState()
@@ -348,3 +372,4 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
