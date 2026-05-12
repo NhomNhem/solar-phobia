@@ -1,5 +1,5 @@
 // Assets/_Project/Application/Services/Movement2DCalculator.cs
-using UnityEngine;
+using System;
 using SolarPhobia.Domain.ValueObjects;
 using VContainer;
 
@@ -59,21 +59,21 @@ namespace SolarPhobia.Application.Services
         public float NightMoveSpeed
         {
             get => _nightMoveSpeed;
-            set => _nightMoveSpeed = Mathf.Clamp(value, MinNightMoveSpeed, MaxNightMoveSpeed);
+            set => _nightMoveSpeed = Clamp(value, MinNightMoveSpeed, MaxNightMoveSpeed);
         }
 
         /// <inheritdoc/>
         public float DayMoveSpeed
         {
             get => _dayMoveSpeed;
-            set => _dayMoveSpeed = Mathf.Clamp(value, MinDayMoveSpeed, MaxDayMoveSpeed);
+            set => _dayMoveSpeed = Clamp(value, MinDayMoveSpeed, MaxDayMoveSpeed);
         }
 
         /// <inheritdoc/>
         public float SprintMultiplier
         {
             get => _sprintMultiplier;
-            set => _sprintMultiplier = Mathf.Clamp(value, MinSprintMultiplier, MaxSprintMultiplier);
+            set => _sprintMultiplier = Clamp(value, MinSprintMultiplier, MaxSprintMultiplier);
         }
 
         // ── Constructor ────────────────────────────────────────────
@@ -113,6 +113,11 @@ namespace SolarPhobia.Application.Services
 
             float speed = _nightMoveSpeed * (isSprinting ? _sprintMultiplier : 1f);
             return inputX * speed;
+        }
+
+        private static float Clamp(float value, float min, float max)
+        {
+            return Math.Min(Math.Max(value, min), max);
         }
     }
 }

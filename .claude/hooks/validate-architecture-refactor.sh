@@ -28,6 +28,7 @@ WARNINGS=""
 
 is_domain=0
 is_application=0
+is_runtime_layer=0
 
 if echo "$FILE_PATH" | grep -qE 'Assets/_Project/(01_Domain|Domain)/'; then
     is_domain=1
@@ -35,6 +36,10 @@ fi
 
 if echo "$FILE_PATH" | grep -qE 'Assets/_Project/(02_Application|Application)/'; then
     is_application=1
+fi
+
+if echo "$FILE_PATH" | grep -qE 'Assets/_Project/(02_Application|Application|03_Infrastructure|Infrastructure|04_Presentation|Presentation|05_Composition|Composition)/'; then
+    is_runtime_layer=1
 fi
 
 if [ "$is_domain" -eq 1 ]; then
@@ -66,6 +71,18 @@ if [ "$is_application" -eq 1 ]; then
 
     if grep -qE 'ObservableList<|ObservableDictionary<|ObservableQueue<|ObservableHashSet<' "$FILE_PATH"; then
         WARNINGS="$WARNINGS\n  APPLICATION: $FILE_PATH uses ObservableCollections. Keep this only when collection delta streams are genuinely required."
+    fi
+fi
+
+if grep -qE 'Debug\.(Log|LogWarning|LogError|Assert)' "$FILE_PATH"; then
+    WARNINGS="$WARNINGS\n  LOGGING: $FILE_PATH uses UnityEngine.Debug directly. Prefer INhemLogger/NhemUnityLogger according to project logging policy."
+fi
+
+if [ "$is_runtime_layer" -eq 1 ]; then
+    if grep -qE 'new[[:space:]]+NhemUnityLogger\(' "$FILE_PATH"; then
+        if ! echo "$FILE_PATH" | grep -qE 'Assets/_Project/(Composition/Installers/GameplayBalanceConfigLoader\.cs|Infrastructure/Hazards/|Infrastructure/Dialogue/JsonDialogueRepository\.cs)'; then
+            WARNINGS="$WARNINGS\n  LOGGING: $FILE_PATH constructs NhemUnityLogger directly. DI-managed classes should inject INhemLogger and keep direct construction only in static loaders or non-DI MonoBehaviours."
+        fi
     fi
 fi
 

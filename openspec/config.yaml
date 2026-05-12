@@ -1,0 +1,16 @@
+schema: spec-driven
+
+context: |
+  Project: Solar Phobia
+  Engine: Unity 6000.3.11f1
+  Render Pipeline: URP 2D / Unity 6
+  Camera: Cinemachine with Day fixed camera and Night smooth follow camera
+  Art Direction: Limbo + symbolic warning colors
+  Language: English for specs and code comments.
+  Gameplay:
+    - Day phase: fixed frame, heat wall pressure, service ritual.
+    - Night phase: smooth follow, parkour, boss searchlight, survival horror.
+  Shader Rules:
+    - Screen space for camera/mental effects.
+    - World space for environment/boss/trail effects.
+    - Hybrid for Heat Wall: screen edge + world noise.

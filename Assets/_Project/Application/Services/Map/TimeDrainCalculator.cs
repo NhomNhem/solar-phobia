@@ -1,5 +1,5 @@
 // Assets/_Project/Application/Services/Map/TimeDrainCalculator.cs
-using UnityEngine;
+using System;
 
 namespace SolarPhobia.Application.Services.Map
 {
@@ -37,7 +37,7 @@ namespace SolarPhobia.Application.Services.Map
             float hallucinationMultiplier = DefaultHallucinationMultiplier)
         {
             float effective = baseDrainRate * (1f + bonesCarried * hallucinationMultiplier);
-            return Mathf.Min(effective, MaxSafeDrainRate);
+            return Math.Min(effective, MaxSafeDrainRate);
         }
     }
 }

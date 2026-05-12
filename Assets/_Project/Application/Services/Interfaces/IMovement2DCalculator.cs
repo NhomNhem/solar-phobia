@@ -1,5 +1,4 @@
 // Assets/_Project/Application/Services/Interfaces/IMovement2DCalculator.cs
-using UnityEngine;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Services

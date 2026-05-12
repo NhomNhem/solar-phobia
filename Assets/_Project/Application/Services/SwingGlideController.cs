@@ -1,7 +1,7 @@
 // Assets/_Project/Application/Services/SwingGlideController.cs
+using System;
 using R3;
 using SolarPhobia.Domain.ValueObjects;
-using UnityEngine;
 using VContainer;
 
 namespace SolarPhobia.Application.Services
@@ -48,14 +48,14 @@ namespace SolarPhobia.Application.Services
         public float SwingWardCost
         {
             get => _swingWardCost;
-            set => _swingWardCost = Mathf.Max(0f, value);
+            set => _swingWardCost = Math.Max(0f, value);
         }
 
         /// <inheritdoc/>
         public float GlideWardCostPerSec
         {
             get => _glideWardCostPerSec;
-            set => _glideWardCostPerSec = Mathf.Max(0f, value);
+            set => _glideWardCostPerSec = Math.Max(0f, value);
         }
 
         // ── Constructor ────────────────────────────────────────────

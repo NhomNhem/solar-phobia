@@ -1,6 +1,4 @@
 // Assets/_Project/Application/Services/Map/RouteViabilityCalculator.cs
-using UnityEngine;
-
 namespace SolarPhobia.Application.Services.Map
 {
     /// <summary>

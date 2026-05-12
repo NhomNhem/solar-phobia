@@ -1,5 +1,5 @@
 // Assets/_Project/Application/Services/Map/CoverDensityValidator.cs
-using UnityEngine;
+using System;
 
 namespace SolarPhobia.Application.Services.Map
 {
@@ -60,7 +60,7 @@ namespace SolarPhobia.Application.Services.Map
         /// </summary>
         public static int MinCountForLane(float laneLength)
         {
-            return Mathf.CeilToInt(MinDensity * laneLength);
+            return (int)Math.Ceiling(MinDensity * laneLength);
         }
     }
 }

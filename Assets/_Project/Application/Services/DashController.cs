@@ -1,7 +1,7 @@
 // Assets/_Project/Application/Services/DashController.cs
+using System;
 using R3;
 using SolarPhobia.Domain.ValueObjects;
-using UnityEngine;
 using VContainer;
 
 namespace SolarPhobia.Application.Services
@@ -58,14 +58,14 @@ namespace SolarPhobia.Application.Services
         public float DashWardCost
         {
             get => _dashWardCost;
-            set => _dashWardCost = Mathf.Max(0f, value);
+            set => _dashWardCost = Math.Max(0f, value);
         }
 
         /// <inheritdoc/>
         public float DashCooldown
         {
             get => _dashCooldown;
-            set => _dashCooldown = Mathf.Clamp(value, MinDashCooldown, MaxDashCooldown);
+            set => _dashCooldown = Clamp(value, MinDashCooldown, MaxDashCooldown);
         }
 
         // ── Constructor ────────────────────────────────────────────
@@ -117,8 +117,13 @@ namespace SolarPhobia.Application.Services
         {
             if (_cooldownRemaining > 0f)
             {
-                _cooldownRemaining = Mathf.Max(0f, _cooldownRemaining - deltaTime);
+                _cooldownRemaining = Math.Max(0f, _cooldownRemaining - deltaTime);
             }
+        }
+
+        private static float Clamp(float value, float min, float max)
+        {
+            return Math.Min(Math.Max(value, min), max);
         }
     }
 }

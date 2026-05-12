@@ -1,5 +1,4 @@
-// Assets/_Project/Application/Services/StrikeWarning.cs
-using UnityEngine;
+using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Services
 {
@@ -19,16 +18,16 @@ namespace SolarPhobia.Application.Services
         /// World-space position of the strike at registration time.
         /// Used for nearest-strike priority selection.
         /// </summary>
-        public readonly Vector2 Position;
+        public readonly Float2 Position;
 
         /// <summary>
         /// Initialises a new <see cref="StrikeWarning"/> with the given identifier and position.
         /// </summary>
         /// <param name="id">Unique identifier for this warning instance.</param>
         /// <param name="position">World-space position of the incoming strike.</param>
-        public StrikeWarning(int id, Vector2 position)
+        public StrikeWarning(int id, Float2 position)
         {
-            Id       = id;
+            Id = id;
             Position = position;
         }
     }

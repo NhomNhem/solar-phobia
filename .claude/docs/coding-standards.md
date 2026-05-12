@@ -15,6 +15,7 @@
 - Use **ObservableCollections** only when observers need collection delta events such as add/remove/move/replace/range changes.
 - Use **MessagePipe** for one-way events that cross modules, layers, or DI scopes and may have multiple consumers.
 - Use **ZLinq** only in profiled or obviously hot paths where allocations matter.
+- Use **INhemLogger** for project logging in DI-managed classes. Direct `NhemUnityLogger` construction is allowed only in static loaders or MonoBehaviours that are not created by DI.
 
 ## Package Selection Rules
 
@@ -29,6 +30,7 @@
 - **ObservableCollections** must not appear in `Domain` or in public contracts that cross layers.
 - **MessagePipe** must not become a second state store and should not be used for request/response.
 - **ZLinq** is disallowed in tests, most UI/presentation code, and ordinary application orchestration.
+- **UnityEngine.Debug** is disallowed in `Assets/_Project` production code. Use `INhemLogger` or `NhemUnityLogger` instead.
 - Do not mix **ZLinq** and `System.Linq` in the same hot path without an explicit reason.
 
 # Design Document Standards

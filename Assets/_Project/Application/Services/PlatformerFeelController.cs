@@ -1,6 +1,6 @@
 // Assets/_Project/Application/Services/PlatformerFeelController.cs
+using System;
 using SolarPhobia.Domain.ValueObjects;
-using UnityEngine;
 using VContainer;
 
 namespace SolarPhobia.Application.Services
@@ -39,14 +39,14 @@ namespace SolarPhobia.Application.Services
         public float CoyoteTime
         {
             get => _coyoteTime;
-            set => _coyoteTime = Mathf.Max(0f, value);
+            set => _coyoteTime = Math.Max(0f, value);
         }
 
         /// <inheritdoc/>
         public float JumpBufferTime
         {
             get => _jumpBufferTime;
-            set => _jumpBufferTime = Mathf.Max(0f, value);
+            set => _jumpBufferTime = Math.Max(0f, value);
         }
 
         /// <inheritdoc/>
@@ -89,7 +89,7 @@ namespace SolarPhobia.Application.Services
             // Count down coyote window while airborne
             if (!isGrounded && _coyoteRemaining > 0f)
             {
-                _coyoteRemaining = Mathf.Max(0f, _coyoteRemaining - deltaTime);
+                _coyoteRemaining = Math.Max(0f, _coyoteRemaining - deltaTime);
             }
 
             // ── Jump Buffer ────────────────────────────────────────
@@ -99,7 +99,7 @@ namespace SolarPhobia.Application.Services
             }
             else if (_jumpBufferRemaining > 0f)
             {
-                _jumpBufferRemaining = Mathf.Max(0f, _jumpBufferRemaining - deltaTime);
+                _jumpBufferRemaining = Math.Max(0f, _jumpBufferRemaining - deltaTime);
             }
 
             _wasGrounded = isGrounded;
