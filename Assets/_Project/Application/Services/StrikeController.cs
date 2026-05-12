@@ -19,6 +19,11 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class StrikeController : IStrikeController
     {
+        public static float DefaultStrikeTimePenaltySec => GameplayBalanceConfig.CreateDefault().Strike.DefaultStrikeTimePenaltySec;
+        public static float DefaultStrikeTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.DefaultStrikeTelegraphSec;
+        public static float MinTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.MinTelegraphSec;
+        public static float MaxTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.MaxTelegraphSec;
+
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly Subject<bool>  _onStrikeWarning     = new();
         private readonly Subject<float> _onWardCostIncurred  = new();

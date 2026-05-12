@@ -34,6 +34,11 @@ namespace SolarPhobia.Application.Services
         /// <summary>
         /// Initializes a new instance of the KarmaHazardService class.
         /// </summary>
+        public KarmaHazardService(IPhaseStateMachine phaseStateMachine)
+            : this(phaseStateMachine, GameplayBalanceConfig.CreateDefault())
+        {
+        }
+
         [Inject]
         public KarmaHazardService(IPhaseStateMachine phaseStateMachine, GameplayBalanceConfig balanceConfig)
         {

@@ -14,6 +14,8 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class MapSpawnDirector : IMapSpawnDirector
     {
+        public static int DefaultSafeMoundsPerChunk => GameplayBalanceConfig.CreateDefault().MapSpawn.DefaultSafeMoundsPerChunk;
+
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly Subject<bool>   _onStrikeWarning = new();
         private readonly Subject<string> _onEnterCover    = new();
