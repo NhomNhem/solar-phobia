@@ -1,7 +1,7 @@
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.MainMenu;
 using UnityEngine;
 
-namespace SolarPhobia.Infrastructure.Services
+namespace SolarPhobia.Infrastructure.MainMenu
 {
     public sealed class MainMenuPlatformService : IMainMenuPlatformService
     {

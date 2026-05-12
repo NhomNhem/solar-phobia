@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Hazards
 {
     public interface IKarmaHazardRuntime
     {

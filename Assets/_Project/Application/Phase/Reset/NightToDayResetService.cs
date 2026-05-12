@@ -1,6 +1,8 @@
 using System;
 using R3;
+using SolarPhobia.Application.Consequences;
 using SolarPhobia.Application.Messages;
+using SolarPhobia.Application.Hazards;
 using SolarPhobia.Application.Phase.Day;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Phase.Timeline;

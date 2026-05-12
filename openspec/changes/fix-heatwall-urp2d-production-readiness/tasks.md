@@ -34,10 +34,10 @@
 
 ## 6. Verify and Clean Up
 
-- [ ] 6.1 Open `HeatWall_World.shader` in Unity, verify no compile errors
-- [ ] 6.2 Open `HeatWall_EdgeBurn.shader` in Unity, verify no compile errors
-- [ ] 6.3 Open `SensoryDecay.shader` in Unity, verify no compile errors
-- [ ] 6.4 Verify heat wall displays correctly in URP 2D Game View
-- [ ] 6.5 Verify edge burn remains readable against grayscale background
-- [ ] 6.6 Verify heat shimmer is not glued to camera (follows world-space)
-- [ ] 6.7 Verify SRP Batcher reports the material as compatible (Frame Debugger)
+- [x] 6.1 Open `HeatWall_World.shader` in Unity, verify no compile errors
+- [x] 6.2 Open `HeatWall_EdgeBurn.shader` in Unity, verify no compile errors
+- [x] 6.3 Open `SensoryDecay.shader` in Unity, verify no compile errors
+- [ ] 6.4 Verify heat wall displays correctly in URP 2D Game View (manual - test in Game View)
+- [ ] 6.5 Verify edge burn remains readable against grayscale background (manual - test in Game View)
+- [ ] 6.6 Verify heat shimmer is not glued to camera (follows world-space) (manual - test in Game View)
+- [x] 6.7 Verify SRP Batcher reports the material as compatible - SRP Batcher: True, CBUFFER pattern correct

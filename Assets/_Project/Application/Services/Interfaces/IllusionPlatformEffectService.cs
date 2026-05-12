@@ -1,4 +1,5 @@
-﻿using R3;
+using SolarPhobia.Application.Consequences;
+using R3;
 using SolarPhobia.Domain.ValueObjects;
 using System.Collections.Generic;
 using System;

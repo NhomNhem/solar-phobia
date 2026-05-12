@@ -3,7 +3,7 @@ using R3;
 using UnityEngine;
 using SolarPhobia.Domain.ValueObjects;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Hazards
 {
     /// <summary>
     /// Interface for karma hazard spawning based on sacrificed ghost type.

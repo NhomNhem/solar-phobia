@@ -5,7 +5,7 @@ using SolarPhobia.Application.Phase.Flow;
 using VContainer;
 using SolarPhobia.Domain.ValueObjects;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Consequences
 {
     /// <summary>
     /// Implementation of curse effect management - core state machine for hazard spawning.

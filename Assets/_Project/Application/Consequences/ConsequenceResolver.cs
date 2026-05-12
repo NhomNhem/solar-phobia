@@ -6,7 +6,7 @@ using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Domain.ValueObjects;
 using VContainer;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Consequences
 {
     /// <summary>
     /// Deterministic mapping of abandoned soul IDs to night curse outcomes.

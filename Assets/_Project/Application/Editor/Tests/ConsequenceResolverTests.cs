@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SolarPhobia.Application.Consequences;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Services;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Domain.ValueObjects;

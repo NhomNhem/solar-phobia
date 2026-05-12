@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Hazards
 {
     /// <summary>
     /// Data class for karma hazard information.

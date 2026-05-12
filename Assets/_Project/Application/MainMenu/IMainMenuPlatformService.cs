@@ -1,4 +1,4 @@
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.MainMenu
 {
     public interface IMainMenuPlatformService
     {

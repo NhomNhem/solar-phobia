@@ -2,7 +2,7 @@ using System;
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Consequences
 {
     /// <summary>
     /// Interface for curse effect management - controls hazard spawning based on abandoned soul.

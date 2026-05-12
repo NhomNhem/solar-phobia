@@ -1,4 +1,4 @@
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Hazards;
 using UnityEngine;
 
 namespace SolarPhobia.Infrastructure.Hazards

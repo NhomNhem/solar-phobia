@@ -2,7 +2,7 @@
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Domain.ValueObjects;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Consequences
 {
     /// <summary>
     /// Resolves abandoned soul IDs into curse payloads for the night phase.

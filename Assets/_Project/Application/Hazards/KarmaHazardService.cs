@@ -6,7 +6,7 @@ using SolarPhobia.Shared.Configuration;
 using UnityEngine;
 using VContainer;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Hazards
 {
     /// <summary>
     /// Implementation of karma hazard spawning service for Night phase.
