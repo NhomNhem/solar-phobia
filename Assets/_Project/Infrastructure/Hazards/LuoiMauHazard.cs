@@ -1,3 +1,4 @@
+using NhemDangFugBixs.NhemLogging;
 using UnityEngine;
 
 namespace SolarPhobia.Infrastructure.Hazards
@@ -7,6 +8,7 @@ namespace SolarPhobia.Infrastructure.Hazards
     /// </summary>
     public class LuoiMauHazard : MonoBehaviour
     {
+        private static readonly INhemLogger Logger = new NhemUnityLogger();
         private float _slowMultiplier;
         private SphereCollider _trigger;
 
@@ -23,7 +25,7 @@ namespace SolarPhobia.Infrastructure.Hazards
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log($"Player in Luoi Mau zone - speed reduced to {_slowMultiplier}×");
+                Logger.Log($"Player in Luoi Mau zone - speed reduced to {_slowMultiplier}×", this);
             }
         }
     }

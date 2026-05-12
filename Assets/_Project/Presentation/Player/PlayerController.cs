@@ -1,6 +1,8 @@
 // Assets/_Project/Presentation/Player/PlayerController.cs
 using System;
 using R3;
+using SolarPhobia.Application.Map.Directors;
+using SolarPhobia.Application.Player.Warnings;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
@@ -68,9 +70,13 @@ namespace SolarPhobia.Presentation.Player
                 return;
             }
 
+            Bounds colliderBounds = _cachedCollider != null
+                ? _cachedCollider.bounds
+                : new Bounds(transform.position, Vector3.zero);
+
             _strikeWarningController.ReportPlayerPosition(
-                (Vector2)transform.position,
-                _cachedCollider != null ? _cachedCollider.bounds : new Bounds(transform.position, Vector3.zero),
+                ToFloat2(transform.position),
+                ToBounds2D(colliderBounds),
                 _mode);
         }
 
@@ -118,7 +124,7 @@ namespace SolarPhobia.Presentation.Player
                     _strikeWarningController.OnStrikeWarningReceived(
                         active,
                         _mode,
-                        (Vector2)transform.position));
+                        ToFloat2(transform.position)));
         }
 
         /// <summary>
@@ -141,6 +147,18 @@ namespace SolarPhobia.Presentation.Player
             {
                 OnInteract?.Invoke("shrine");
             }
+        }
+
+        private static Float2 ToFloat2(Vector3 value)
+        {
+            return new Float2(value.x, value.y);
+        }
+
+        private static Bounds2D ToBounds2D(Bounds bounds)
+        {
+            return new Bounds2D(
+                new Float2(bounds.center.x, bounds.center.y),
+                new Float2(bounds.size.x, bounds.size.y));
         }
     }
 }

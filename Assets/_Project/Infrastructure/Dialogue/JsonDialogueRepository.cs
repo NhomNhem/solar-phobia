@@ -1,8 +1,9 @@
-﻿using System;
+using System;
+using NhemDangFugBixs.NhemLogging;
 using Newtonsoft.Json;
-using UnityEngine;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Repositories;
+using UnityEngine;
 
 namespace TinyMonsterArena.Infrastructure.Dialogue
 {
@@ -12,16 +13,21 @@ namespace TinyMonsterArena.Infrastructure.Dialogue
     /// </summary>
     public class JsonDialogueRepository : IDialogueRepository
     {
+        private static readonly INhemLogger Logger = new NhemUnityLogger();
+
         public DialogueNode GetDialogue(string dialogueId)
         {
-            if (string.IsNullOrWhiteSpace(dialogueId)) return null;
+            if (string.IsNullOrWhiteSpace(dialogueId))
+            {
+                return null;
+            }
 
             try
             {
                 var textAsset = Resources.Load<TextAsset>("Dialogues/" + dialogueId);
                 if (textAsset == null)
                 {
-                    Debug.LogWarning($"Dialogue JSON not found for id: {dialogueId}");
+                    Logger.LogWarning($"Dialogue JSON not found for id: {dialogueId}");
                     return null;
                 }
 
@@ -30,10 +36,9 @@ namespace TinyMonsterArena.Infrastructure.Dialogue
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Failed to load dialogue {dialogueId}: {ex}");
+                Logger.LogError($"Failed to load dialogue {dialogueId}: {ex}");
                 return null;
             }
         }
     }
 }
-

@@ -1,6 +1,5 @@
 // Assets/_Project/Application/Editor/Tests/CursorVisibilityTests.cs
 using NUnit.Framework;
-using UnityEngine;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
 
@@ -36,7 +35,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC1_DayService_LockState_None()
         {
-            Assert.AreEqual(CursorLockMode.None, _controller.GetCursorLockMode(PhaseState.DayService));
+            Assert.AreEqual(CursorLockState.None, _controller.GetCursorLockState(PhaseState.DayService));
         }
 
         // ── AC-2: NightSurvival → cursor hidden + locked ──────────
@@ -50,7 +49,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC2_NightSurvival_LockState_Locked()
         {
-            Assert.AreEqual(CursorLockMode.Locked, _controller.GetCursorLockMode(PhaseState.NightSurvival));
+            Assert.AreEqual(CursorLockState.Locked, _controller.GetCursorLockState(PhaseState.NightSurvival));
         }
 
         // ── AC-3: ChoiceLock / EndingEvaluation → cursor visible ──
@@ -64,7 +63,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC3_ChoiceLock_LockState_None()
         {
-            Assert.AreEqual(CursorLockMode.None, _controller.GetCursorLockMode(PhaseState.ChoiceLock));
+            Assert.AreEqual(CursorLockState.None, _controller.GetCursorLockState(PhaseState.ChoiceLock));
         }
 
         [Test]
@@ -76,7 +75,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC3_EndingEvaluation_LockState_None()
         {
-            Assert.AreEqual(CursorLockMode.None, _controller.GetCursorLockMode(PhaseState.EndingEvaluation));
+            Assert.AreEqual(CursorLockState.None, _controller.GetCursorLockState(PhaseState.EndingEvaluation));
         }
 
         // ── All intermediate phases → cursor visible ──────────────
@@ -101,9 +100,9 @@ namespace SolarPhobia.Application.Tests
                     $"Phase {phase} should show cursor"
                 );
                 Assert.AreEqual(
-                    CursorLockMode.None,
-                    _controller.GetCursorLockMode(phase),
-                    $"Phase {phase} should use CursorLockMode.None"
+                    CursorLockState.None,
+                    _controller.GetCursorLockState(phase),
+                    $"Phase {phase} should use CursorLockState.None"
                 );
             }
         }

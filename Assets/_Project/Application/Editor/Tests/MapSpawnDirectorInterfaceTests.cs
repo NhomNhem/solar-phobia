@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Services;
-using UnityEngine;
+using SolarPhobia.Application.Map.Directors;
+using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -92,8 +92,8 @@ namespace SolarPhobia.Application.Tests
 
             Assert.DoesNotThrow(() =>
                 _director.UpdatePlayerPosition(
-                    new Vector2(5f, 0f),
-                    new Bounds(Vector3.zero, Vector3.one)
+                    new Float2(5f, 0f),
+                    new Bounds2D(new Float2(0f, 0f), new Float2(1f, 1f))
                 )
             );
         }
@@ -128,7 +128,7 @@ namespace SolarPhobia.Application.Tests
             IMapSpawnDirector iface = _director;
             _director.Initialize(1);
             Assert.DoesNotThrow(() =>
-                iface.UpdatePlayerPosition(Vector2.zero, new Bounds()));
+                iface.UpdatePlayerPosition(new Float2(0f, 0f), new Bounds2D(new Float2(0f, 0f), new Float2(0f, 0f))));
         }
     }
 }

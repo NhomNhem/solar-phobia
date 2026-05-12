@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using R3;
+using SolarPhobia.Application.Phase.Timeline;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
 

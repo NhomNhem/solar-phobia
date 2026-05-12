@@ -1,8 +1,9 @@
-﻿using R3;
+﻿using System;
+using R3;
+using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services.Interfaces;
-using SolarPhobia.Domain;
 using SolarPhobia.Domain.ValueObjects;
-using System;
+using VContainer;
 using VContainer.Unity;
 
 namespace SolarPhobia.Application.Services.Objective
@@ -20,7 +21,10 @@ namespace SolarPhobia.Application.Services.Objective
 
         public bool HasTriggeredDeath => _hasTriggeredDeath;
 
-        public WardDeathTriggerService(SolarPhobia.Domain.IWardTimerService wardTimer, IPhaseStateMachine phaseStateMachine)
+        [Inject]
+        public WardDeathTriggerService(
+            SolarPhobia.Domain.IWardTimerService wardTimer,
+            IPhaseStateMachine phaseStateMachine)
         {
             _wardTimer = wardTimer;
             _phaseStateMachine = phaseStateMachine;

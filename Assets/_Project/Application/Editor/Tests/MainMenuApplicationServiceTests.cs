@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.MainMenu;
 using System.Collections.Generic;
 
 namespace SolarPhobia.Application.Tests

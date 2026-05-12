@@ -5,9 +5,13 @@
     "SolarPhobia.Domain",
     "SolarPhobia.Application",
     "SolarPhobia.Shared",
+    "NhemDangFugBixs.Logging",
+    "Unity.Cinemachine",
     "Unity.InputSystem",
     "VContainer",
-    "R3.Unity"
+    "R3.Unity",
+    "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "autoReferenced": false
 }

@@ -80,7 +80,7 @@ namespace SolarPhobia.Application.Systems {
 ### Error Handling
 - Use **try-finally** for cleanup
 - Avoid empty catch blocks; log or rethrow with `throw;`
-- Unity-specific: Use `Debug.LogWarning()` or `Debug.LogError()` for diagnostics
+- Unity-specific: Prefer `NhemDangFugBixs.NhemLogging.INhemLogger` for diagnostics in DI-managed classes. Direct `NhemUnityLogger` construction is only for static loaders or non-DI runtime components.
 - Test assertions: NUnit `Assert.That()`, `Assert.AreEqual()`, `StringAssert.Contains()`
 
 ### Imports Organization
@@ -104,6 +104,7 @@ namespace SolarPhobia.Application.Systems {
 
 ## Key Packages
 - **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — `[Inject]` fields must be `internal` (not `private`) for source generator compatibility
+- **NhemDangFugBixs.Logging**: Project logging abstraction — use `INhemLogger` in DI-managed classes; keep `NhemUnityLogger` construction limited to static loaders and non-DI runtime components
 - **R3**: Reactive programming (com.cysharp.r3) — replaces reactive patterns
 - **ObservableCollections**: Collection-level change tracking (Cysharp) — use for add/remove/move/replace deltas, never in Domain or public cross-layer contracts
 - **UniTask**: Async/await for Unity (com.cysharp.unitask)

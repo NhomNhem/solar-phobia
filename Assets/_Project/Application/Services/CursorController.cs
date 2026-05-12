@@ -1,6 +1,5 @@
 // Assets/_Project/Application/Services/CursorController.cs
 using SolarPhobia.Domain.ValueObjects;
-using UnityEngine;
 using VContainer;
 
 namespace SolarPhobia.Application.Services
@@ -16,7 +15,7 @@ namespace SolarPhobia.Application.Services
     ///
     /// The MonoBehaviour layer applies the result to Unity's Cursor API:
     ///   Cursor.visible   = GetCursorVisible(phase)
-    ///   Cursor.lockState = GetCursorLockMode(phase)
+    ///   Cursor.lockState = MapToUnity(GetCursorLockState(phase))
     ///
     /// Edge case (Alt+Tab): Unity auto-unlocks cursor on focus loss.
     /// Re-apply on OnApplicationFocus(true) if phase is NightSurvival.
@@ -35,11 +34,11 @@ namespace SolarPhobia.Application.Services
         }
 
         /// <inheritdoc/>
-        public CursorLockMode GetCursorLockMode(PhaseState phase)
+        public CursorLockState GetCursorLockState(PhaseState phase)
         {
             return phase == PhaseState.NightSurvival
-                ? CursorLockMode.Locked
-                : CursorLockMode.None;
+                ? CursorLockState.Locked
+                : CursorLockState.None;
         }
     }
 }

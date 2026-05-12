@@ -1,6 +1,6 @@
 // Assets/_Project/Application/Editor/Tests/TimeDrainTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Services.Map;
+using SolarPhobia.Application.Map.Analysis;
 
 namespace SolarPhobia.Application.Tests
 {

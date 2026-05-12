@@ -1,10 +1,23 @@
+using NhemDangFugBixs.NhemLogging;
+using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Hazards;
+using SolarPhobia.Application.MainMenu;
+using SolarPhobia.Application.Map.Cover;
+using SolarPhobia.Application.Map.Directors;
+using SolarPhobia.Application.Phase.Day;
+using SolarPhobia.Application.Phase.Flow;
+using SolarPhobia.Application.Phase.Reset;
+using SolarPhobia.Application.Phase.Timeline;
+using SolarPhobia.Application.Player.Movement;
+using SolarPhobia.Application.Player.Warnings;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Infrastructure.Hazards;
+using SolarPhobia.Infrastructure.MainMenu;
+using SolarPhobia.Infrastructure.Services;
 using SolarPhobia.Shared.Configuration;
 using SolarPhobia.Shared.InputActions;
-using SolarPhobia.Infrastructure.Services;
 using VContainer.Unity;
 using VContainer;
 
@@ -14,6 +27,8 @@ namespace SolarPhobia.Composition.Installers
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance<INhemLogger>(new NhemUnityLogger());
+
             // ── Data-Driven Gameplay Config ──────────────────────────────────
             GameplayBalanceConfig gameplayBalanceConfig = GameplayBalanceConfigLoader.Load();
             builder.RegisterInstance(gameplayBalanceConfig);
@@ -34,7 +49,7 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<PlayerInputHandler>(Lifetime.Singleton).As<IPlayerInputHandler>();
             builder.Register<PlayerStateMachine>(Lifetime.Singleton).As<IPlayerStateMachine>();
             builder.Register<MapSpawnDirector>(Lifetime.Singleton).As<IMapSpawnDirector>();
-            builder.Register<SolarPhobia.Application.Services.StrikeWarningController>(Lifetime.Singleton).As<IStrikeWarningController>();
+            builder.Register<StrikeWarningController>(Lifetime.Singleton).As<IStrikeWarningController>();
             builder.Register<StrikeController>(Lifetime.Singleton).As<IStrikeController>();
             builder.Register<SprintController>(Lifetime.Singleton).As<ISprintController>();
             builder.Register<SwingGlideController>(Lifetime.Singleton).As<ISwingGlideController>();
@@ -58,7 +73,7 @@ namespace SolarPhobia.Composition.Installers
                 .As<IWardTimerService>();
             builder.RegisterEntryPoint<WardTimerServiceEntryPoint>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SolarPhobia.Application.Services.Objective.WardDeathTriggerService>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<SolarPhobia.Application.Services.Phase.NightToDayResetService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<NightToDayResetService>(Lifetime.Singleton);
 
             // ── Day Selection Validator ──────────────────────────────────
             builder.Register<DaySelectionValidator>(Lifetime.Singleton).As<IDaySelectionValidator>();

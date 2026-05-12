@@ -5,6 +5,7 @@
         "SolarPhobia.Infrastructure",
         "SolarPhobia.Application",
         "SolarPhobia.Domain",
+        "Unity.Cinemachine",
         "UnityEngine.TestRunner"
     ],
     "includePlatforms": [

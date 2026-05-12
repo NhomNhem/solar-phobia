@@ -1,3 +1,4 @@
+using NhemDangFugBixs.NhemLogging;
 using UnityEngine;
 
 namespace SolarPhobia.Infrastructure.Hazards
@@ -7,6 +8,7 @@ namespace SolarPhobia.Infrastructure.Hazards
     /// </summary>
     public class VungNuocHazard : MonoBehaviour
     {
+        private static readonly INhemLogger Logger = new NhemUnityLogger();
         private float _damagePerSecond;
         private SphereCollider _trigger;
 
@@ -23,7 +25,7 @@ namespace SolarPhobia.Infrastructure.Hazards
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log($"Player in Vung Nuoc zone - taking {_damagePerSecond} HP/s");
+                Logger.Log($"Player in Vung Nuoc zone - taking {_damagePerSecond} HP/s", this);
             }
         }
     }

@@ -1,6 +1,5 @@
 // Assets/_Project/Application/Services/Interfaces/ICursorController.cs
 using SolarPhobia.Domain.ValueObjects;
-using UnityEngine;
 
 namespace SolarPhobia.Application.Services
 {
@@ -26,6 +25,6 @@ namespace SolarPhobia.Application.Services
         /// <summary>
         /// Returns the desired cursor lock state for the given phase.
         /// </summary>
-        CursorLockMode GetCursorLockMode(PhaseState phase);
+        CursorLockState GetCursorLockState(PhaseState phase);
     }
 }

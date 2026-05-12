@@ -1,4 +1,5 @@
-﻿using R3;
+using SolarPhobia.Application.Consequences;
+using R3;
 using SolarPhobia.Application.Services.Interfaces;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.ValueObjects;

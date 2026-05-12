@@ -1,7 +1,8 @@
 // Assets/_Project/Presentation/Player/StrikeWarningView.cs
 using System;
+using NhemDangFugBixs.NhemLogging;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Player.Warnings;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -21,6 +22,8 @@ namespace SolarPhobia.Presentation.Player
     [RequireComponent(typeof(UIDocument))]
     public class StrikeWarningView : MonoBehaviour
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+
         // ── Inspector ──────────────────────────────────────────────
         [SerializeField] private string _warningIconName = "warning-icon";
 
@@ -39,7 +42,7 @@ namespace SolarPhobia.Presentation.Player
 
             if (_warningIcon == null)
             {
-                Debug.LogError($"[StrikeWarningView] VisualElement '{_warningIconName}' not found — disabling.");
+                _logger.LogError($"[StrikeWarningView] VisualElement '{_warningIconName}' not found — disabling.", this);
                 enabled = false;
                 return;
             }

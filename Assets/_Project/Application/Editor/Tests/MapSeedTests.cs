@@ -1,6 +1,6 @@
 // Assets/_Project/Application/Editor/Tests/MapSeedTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Map.Directors;
 
 namespace SolarPhobia.Application.Tests
 {
