@@ -130,6 +130,21 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_resolver.HasResolved, Is.True);
         }
 
+        [Test]
+        public void Reset_ClearsOneWriteGuard()
+        {
+            _resolver.Resolve("linh");
+
+            _resolver.Reset();
+
+            Assert.That(_resolver.HasResolved, Is.False);
+
+            var payload = _resolver.Resolve("van");
+
+            Assert.That(payload.CurseType, Is.EqualTo(NightOutcomeState.Block));
+            Assert.That(_resolver.HasResolved, Is.True);
+        }
+
         // ═══════════════════════════════════════════════════════════
         // ── AC-3: Invalid Soul ID ──────────────────────────────────
         // ═══════════════════════════════════════════════════════════

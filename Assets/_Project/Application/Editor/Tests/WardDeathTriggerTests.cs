@@ -20,6 +20,7 @@ namespace SolarPhobia.Application.Editor.Tests
             _wardTimer = new TestWardTimer();
             _phaseMachine = new TestPhaseStateMachine(PhaseState.NightSurvival);
             _service = new WardDeathTriggerService(_wardTimer, _phaseMachine);
+            _service.Initialize();
         }
 
         [TearDown]
@@ -66,13 +67,13 @@ namespace SolarPhobia.Application.Editor.Tests
         }
 
         [Test]
-        public void AC4_DepletedInDayService_TransitionsToEndingEvaluation()
+        public void AC4_DepletedOutsideNightSurvival_DoesNotTransition()
         {
             _phaseMachine.SetPhase(PhaseState.DayService);
             _wardTimer.FireDepleted();
 
-            Assert.That(_service.HasTriggeredDeath, Is.True);
-            Assert.That(_phaseMachine.LastTransitionTarget, Is.EqualTo(PhaseState.EndingEvaluation));
+            Assert.That(_service.HasTriggeredDeath, Is.False);
+            Assert.That(_phaseMachine.LastTransitionTarget, Is.Null);
         }
 
         [Test]
@@ -106,6 +107,20 @@ namespace SolarPhobia.Application.Editor.Tests
             _wardTimer.FireDepleted();
 
             Assert.That(_phaseMachine.TransitionCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Reset_ClearsDeathGuard()
+        {
+            _wardTimer.FireDepleted();
+            Assert.That(_service.HasTriggeredDeath, Is.True);
+
+            _service.Reset();
+            _phaseMachine.SetPhase(PhaseState.NightSurvival);
+            _wardTimer.FireDepleted();
+
+            Assert.That(_service.HasTriggeredDeath, Is.True);
+            Assert.That(_phaseMachine.TransitionCount, Is.EqualTo(2));
         }
 
         // ── Test Doubles ───────────────────────────────────────────

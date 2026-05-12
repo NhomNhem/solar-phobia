@@ -3,14 +3,19 @@ using SolarPhobia.Application.Services.Interfaces;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.ValueObjects;
 using System;
+using VContainer.Unity;
 
 namespace SolarPhobia.Application.Services.Objective
 {
-    public class WardDeathTriggerService : IWardDeathTriggerService
+    /// <summary>
+    /// Transitions the run to ending evaluation when Ward depletes during NightSurvival.
+    /// Implements Ward Timer story 001: death trigger.
+    /// </summary>
+    public class WardDeathTriggerService : IWardDeathTriggerService, IInitializable
     {
         private readonly SolarPhobia.Domain.IWardTimerService _wardTimer;
         private readonly IPhaseStateMachine _phaseStateMachine;
-        private readonly IDisposable _depletedSubscription;
+        private IDisposable _depletedSubscription;
         private bool _hasTriggeredDeath;
 
         public bool HasTriggeredDeath => _hasTriggeredDeath;
@@ -19,14 +24,22 @@ namespace SolarPhobia.Application.Services.Objective
         {
             _wardTimer = wardTimer;
             _phaseStateMachine = phaseStateMachine;
+        }
 
+        public void Initialize()
+        {
             _depletedSubscription = _wardTimer.OnDepleted
-            .Subscribe(_ => OnDepleted());
+                .Subscribe(_ => OnDepleted());
         }
 
         public void Dispose()
         {
             _depletedSubscription?.Dispose();
+        }
+
+        public void Reset()
+        {
+            _hasTriggeredDeath = false;
         }
 
         private void OnDepleted()
@@ -36,7 +49,7 @@ namespace SolarPhobia.Application.Services.Objective
                 return;
             }
 
-            if (_phaseStateMachine.CurrentState == PhaseState.EndingEvaluation)
+            if (_phaseStateMachine.CurrentState != PhaseState.NightSurvival)
             {
                 return;
             }

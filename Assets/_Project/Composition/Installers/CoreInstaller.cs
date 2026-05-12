@@ -44,6 +44,11 @@ namespace SolarPhobia.Composition.Installers
             // ── Camera Service ───────────────────────────────────────────────
             builder.Register<DayNightCameraController>(Lifetime.Singleton).As<IDayNightCameraController>();
 
+            // ── Ward Timer ─────────────────────────────────────────────────
+            builder.RegisterEntryPoint<WardTimerService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<SolarPhobia.Application.Services.Objective.WardDeathTriggerService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<SolarPhobia.Application.Services.Phase.NightToDayResetService>(Lifetime.Singleton);
+
             // ── Day Selection Validator ──────────────────────────────────
             builder.Register<DaySelectionValidator>(Lifetime.Singleton).As<IDaySelectionValidator>();
 

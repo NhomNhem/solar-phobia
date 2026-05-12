@@ -80,5 +80,10 @@ namespace SolarPhobia.Application.Services
                 SpawnBias = abandonedSoulId
             };
         }
+
+        public void Reset()
+        {
+            HasResolved = false;
+        }
     }
 }

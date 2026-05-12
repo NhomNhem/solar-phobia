@@ -1,3 +1,4 @@
+using R3;
 using System;
 
 namespace SolarPhobia.Application.Services
@@ -5,5 +6,6 @@ namespace SolarPhobia.Application.Services
     public interface IShrineObjectiveService
     {
         bool TryTriggerShrineArrival(float distanceToShrine);
+        Observable<Unit> OnShrineReached { get; }
     }
 }

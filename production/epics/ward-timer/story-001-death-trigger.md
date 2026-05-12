@@ -1,7 +1,7 @@
 # Story 001: Death Trigger (Ward=0 → EndingEvaluation)
 
 > **Epic**: ward-timer
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Foundation
 > **Type**: Logic
 > **Estimate**: 0.5h
@@ -16,11 +16,11 @@
 
 ## Acceptance Criteria
 
-- [ ] Subscribes to `IWardTimerService.OnDepleted`
-- [ ] On depletion, calls `IPhaseStateMachine.TryTransition(PhaseState.EndingEvaluation)`
-- [ ] Only active during `NightSurvival` phase
-- [ ] Does not fire if already in EndingEvaluation
-- [ ] One-shot: only triggers once per depletion (guarded by state)
+- [x] Subscribes to `IWardTimerService.OnDepleted`
+- [x] On depletion, calls `IPhaseStateMachine.TryTransition(PhaseState.EndingEvaluation)`
+- [x] Only active during `NightSurvival` phase
+- [x] Does not fire if already in EndingEvaluation
+- [x] One-shot: only triggers once per depletion (guarded by state)
 
 ## Implementation Notes
 
@@ -33,6 +33,17 @@
 
 **Type**: Logic
 **Required**: `Assets/_Project/Application/Editor/Tests/WardTimerDeathTriggerTests.cs`
+
+## Completion Notes
+
+**Completed**: 2026-05-12
+**Criteria**: 5/5 passing — all acceptance criteria verified via automated tests (12 tests, all passing)
+**Deviations**: None
+
+**Files created:**
+- `Assets/_Project/Application/Services/Interfaces/IWardDeathTriggerService.cs` — interface
+- `Assets/_Project/Application/Services/Objective/WardDeathTriggerService.cs` — implementation
+- `Assets/_Project/Application/Editor/Tests/WardDeathTriggerTests.cs` — 12 tests
 
 ## Dependencies
 

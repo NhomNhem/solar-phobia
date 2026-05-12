@@ -1,7 +1,17 @@
 # Active Session State
 
 ## Current Task
-SP2-006 (Shrine Arrival + Win Condition) implemented — 14 tests, all passing. SP2-006 complete.
+SP2-007 (Night→Day reset flow) implemented — reset coordinator, consequence guard reset, ward guard reset, and DayService ritual cleanup. 4 targeted EditMode tests passing.
+
+## Session Extract — /story-done 2026-05-12
+- **Verdict**: COMPLETE WITH NOTES
+- **Story**: `production/epics/phase-state-machine/story-010-night-day-reset-flow.md` — Night→Day Reset Flow
+- **Criteria**: 4/5 passing (AC-2 delay omitted by design, AC-5 uses OnResolve instead of GameFlowCoordinator)
+- **Deviations**: Advisory — AC-2 0.5s delay not implemented (not in sprint AC); AC-5 trigger via OnResolve (cleaner event-driven pattern); test file named NightToDayResetServiceTests.cs vs PhaseStateMachineResetTests.cs
+- **Test Evidence**: Logic — NightToDayResetServiceTests.cs (3 tests, all passing)
+- **Code Review**: Completed — APPROVED WITH SUGGESTIONS
+- **Tech debt logged**: None
+- **Next recommended**: SP2-005 (Ward Timer) — the last remaining Sprint 2 task
 
 ## Session Extract — /story-done 2026-05-11
 - **Verdict**: COMPLETE ✅
@@ -15,6 +25,16 @@ SP2-006 (Shrine Arrival + Win Condition) implemented — 14 tests, all passing. 
 - **Files modified**: `SolarPhobiaInputActions.*` (Look action), `CoreInstaller.cs` (DI registration), `Application.asmdef`, `Editor.Tests.asmdef`, `DayNightCameraController.cs` (Input System migration)
 - **Next recommended**: Consequence Resolver story (story-001-curse-mapping.md) — structural gap identified in phase gate check
 
+## Session Extract — /dev-story 2026-05-12 (2)
+- **Story**: `production/epics/shrine-objective-win-lose-rules/story-002-shrine-arrival-win-condition.md` — Shrine Arrival and Win Condition
+- **Status**: Complete
+- **Files changed**: `IShrineObjectiveService.cs` (added OnShrineReached event), `ShrineObjectiveService.cs` (transition to ShrineArrival, one-shot guard, OnShrineReached, IDisposable)
+- **Files created**: `ShrineArrivalWinConditionTests.cs` (9 tests)
+- **Files deleted**: `ShrineObjectiveService.cs` (duplicate in Objective/ folder)
+- **Test written**: `Assets/_Project/Application/Editor/Tests/ShrineArrivalWinConditionTests.cs` (9 tests)
+- **Blockers**: None
+- **Next**: `/code-review` then `/story-done production/epics/shrine-objective-win-lose-rules/story-002-shrine-arrival-win-condition.md`
+
 ## Sprint 2 Progress
 | Story | Status |
 |-------|--------|
@@ -24,7 +44,7 @@ SP2-006 (Shrine Arrival + Win Condition) implemented — 14 tests, all passing. 
 | SP2-004: Curse Effect: Drag / Water Trap | ✅ Done |
 | SP2-005: Ward Timer | 🔲 Ready |
 | SP2-006: Shrine arrival + win condition | ✅ Done |
-| SP2-007: Night→Day reset flow | 🔲 Ready |
+| SP2-007: Night→Day reset flow | ✅ Done |
 
 ## Session Extract — 2026-05-11 (SP2-006)
 - **Verdict**: COMPLETE
