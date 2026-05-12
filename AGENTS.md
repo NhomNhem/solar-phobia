@@ -105,11 +105,46 @@ namespace SolarPhobia.Application.Systems {
 ## Key Packages
 - **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — `[Inject]` fields must be `internal` (not `private`) for source generator compatibility
 - **R3**: Reactive programming (com.cysharp.r3) — replaces reactive patterns
+- **ObservableCollections**: Collection-level change tracking (Cysharp) — use for add/remove/move/replace deltas, never in Domain or public cross-layer contracts
 - **UniTask**: Async/await for Unity (com.cysharp.unitask)
 - **ZLinq**: LINQ extensions (com.cysharp.zlinq)
 - **DOTween**: Animation tweens (Demigiant)
 - **Odin Inspector**: Editor enhancements (Sirenix)
 - **MessagePipe**: Event/message bus (com.cysharp.messagepipe)
+
+## Package Usage Policy
+
+- **R3**: Use for single-value state or local reactive streams with a clear owner. Typical cases: current phase, ward timer, flags, local UI state.
+- **ObservableCollections**: Use only when collection deltas matter: add/remove/move/replace/range updates, usually for UI/list binding or runtime collection sync.
+- **MessagePipe**: Use for one-way events that cross bounded contexts or scopes and may have multiple decoupled consumers.
+- **ZLinq**: Use only in measured or clearly justified hot paths. Default to plain code or `System.Linq` elsewhere.
+
+### R3 Rules
+
+- Prefer `ReactiveProperty<T>` or `ReadOnlyReactiveProperty<T>` for a single observable value.
+- Keep R3 out of `Domain`; use it in `Application`, `Infrastructure`, or `Presentation` only.
+- Do not use R3 as a global event bus.
+- Do not use R3 to model collection deltas when `ObservableCollections` is the real need.
+
+### ObservableCollections Rules
+
+- Allowed in `Infrastructure` and `Presentation`; only use in `Application` when a collection-change stream is genuinely required.
+- Forbidden in `Domain`.
+- Do not expose `ObservableList<T>`, `ObservableDictionary<TKey, TValue>`, or other package-specific collection types in public cross-layer contracts.
+- If only a current snapshot or count is needed, prefer normal collections plus an owning service/property.
+
+### MessagePipe Rules
+
+- Prefer direct method calls when there is one clear consumer and synchronous flow is simpler.
+- Use MessagePipe for cross-module notifications such as lifecycle broadcasts, telemetry hooks, audio triggers, and decoupled UI reactions.
+- Do not use MessagePipe as authoritative state storage.
+- Do not use MessagePipe for request/response flows.
+
+### ZLinq Rules
+
+- Forbidden in tests, normal orchestration code, most UI/presentation code, and small one-off queries.
+- Only introduce ZLinq after profiling or when the code is an obvious hot path with allocation sensitivity.
+- Do not mix `ZLinq` and `System.Linq` in the same hot path unless the reason is explicit and reviewed.
 
 ## Scene Folder Structure
 
@@ -149,7 +184,10 @@ See `Assets/_Project/Domain/Rules/` for:
 
 - **`FindObjectOfType<T>()` / `FindObjectsOfType<T>()`**: **Obsolete** in Unity 6000+. Use `FindFirstObjectByType<T>()` or `FindObjectsByType<T>(FindObjectsSortMode.None)` instead. See `docs/engine-reference/unity/breaking-changes.md`.
 - **Duplicate `using` directives**: Avoid declaring the same `using` namespace multiple times in a file. Unity compiler warns CS0105.
-- **R3 reactive patterns**: Use `ReactiveProperty<T>` and `ReadOnlyReactiveProperty<T>` for observable state. Subscribe via `.Subscribe()` and dispose via `CancellationToken` or `Dispose()`.
+- **R3 reactive patterns**: Use `ReactiveProperty<T>` and `ReadOnlyReactiveProperty<T>` for observable single-value state. Subscribe via `.Subscribe()` and dispose via `CancellationToken` or `Dispose()`.
+- **ObservableCollections**: Use when observers must react to collection add/remove/move/replace deltas; do not put these types in Domain or public cross-layer APIs.
+- **MessagePipe**: Use for cross-context one-way events, not as a second state store.
+- **ZLinq**: Restrict to profiled hot paths; prefer plain code or `System.Linq` for normal queries.
 - **VContainer `[Inject]` fields**: Must be `internal` visibility, not `private`. Private fields cannot be set by the source generator (VCON0007).
 - **R3 ReadOnlyReactiveProperty.Value**: Does NOT have a `.Value` accessor directly. Add a wrapper property like `public T CurrentStateValue => _currentState.Value` to expose the value.
 - **Unity types in services**: If using `Vector3`, `Vector2`, `Quaternion`, etc., add `using UnityEngine;` to the file.

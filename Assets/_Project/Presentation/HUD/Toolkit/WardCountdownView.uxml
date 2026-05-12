@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="WardCountdownView.uss" />
+    <ui:VisualElement name="ward-countdown-root" class="ward-countdown-root">
+        <ui:Label name="ward-timer-label" class="ward-timer-label" text="--:--" />
+        <ui:VisualElement name="ward-bar-bg" class="ward-bar-bg">
+            <ui:VisualElement name="ward-bar-fill" class="ward-bar-fill" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

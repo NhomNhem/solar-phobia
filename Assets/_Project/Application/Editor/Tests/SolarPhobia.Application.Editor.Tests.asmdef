@@ -4,6 +4,7 @@
     "references": [
         "SolarPhobia.Application",
         "SolarPhobia.Domain",
+        "SolarPhobia.Infrastructure",
         "SolarPhobia.Shared",
         "UnityEngine.TestRunner",
         "VContainer",

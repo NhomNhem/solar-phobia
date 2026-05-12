@@ -25,6 +25,11 @@
             "type": "command",
             "command": "bash 'I:\\unityVers\\Solar phobia\\.codex\\hooks\\validate-assets.sh'",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash 'I:\\unityVers\\Solar phobia\\.codex\\hooks\\validate-architecture-refactor.sh'",
+            "timeout": 10
           }
         ]
       }

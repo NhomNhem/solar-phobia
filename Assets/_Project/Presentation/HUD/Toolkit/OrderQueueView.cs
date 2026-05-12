@@ -1,5 +1,6 @@
-﻿using ObservableCollections;
+using System.Collections.Generic;
 using SolarPhobia.Domain;
+using SolarPhobia.Domain.ValueObjects;
 using UnityEngine.UIElements;
 
 namespace SolarPhobia.Presentation.HUD
@@ -15,7 +16,7 @@ namespace SolarPhobia.Presentation.HUD
             _itemsContainer = _root.Q<VisualElement>("orders-container");
         }
 
-        public void Render(ObservableDictionary<OrderType, int> itemsNeeded)
+        public void Render(IReadOnlyDictionary<OrderType, int> itemsNeeded)
         {
             if (_itemsContainer == null)
             {
@@ -36,4 +37,3 @@ namespace SolarPhobia.Presentation.HUD
         }
     }
 }
-

@@ -1,0 +1,69 @@
+.ward-countdown-root {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.ward-timer-label {
+    font-size: 28px;
+    unity-font-style: bold;
+    -unity-text-align: middle-right;
+    color: rgb(240, 230, 205);
+}
+
+.ward-bar-bg {
+    width: 120px;
+    height: 6px;
+    background-color: rgba(60, 50, 40, 0.7);
+    border-radius: 3px;
+}
+
+.ward-bar-fill {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(100, 200, 255);
+    border-radius: 3px;
+}
+
+/* Tier colors */
+.ward-tier-stable .ward-timer-label {
+    color: rgb(240, 230, 205);
+}
+
+.ward-tier-stable .ward-bar-fill {
+    background-color: rgb(100, 200, 255);
+}
+
+.ward-tier-creeping-dread .ward-timer-label {
+    color: rgb(255, 220, 100);
+}
+
+.ward-tier-creeping-dread .ward-bar-fill {
+    background-color: rgb(255, 200, 50);
+}
+
+.ward-tier-heavy-burden .ward-timer-label {
+    color: rgb(255, 160, 60);
+}
+
+.ward-tier-heavy-burden .ward-bar-fill {
+    background-color: rgb(255, 140, 20);
+}
+
+.ward-tier-panic .ward-timer-label {
+    color: rgb(255, 80, 80);
+}
+
+.ward-tier-panic .ward-bar-fill {
+    background-color: rgb(255, 50, 50);
+}
+
+.ward-tier-death-spiral .ward-timer-label {
+    color: rgb(180, 0, 0);
+}
+
+.ward-tier-death-spiral .ward-bar-fill {
+    background-color: rgb(180, 0, 0);
+}

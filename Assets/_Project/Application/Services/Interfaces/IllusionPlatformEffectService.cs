@@ -1,0 +1,93 @@
+﻿using R3;
+using SolarPhobia.Domain.ValueObjects;
+using System.Collections.Generic;
+using System;
+
+namespace SolarPhobia.Application.Services.Interfaces
+{
+    public class IllusionPlatformEffectService : IIllusionPlatformEffectService
+    {
+        public const float DefaultCollapseDelay = 0.2f;
+
+        private readonly ICurseEffectManager _curseEffectManager;
+        private readonly IDisposable _hazardTriggeredSub;
+        private readonly IDisposable _hazardClearedSub;
+        private readonly Dictionary<string, float> _collapseTimers = new();
+        private readonly HashSet<string> _collapsedPlatforms = new();
+
+        public IllusionPlatformEffectService(ICurseEffectManager curseEffectManager)
+        {
+            _curseEffectManager = curseEffectManager;
+
+            _hazardTriggeredSub = _curseEffectManager.OnHazardTriggered
+            .Subscribe(OnHazardTriggered);
+
+            _hazardClearedSub = _curseEffectManager.OnHazardCleared
+            .Subscribe(OnHazardCleared);
+        }
+
+        public bool IsPlatformCollapsed(string platformId)
+        {
+            return _collapsedPlatforms.Contains(platformId);
+        }
+
+        public bool IsCollapseTimerActive(string platformId)
+        {
+            return _collapseTimers.ContainsKey(platformId);
+        }
+
+        public void Tick(float deltaTime)
+        {
+            List<string> collapsed = new();
+
+            foreach (var kvp in _collapseTimers)
+            {
+                float newTime = kvp.Value - deltaTime;
+                if (newTime <= 0f)
+                {
+                    collapsed.Add(kvp.Key);
+                    _collapsedPlatforms.Add(kvp.Key);
+                }
+                {
+                    _collapseTimers[kvp.Key] = newTime;
+                }
+            }
+
+            foreach (string id in collapsed)
+            {
+                _collapseTimers.Remove(id);
+            }
+        }
+
+        public void Dispose()
+        {
+            _hazardTriggeredSub?.Dispose();
+            _hazardClearedSub?.Dispose();
+        }
+
+        private void OnHazardTriggered(HazardEvent evt)
+        {
+            if (evt.CurseType != NightOutcomeState.FakeShrine)
+            {
+                return;
+            }
+
+            if (_collapsedPlatforms.Contains(evt.HazardId))
+            {
+                return;
+            }
+
+            _collapseTimers[evt.HazardId] = DefaultCollapseDelay;
+        }
+
+        private void OnHazardCleared(HazardEvent evt)
+        {
+            if (evt.CurseType != NightOutcomeState.FakeShrine)
+            {
+                return;
+            }
+
+            _collapseTimers.Remove(evt.HazardId);
+        }
+    }
+}

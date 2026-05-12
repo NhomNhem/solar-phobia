@@ -1,6 +1,7 @@
 // Assets/_Project/Application/Services/StrikeController.cs
 using R3;
 using SolarPhobia.Domain.ValueObjects;
+using SolarPhobia.Shared.Configuration;
 using UnityEngine;
 using VContainer;
 
@@ -18,28 +19,21 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class StrikeController : IStrikeController
     {
-        // ── Constants ─────────────────────────────────────────────
-        /// <summary>Default Ward penalty per strike (seconds).</summary>
-        public const float DefaultStrikeTimePenaltySec = 30f;
-
-        /// <summary>Default telegraph duration (seconds).</summary>
-        public const float DefaultStrikeTelegraphSec = 1.5f;
-
-        /// <summary>Minimum telegraph duration.</summary>
-        public const float MinTelegraphSec = 0.8f;
-
-        /// <summary>Maximum telegraph duration.</summary>
-        public const float MaxTelegraphSec = 2.5f;
+        public static float DefaultStrikeTimePenaltySec => GameplayBalanceConfig.CreateDefault().Strike.DefaultStrikeTimePenaltySec;
+        public static float DefaultStrikeTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.DefaultStrikeTelegraphSec;
+        public static float MinTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.MinTelegraphSec;
+        public static float MaxTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.MaxTelegraphSec;
 
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly Subject<bool>  _onStrikeWarning     = new();
         private readonly Subject<float> _onWardCostIncurred  = new();
 
         // ── State ─────────────────────────────────────────────────
-        private float _strikeTimePenalty  = DefaultStrikeTimePenaltySec;
-        private float _telegraphDuration  = DefaultStrikeTelegraphSec;
+        private float _strikeTimePenalty;
+        private float _telegraphDuration;
         private float _telegraphRemaining;
         private bool  _isTelegraphActive;
+        private readonly GameplayBalanceConfig _balanceConfig;
 
         // ── Public Interface ───────────────────────────────────────
         /// <inheritdoc/>
@@ -65,12 +59,25 @@ namespace SolarPhobia.Application.Services
         public float StrikeTelegraphSec
         {
             get => _telegraphDuration;
-            set => _telegraphDuration = Mathf.Clamp(value, MinTelegraphSec, MaxTelegraphSec);
+            set => _telegraphDuration = Mathf.Clamp(value, _balanceConfig.Strike.MinTelegraphSec, _balanceConfig.Strike.MaxTelegraphSec);
         }
 
         // ── Constructor ────────────────────────────────────────────
+        public StrikeController()
+            : this(GameplayBalanceConfig.CreateDefault())
+        {
+        }
+
         [Inject]
-        public StrikeController() { }
+        public StrikeController(GameplayBalanceConfig balanceConfig)
+        {
+            _balanceConfig = balanceConfig ?? GameplayBalanceConfig.CreateDefault();
+            _strikeTimePenalty = _balanceConfig.Strike.DefaultStrikeTimePenaltySec;
+            _telegraphDuration = Mathf.Clamp(
+                _balanceConfig.Strike.DefaultStrikeTelegraphSec,
+                _balanceConfig.Strike.MinTelegraphSec,
+                _balanceConfig.Strike.MaxTelegraphSec);
+        }
 
         // ── IStrikeController ──────────────────────────────────────
         /// <inheritdoc/>

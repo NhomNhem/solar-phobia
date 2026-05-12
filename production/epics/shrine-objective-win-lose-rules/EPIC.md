@@ -4,7 +4,7 @@
 > **GDD**: design/gdd/shrine-objective-win-lose-rules.md
 > **Architecture Module**: ShrineObjective (from architecture.md)
 > **Status**: Ready
-> **Stories**: Not yet created — run `/create-stories shrine-objective-win-lose-rules`
+> **Stories**: 1 created — `story-001-shrine-win-detection.md`
 
 ## Overview
 

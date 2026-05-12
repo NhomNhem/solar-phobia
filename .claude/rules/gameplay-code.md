@@ -13,6 +13,10 @@ paths:
 - Write unit tests for all gameplay logic — separate logic from presentation
 - Document which design doc each feature implements in code comments
 - No static singletons for game state — use dependency injection
+- Use **R3** for single-value reactive state and local streams, not for global event bus behavior
+- Use **ObservableCollections** only when collection add/remove/move/replace deltas matter; never in Domain or public cross-layer contracts
+- Use **MessagePipe** for one-way cross-context gameplay events with multiple decoupled consumers; do not use it as state storage or request/response
+- Do NOT use **ZLinq** in normal gameplay orchestration; only allow it in profiled hot paths with a clear allocation/performance reason
 
 ## Examples
 

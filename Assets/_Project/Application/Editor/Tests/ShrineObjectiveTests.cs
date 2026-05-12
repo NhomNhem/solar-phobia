@@ -1,9 +1,9 @@
-using System;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
+using System;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -23,18 +23,19 @@ namespace SolarPhobia.Application.Tests
         [TearDown]
         public void TearDown()
         {
+            _service?.Dispose();
             _phaseMachine?.Dispose();
         }
 
-        // ── AC-1: Proximity — within range ─────────────────────────
+        // ── AC-1: Within range during NightSurvival ────────────────
 
         [Test]
-        public void AC1_WithinRange_NightSurvival_TransitionsToEndingEvaluation()
+        public void AC1_WithinRange_NightSurvival_TransitionsToShrineArrival()
         {
             bool result = _service.TryTriggerShrineArrival(2.0f);
 
             Assert.That(result, Is.True);
-            Assert.That(_phaseMachine.CurrentState, Is.EqualTo(PhaseState.EndingEvaluation));
+            Assert.That(_phaseMachine.CurrentState, Is.EqualTo(PhaseState.ShrineArrival));
         }
 
         [Test]
@@ -43,7 +44,7 @@ namespace SolarPhobia.Application.Tests
             bool result = _service.TryTriggerShrineArrival(3.0f);
 
             Assert.That(result, Is.True);
-            Assert.That(_phaseMachine.CurrentState, Is.EqualTo(PhaseState.EndingEvaluation));
+            Assert.That(_phaseMachine.CurrentState, Is.EqualTo(PhaseState.ShrineArrival));
         }
 
         [Test]
@@ -52,9 +53,22 @@ namespace SolarPhobia.Application.Tests
             bool result = _service.TryTriggerShrineArrival(0f);
 
             Assert.That(result, Is.True);
+            Assert.That(_phaseMachine.CurrentState, Is.EqualTo(PhaseState.ShrineArrival));
         }
 
-        // ── AC-2: Proximity — outside range ────────────────────────
+        [Test]
+        public void AC1_EmitsOnShrineReached()
+        {
+            Unit? received = null;
+            using (_service.OnShrineReached.Subscribe(u => received = u))
+            {
+                _service.TryTriggerShrineArrival(2.0f);
+            }
+
+            Assert.That(received, Is.Not.Null);
+        }
+
+        // ── AC-2: Outside range ────────────────────────────────────
 
         [Test]
         public void AC2_OutsideRange_Ignored()
@@ -116,10 +130,18 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_service.TryTriggerShrineArrival(2.0f), Is.False);
         }
 
-        // ── AC-4: Debounce ─────────────────────────────────────────
+        // ── AC-4: One-shot — fires only once per run ───────────────
 
         [Test]
-        public void AC4_RapidDuplicatePresses_OnlyFirstSucceeds()
+        public void AC4_AfterFirstFire_SubsequentCallsFail()
+        {
+            Assert.That(_service.TryTriggerShrineArrival(2.0f), Is.True);
+            Assert.That(_service.TryTriggerShrineArrival(2.0f), Is.False);
+            Assert.That(_service.TryTriggerShrineArrival(1.0f), Is.False);
+        }
+
+        [Test]
+        public void AC4_DebounceWindow_Ignored()
         {
             bool first = _service.TryTriggerShrineArrival(2.0f);
             bool second = _service.TryTriggerShrineArrival(2.0f);
@@ -128,20 +150,20 @@ namespace SolarPhobia.Application.Tests
             Assert.That(second, Is.False);
         }
 
-        // ── AC-5: State transition verification ────────────────────
+        // ── AC-5: Transition to ShrineArrival phase ────────────────
 
         [Test]
-        public void AC5_TryTransitionCalled_WithEndingEvaluation()
+        public void AC5_TryTransitionCalled_WithShrineArrival()
         {
             _service.TryTriggerShrineArrival(2.0f);
 
-            Assert.That(_phaseMachine.LastTransitionTarget, Is.EqualTo(PhaseState.EndingEvaluation));
+            Assert.That(_phaseMachine.LastTransitionTarget, Is.EqualTo(PhaseState.ShrineArrival));
         }
 
-        // ── AC-6: Edge cases ───────────────────────────────────────
+        // ── Edge cases ─────────────────────────────────────────────
 
         [Test]
-        public void AC6_NegativeDistance_TriggersWin()
+        public void EdgeCase_NegativeDistance_TriggersWin()
         {
             bool result = _service.TryTriggerShrineArrival(-1.0f);
 
@@ -149,12 +171,11 @@ namespace SolarPhobia.Application.Tests
         }
 
         [Test]
-        public void AC6_AfterWin_DuplicateCallIsDebounced()
+        public void EdgeCase_Dispose_CleansUpSubscription()
         {
-            _service.TryTriggerShrineArrival(2.0f);
-            bool retry = _service.TryTriggerShrineArrival(2.0f);
+            _service.Dispose();
 
-            Assert.That(retry, Is.False);
+            Assert.DoesNotThrow(() => _service.TryTriggerShrineArrival(2.0f));
         }
 
         // ── Test Doubles ───────────────────────────────────────────

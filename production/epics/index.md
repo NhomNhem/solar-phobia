@@ -1,6 +1,6 @@
 # Epics Index
 
-> **Last Updated**: 2026-05-07
+> **Last Updated**: 2026-05-11
 > **Engine**: Unity 6000.3.11f1 (Unity 6)
 
 ---
@@ -19,7 +19,7 @@
 | physical-crowding-and-push | Core | Physical Crowding & Push | physical-crowding-and-push.md | Not yet created | Ready |
 | tactile-rituals | Core | Tactile Rituals | tactile-rituals.md | Not yet created | Ready |
 | day-service-and-selection | Core | Day Service & Selection | day-service-and-selection.md | Not yet created | Ready |
-| shrine-objective-win-lose-rules | Core | Shrine Objective & Win/Lose Rules | shrine-objective-win-lose-rules.md | Not yet created | Ready |
+| shrine-objective-win-lose-rules | Core | Shrine Objective & Win/Lose Rules | shrine-objective-win-lose-rules.md | 1 created | Ready |
 | sensory-feedback-system | Core | Sensory Feedback System | sensory-feedback-system.md | Not yet created | Ready |
 | consequence-resolver | Feature | Consequence Resolver | consequence-resolver.md | Not yet created | Ready |
 | curse-effect-modules | Feature | Curse Effect Modules | curse-effect-modules.md | Not yet created | Ready |

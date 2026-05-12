@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Map;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 
@@ -22,14 +21,14 @@ namespace SolarPhobia.Application.Tests
     [TestFixture]
     public class StrikeWarningIntegrationTests
     {
-        private MapSpawnDirector        _mapDirector;
+        private SolarPhobia.Application.Services.MapSpawnDirector _mapDirector;
         private StrikeWarningController _controller;
         private List<bool>              _warningEvents;
 
         [SetUp]
         public void Setup()
         {
-            _mapDirector   = new MapSpawnDirector();
+            _mapDirector   = new SolarPhobia.Application.Services.MapSpawnDirector();
             _mapDirector.Initialize(42);
             _controller    = new StrikeWarningController(_mapDirector);
             _warningEvents = new List<bool>();

@@ -59,7 +59,6 @@ namespace SolarPhobia.Application.Services
             // Look up curse type (default to Drag for invalid/null IDs)
             if (!CurseMap.TryGetValue(abandonedSoulId ?? string.Empty, out var curseType))
             {
-                UnityEngine.Debug.LogWarning($"InvalidSoulId: {abandonedSoulId ?? "null"} — defaulting to Drag");
                 curseType = NightOutcomeState.Drag;
             }
 
@@ -79,6 +78,11 @@ namespace SolarPhobia.Application.Services
                 Intensity = 1.0f,
                 SpawnBias = abandonedSoulId
             };
+        }
+
+        public void Reset()
+        {
+            HasResolved = false;
         }
     }
 }

@@ -1,0 +1,29 @@
+{
+  "WardTimer": {
+    "BaseWardSec": 10.0,
+    "WardPerGhostSec": 30.0,
+    "FailedLightInterruptPenalty": 10.0,
+    "SoulPanicPenalty": 5.0,
+    "MaxDayPenalties": 30.0,
+    "DefaultBaseDrain": 1.0
+  },
+  "MapSpawn": {
+    "DefaultSafeMoundsPerChunk": 2,
+    "CursedMoundProbability": 0.4,
+    "FalseSafeMoundProbability": 0.15
+  },
+  "Strike": {
+    "DefaultStrikeTimePenaltySec": 30.0,
+    "DefaultStrikeTelegraphSec": 1.5,
+    "MinTelegraphSec": 0.8,
+    "MaxTelegraphSec": 2.5
+  },
+  "KarmaHazard": {
+    "LuoiMauEffectValue": 0.5,
+    "VungNuocEffectValue": 5.0,
+    "BeDaDaoAnhEffectValue": 0.2
+  },
+  "ResourceEffects": {
+    "DefaultNgocCotDrainMultiplier": 1.0
+  }
+}

@@ -18,5 +18,10 @@ namespace SolarPhobia.Application.Services
         /// Throws InvalidOperationException if called more than once.
         /// </summary>
         CursePayload Resolve(string abandonedSoulId);
+
+        /// <summary>
+        /// Clear run-scoped state so the resolver can be used for the next run.
+        /// </summary>
+        void Reset();
     }
 }
