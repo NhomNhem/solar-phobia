@@ -103,7 +103,9 @@ namespace SolarPhobia.Presentation.MainMenu
 
             if (_mainMenuService == null)
             {
-                _mainMenuService = new MainMenuApplicationService();
+                Debug.LogError("[MainMenuController] IMainMenuApplicationService was not injected.");
+                enabled = false;
+                return;
             }
 
             _root = _document.rootVisualElement;

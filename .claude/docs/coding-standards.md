@@ -9,6 +9,28 @@
   For UI changes, verify with screenshots. Compare expected output to actual output
   before marking work complete. Every implementation should have a way to prove it works.
 
+# Reactive and Messaging Standards
+
+- Use **R3** for single-value state and local reactive streams with a clear owner.
+- Use **ObservableCollections** only when observers need collection delta events such as add/remove/move/replace/range changes.
+- Use **MessagePipe** for one-way events that cross modules, layers, or DI scopes and may have multiple consumers.
+- Use **ZLinq** only in profiled or obviously hot paths where allocations matter.
+
+## Package Selection Rules
+
+- If the problem is "one value changed", use **R3**.
+- If the problem is "this list/dictionary changed", use **ObservableCollections**.
+- If the problem is "multiple independent modules should be notified", use **MessagePipe**.
+- If the problem is "this query runs in a hot path and allocates too much", consider **ZLinq** after profiling.
+
+## Package Restrictions
+
+- **R3** is not a replacement for a global event bus and should stay out of `Domain`.
+- **ObservableCollections** must not appear in `Domain` or in public contracts that cross layers.
+- **MessagePipe** must not become a second state store and should not be used for request/response.
+- **ZLinq** is disallowed in tests, most UI/presentation code, and ordinary application orchestration.
+- Do not mix **ZLinq** and `System.Linq` in the same hot path without an explicit reason.
+
 # Design Document Standards
 
 - All design docs use Markdown

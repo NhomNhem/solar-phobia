@@ -5,7 +5,7 @@ Rules in `.claude/rules/` are automatically enforced when editing files in match
 | Rule File | Path Pattern | Enforces |
 | ---- | ---- | ---- |
 | `gameplay-code.md` | `src/gameplay/**` | Data-driven values, delta time, no UI references |
-| `engine-code.md` | `src/core/**` | Zero allocs in hot paths, thread safety, API stability |
+| `engine-code.md` | `src/core/**` | Zero allocs in hot paths, thread safety, API stability, package performance discipline |
 | `ai-code.md` | `src/ai/**` | Performance budgets, debuggability, data-driven params |
 | `network-code.md` | `src/networking/**` | Server-authoritative, versioned messages, security |
 | `ui-code.md` | `src/ui/**` | No game state ownership, localization-ready, accessibility |
@@ -15,3 +15,10 @@ Rules in `.claude/rules/` are automatically enforced when editing files in match
 | `test-standards.md` | `tests/**` | Test naming, coverage requirements, fixture patterns |
 | `prototype-code.md` | `prototypes/**` | Relaxed standards, README required, hypothesis documented |
 | `shader-code.md` | `assets/shaders/**` | Naming conventions, performance targets, cross-platform rules |
+
+## Cross-Cutting Package Policy
+
+- **R3**: single-value state and local reactive streams.
+- **ObservableCollections**: collection delta observation only; not allowed in Domain or public cross-layer contracts.
+- **MessagePipe**: one-way cross-context events only; not state storage and not request/response.
+- **ZLinq**: hot-path optimization tool only; avoid in ordinary code and tests unless profiling justifies it.

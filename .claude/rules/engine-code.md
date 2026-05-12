@@ -14,6 +14,9 @@ paths:
 - Use RAII / deterministic cleanup for all resources
 - All engine systems must support graceful degradation
 - Before writing engine API code, consult `docs/engine-reference/` for the current engine version and verify APIs against the reference docs
+- Use **ZLinq** only in measured hot paths where allocation pressure is a verified concern
+- Prefer **R3** for local engine-adjacent reactive state; use **MessagePipe** only for cross-system notifications that should stay decoupled
+- Avoid **ObservableCollections** in engine hot paths unless collection delta tracking is required and the allocation cost is understood
 
 ## Examples
 

@@ -65,6 +65,8 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<DayServiceUIController>(Lifetime.Singleton).As<IDayServiceUIController>();
 
             // ── Main Menu Application Service ───────────────────────────
+            builder.Register<MainMenuSettingsStore>(Lifetime.Singleton).As<IMainMenuSettingsStore>();
+            builder.Register<MainMenuPlatformService>(Lifetime.Singleton).As<IMainMenuPlatformService>();
             builder.Register<MainMenuApplicationService>(Lifetime.Singleton).As<IMainMenuApplicationService>();
 
             // ── Ritual Assignment ──────────────────────────────────────

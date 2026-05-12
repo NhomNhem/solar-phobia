@@ -1,6 +1,5 @@
 using System;
 using R3;
-using UnityEngine;
 
 namespace SolarPhobia.Application.Services
 {
@@ -103,6 +102,8 @@ namespace SolarPhobia.Application.Services
         private readonly Subject<Unit> _startNewGameRequested = new();
         private readonly Subject<Unit> _continueRequested = new();
         private readonly Subject<Unit> _quitConfirmed = new();
+        private readonly IMainMenuSettingsStore _settingsStore;
+        private readonly IMainMenuPlatformService _platformService;
 
         public ReadOnlyReactiveProperty<MainMenuUiState> CurrentState => _currentState;
         public Observable<Unit> OnStartNewGameRequested => _startNewGameRequested;
@@ -125,39 +126,45 @@ namespace SolarPhobia.Application.Services
             "Maximum"
         };
 
+        public MainMenuApplicationService(IMainMenuSettingsStore settingsStore, IMainMenuPlatformService platformService)
+        {
+            _settingsStore = settingsStore;
+            _platformService = platformService;
+        }
+
         public void Initialize()
         {
-            var width = PlayerPrefs.GetInt(KeyResolutionWidth, Screen.width);
-            var height = PlayerPrefs.GetInt(KeyResolutionHeight, Screen.height);
-            var qualityIndex = Mathf.Clamp(PlayerPrefs.GetInt(KeyQualityLevel, QualitySettings.GetQualityLevel()), 0, QualityLevels.Length - 1);
+            var width = _settingsStore.GetInt(KeyResolutionWidth, _platformService.ScreenWidth);
+            var height = _settingsStore.GetInt(KeyResolutionHeight, _platformService.ScreenHeight);
+            var qualityIndex = Clamp(_settingsStore.GetInt(KeyQualityLevel, _platformService.GetCurrentQualityLevel()), 0, QualityLevels.Length - 1);
 
             _state = new MainMenuUiState
             {
                 ScreenState = MainMenuScreenState.MainMenu,
                 ActiveTab = MainMenuSettingsTab.Audio,
-                HasSave = PlayerPrefs.GetInt(KeyHasSave, 0) == 1,
-                SaveDay = PlayerPrefs.GetInt(KeySaveDayNumber, 1),
+                HasSave = _settingsStore.GetInt(KeyHasSave, 0) == 1,
+                SaveDay = _settingsStore.GetInt(KeySaveDayNumber, 1),
                 Settings = new MainMenuSettingsSnapshot
                 {
-                    MasterVolume = PlayerPrefs.GetFloat(KeyMasterVolume, DefaultMasterVolume),
-                    MusicVolume = PlayerPrefs.GetFloat(KeyMusicVolume, DefaultMusicVolume),
-                    SfxVolume = PlayerPrefs.GetFloat(KeySfxVolume, DefaultSfxVolume),
-                    AmbientVolume = PlayerPrefs.GetFloat(KeyAmbientVolume, DefaultAmbientVolume),
-                    UiScale = PlayerPrefs.GetFloat(KeyUiScale, DefaultUiScale),
-                    Subtitles = PlayerPrefs.GetInt(KeySubtitlesEnabled, DefaultSubtitles ? 1 : 0) == 1,
-                    VSync = PlayerPrefs.GetInt(KeyVSync, DefaultVSync ? 1 : 0) == 1,
-                    CameraShake = PlayerPrefs.GetInt(KeyCameraShake, DefaultCameraShake ? 1 : 0) == 1,
-                    MotionBlur = PlayerPrefs.GetInt(KeyMotionBlur, DefaultMotionBlur ? 1 : 0) == 1,
-                    InvertY = PlayerPrefs.GetInt(KeyInvertYAxis, DefaultInvertY ? 1 : 0) == 1,
-                    GamepadVibration = PlayerPrefs.GetInt(KeyGamepadVibration, DefaultGamepadVibration ? 1 : 0) == 1,
-                    TextSize = PlayerPrefs.GetString(KeyTextSize, DefaultTextSize),
-                    InputDevice = PlayerPrefs.GetString(KeyInputDevice, DefaultInputDevice),
+                    MasterVolume = _settingsStore.GetFloat(KeyMasterVolume, DefaultMasterVolume),
+                    MusicVolume = _settingsStore.GetFloat(KeyMusicVolume, DefaultMusicVolume),
+                    SfxVolume = _settingsStore.GetFloat(KeySfxVolume, DefaultSfxVolume),
+                    AmbientVolume = _settingsStore.GetFloat(KeyAmbientVolume, DefaultAmbientVolume),
+                    UiScale = _settingsStore.GetFloat(KeyUiScale, DefaultUiScale),
+                    Subtitles = _settingsStore.GetInt(KeySubtitlesEnabled, DefaultSubtitles ? 1 : 0) == 1,
+                    VSync = _settingsStore.GetInt(KeyVSync, DefaultVSync ? 1 : 0) == 1,
+                    CameraShake = _settingsStore.GetInt(KeyCameraShake, DefaultCameraShake ? 1 : 0) == 1,
+                    MotionBlur = _settingsStore.GetInt(KeyMotionBlur, DefaultMotionBlur ? 1 : 0) == 1,
+                    InvertY = _settingsStore.GetInt(KeyInvertYAxis, DefaultInvertY ? 1 : 0) == 1,
+                    GamepadVibration = _settingsStore.GetInt(KeyGamepadVibration, DefaultGamepadVibration ? 1 : 0) == 1,
+                    TextSize = _settingsStore.GetString(KeyTextSize, DefaultTextSize),
+                    InputDevice = _settingsStore.GetString(KeyInputDevice, DefaultInputDevice),
                     Resolution = $"{width}x{height}",
-                    WindowMode = PlayerPrefs.GetString(KeyWindowMode, GetCurrentWindowModeName()),
+                    WindowMode = _settingsStore.GetString(KeyWindowMode, _platformService.GetCurrentWindowModeName()),
                     Quality = QualityLevels[qualityIndex],
-                    HighContrast = PlayerPrefs.GetInt(KeyAccessibilityHighContrast, DefaultHighContrast ? 1 : 0) == 1,
-                    ReduceMotion = PlayerPrefs.GetInt(KeyAccessibilityReduceMotion, DefaultReduceMotion ? 1 : 0) == 1,
-                    ColorblindCues = PlayerPrefs.GetInt(KeyAccessibilityColorblindCues, DefaultColorblindCues ? 1 : 0) == 1
+                    HighContrast = _settingsStore.GetInt(KeyAccessibilityHighContrast, DefaultHighContrast ? 1 : 0) == 1,
+                    ReduceMotion = _settingsStore.GetInt(KeyAccessibilityReduceMotion, DefaultReduceMotion ? 1 : 0) == 1,
+                    ColorblindCues = _settingsStore.GetInt(KeyAccessibilityColorblindCues, DefaultColorblindCues ? 1 : 0) == 1
                 }
             };
 
@@ -249,58 +256,58 @@ namespace SolarPhobia.Application.Services
 
         public void SetSettingsTab(int index)
         {
-            var clamped = Mathf.Clamp(index, 0, 3);
+            var clamped = Clamp(index, 0, 3);
             _state.ActiveTab = (MainMenuSettingsTab)clamped;
             Publish();
         }
 
         public void SetMasterVolume(float value)
         {
-            _state.Settings.MasterVolume = Mathf.Clamp01(value);
-            PlayerPrefs.SetFloat(KeyMasterVolume, _state.Settings.MasterVolume);
+            _state.Settings.MasterVolume = Clamp01(value);
+            _settingsStore.SetFloat(KeyMasterVolume, _state.Settings.MasterVolume);
             ApplyAudioSettings();
             Publish();
         }
 
         public void SetMusicVolume(float value)
         {
-            _state.Settings.MusicVolume = Mathf.Clamp01(value);
-            PlayerPrefs.SetFloat(KeyMusicVolume, _state.Settings.MusicVolume);
+            _state.Settings.MusicVolume = Clamp01(value);
+            _settingsStore.SetFloat(KeyMusicVolume, _state.Settings.MusicVolume);
             Publish();
         }
 
         public void SetSfxVolume(float value)
         {
-            _state.Settings.SfxVolume = Mathf.Clamp01(value);
-            PlayerPrefs.SetFloat(KeySfxVolume, _state.Settings.SfxVolume);
+            _state.Settings.SfxVolume = Clamp01(value);
+            _settingsStore.SetFloat(KeySfxVolume, _state.Settings.SfxVolume);
             Publish();
         }
 
         public void SetAmbientVolume(float value)
         {
-            _state.Settings.AmbientVolume = Mathf.Clamp01(value);
-            PlayerPrefs.SetFloat(KeyAmbientVolume, _state.Settings.AmbientVolume);
+            _state.Settings.AmbientVolume = Clamp01(value);
+            _settingsStore.SetFloat(KeyAmbientVolume, _state.Settings.AmbientVolume);
             Publish();
         }
 
         public void SetUiScale(float value)
         {
-            _state.Settings.UiScale = Mathf.Clamp(value, 0.75f, 2.0f);
-            PlayerPrefs.SetFloat(KeyUiScale, _state.Settings.UiScale);
+            _state.Settings.UiScale = Clamp(value, 0.75f, 2.0f);
+            _settingsStore.SetFloat(KeyUiScale, _state.Settings.UiScale);
             Publish();
         }
 
         public void SetSubtitles(bool value)
         {
             _state.Settings.Subtitles = value;
-            PlayerPrefs.SetInt(KeySubtitlesEnabled, value ? 1 : 0);
+            _settingsStore.SetInt(KeySubtitlesEnabled, value ? 1 : 0);
             Publish();
         }
 
         public void SetVSync(bool value)
         {
             _state.Settings.VSync = value;
-            PlayerPrefs.SetInt(KeyVSync, value ? 1 : 0);
+            _settingsStore.SetInt(KeyVSync, value ? 1 : 0);
             ApplyVideoSettings();
             Publish();
         }
@@ -308,42 +315,42 @@ namespace SolarPhobia.Application.Services
         public void SetCameraShake(bool value)
         {
             _state.Settings.CameraShake = value;
-            PlayerPrefs.SetInt(KeyCameraShake, value ? 1 : 0);
+            _settingsStore.SetInt(KeyCameraShake, value ? 1 : 0);
             Publish();
         }
 
         public void SetMotionBlur(bool value)
         {
             _state.Settings.MotionBlur = value;
-            PlayerPrefs.SetInt(KeyMotionBlur, value ? 1 : 0);
+            _settingsStore.SetInt(KeyMotionBlur, value ? 1 : 0);
             Publish();
         }
 
         public void SetInvertY(bool value)
         {
             _state.Settings.InvertY = value;
-            PlayerPrefs.SetInt(KeyInvertYAxis, value ? 1 : 0);
+            _settingsStore.SetInt(KeyInvertYAxis, value ? 1 : 0);
             Publish();
         }
 
         public void SetGamepadVibration(bool value)
         {
             _state.Settings.GamepadVibration = value;
-            PlayerPrefs.SetInt(KeyGamepadVibration, value ? 1 : 0);
+            _settingsStore.SetInt(KeyGamepadVibration, value ? 1 : 0);
             Publish();
         }
 
         public void SetTextSize(string value)
         {
             _state.Settings.TextSize = value ?? DefaultTextSize;
-            PlayerPrefs.SetString(KeyTextSize, _state.Settings.TextSize);
+            _settingsStore.SetString(KeyTextSize, _state.Settings.TextSize);
             Publish();
         }
 
         public void SetInputDevice(string value)
         {
             _state.Settings.InputDevice = value ?? DefaultInputDevice;
-            PlayerPrefs.SetString(KeyInputDevice, _state.Settings.InputDevice);
+            _settingsStore.SetString(KeyInputDevice, _state.Settings.InputDevice);
             Publish();
         }
 
@@ -387,21 +394,21 @@ namespace SolarPhobia.Application.Services
         public void SetHighContrast(bool value)
         {
             _state.Settings.HighContrast = value;
-            PlayerPrefs.SetInt(KeyAccessibilityHighContrast, value ? 1 : 0);
+            _settingsStore.SetInt(KeyAccessibilityHighContrast, value ? 1 : 0);
             Publish();
         }
 
         public void SetReduceMotion(bool value)
         {
             _state.Settings.ReduceMotion = value;
-            PlayerPrefs.SetInt(KeyAccessibilityReduceMotion, value ? 1 : 0);
+            _settingsStore.SetInt(KeyAccessibilityReduceMotion, value ? 1 : 0);
             Publish();
         }
 
         public void SetColorblindCues(bool value)
         {
             _state.Settings.ColorblindCues = value;
-            PlayerPrefs.SetInt(KeyAccessibilityColorblindCues, value ? 1 : 0);
+            _settingsStore.SetInt(KeyAccessibilityColorblindCues, value ? 1 : 0);
             Publish();
         }
 
@@ -414,24 +421,24 @@ namespace SolarPhobia.Application.Services
                     int.TryParse(parts[0], out var width) &&
                     int.TryParse(parts[1], out var height))
                 {
-                    Screen.SetResolution(width, height, Screen.fullScreenMode);
-                    PlayerPrefs.SetInt(KeyResolutionWidth, width);
-                    PlayerPrefs.SetInt(KeyResolutionHeight, height);
+                    _platformService.ApplyResolution(width, height);
+                    _settingsStore.SetInt(KeyResolutionWidth, width);
+                    _settingsStore.SetInt(KeyResolutionHeight, height);
                     _state.Settings.Resolution = _pendingResolution;
                 }
             }
 
             if (!string.IsNullOrWhiteSpace(_pendingWindowMode))
             {
-                Screen.fullScreenMode = ToFullScreenMode(_pendingWindowMode);
-                PlayerPrefs.SetString(KeyWindowMode, _pendingWindowMode);
+                _platformService.ApplyWindowMode(_pendingWindowMode);
+                _settingsStore.SetString(KeyWindowMode, _pendingWindowMode);
                 _state.Settings.WindowMode = _pendingWindowMode;
             }
 
             if (_pendingQualityIndex >= 0 && _pendingQualityIndex < QualityLevels.Length)
             {
-                QualitySettings.SetQualityLevel(_pendingQualityIndex, true);
-                PlayerPrefs.SetInt(KeyQualityLevel, _pendingQualityIndex);
+                _platformService.ApplyQualityLevel(_pendingQualityIndex);
+                _settingsStore.SetInt(KeyQualityLevel, _pendingQualityIndex);
                 _state.Settings.Quality = QualityLevels[_pendingQualityIndex];
             }
 
@@ -463,32 +470,12 @@ namespace SolarPhobia.Application.Services
         // ── Helpers ────────────────────────────────────────────────────
         private void ApplyAudioSettings()
         {
-            AudioListener.volume = _state.Settings.MasterVolume;
+            _platformService.ApplyMasterVolume(_state.Settings.MasterVolume);
         }
 
         private void ApplyVideoSettings()
         {
-            QualitySettings.vSyncCount = _state.Settings.VSync ? 1 : 0;
-        }
-
-        private static FullScreenMode ToFullScreenMode(string mode)
-        {
-            return mode switch
-            {
-                "Fullscreen" => FullScreenMode.ExclusiveFullScreen,
-                "Borderless" => FullScreenMode.FullScreenWindow,
-                _ => FullScreenMode.Windowed
-            };
-        }
-
-        private static string GetCurrentWindowModeName()
-        {
-            return Screen.fullScreenMode switch
-            {
-                FullScreenMode.ExclusiveFullScreen => "Fullscreen",
-                FullScreenMode.FullScreenWindow => "Borderless",
-                _ => "Windowed"
-            };
+            _platformService.ApplyVSync(_state.Settings.VSync);
         }
 
         private void Publish()
@@ -527,6 +514,31 @@ namespace SolarPhobia.Application.Services
                     ColorblindCues = state.Settings.ColorblindCues
                 }
             };
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            if (value < min)
+            {
+                return min;
+            }
+
+            return value > max ? max : value;
+        }
+
+        private static float Clamp(float value, float min, float max)
+        {
+            if (value < min)
+            {
+                return min;
+            }
+
+            return value > max ? max : value;
+        }
+
+        private static float Clamp01(float value)
+        {
+            return Clamp(value, 0f, 1f);
         }
     }
 }
