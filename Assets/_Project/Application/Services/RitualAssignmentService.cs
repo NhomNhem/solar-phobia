@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NhemDangFugBixs.NhemLogging;
 using SolarPhobia.Domain.ValueObjects;
+using VContainer;
 
 namespace SolarPhobia.Application.Services
 {
     public class RitualAssignmentService : IRitualAssignmentService, IDisposable
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
         private readonly Dictionary<string, RitualType> _assignments = new();
         private readonly IResourceEffectApplier _effectApplier;
         private readonly bool _hasEffectApplier;
@@ -68,7 +71,7 @@ namespace SolarPhobia.Application.Services
             }
             else
             {
-                UnityEngine.Debug.LogWarning(
+                _logger.LogWarning(
                     "[RitualAssignmentService] IResourceEffectApplier not registered — " +
                     $"ritual {ritual} assigned to {soulId} without gameplay effect");
             }

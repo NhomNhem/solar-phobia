@@ -1,4 +1,5 @@
 using System.Collections;
+using NhemDangFugBixs.NhemLogging;
 using UnityEngine;
 
 namespace SolarPhobia.Infrastructure.Hazards
@@ -8,6 +9,7 @@ namespace SolarPhobia.Infrastructure.Hazards
     /// </summary>
     public class BeDaDaoAnhHazard : MonoBehaviour
     {
+        private static readonly INhemLogger Logger = new NhemUnityLogger();
         private float _collapseDuration;
         private BoxCollider _trigger;
         private bool _isCollapsed;
@@ -32,7 +34,7 @@ namespace SolarPhobia.Infrastructure.Hazards
         private IEnumerator CollapseRoutine()
         {
             _isCollapsed = true;
-            Debug.Log($"Be Da Dao Anh collapsed for {_collapseDuration}s");
+            Logger.Log($"Be Da Dao Anh collapsed for {_collapseDuration}s", this);
             yield return new WaitForSeconds(_collapseDuration);
             _isCollapsed = false;
         }

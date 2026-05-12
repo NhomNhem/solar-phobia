@@ -1,5 +1,6 @@
 // Assets/_Project/Application/Services/StrikeWarningController.cs
 using System.Collections.Generic;
+using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class StrikeWarningController : IStrikeWarningController
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly ReactiveProperty<bool> _isWarningActive = new(false);
 
@@ -80,7 +83,7 @@ namespace SolarPhobia.Application.Services
 
             if (_mapDirector == null)
             {
-                Debug.LogWarning("[StrikeWarningController] MapDirector is null — skipping UpdatePlayerPosition.");
+                _logger.LogWarning("[StrikeWarningController] MapDirector is null — skipping UpdatePlayerPosition.");
                 return;
             }
 

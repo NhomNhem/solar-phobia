@@ -1,3 +1,4 @@
+using NhemDangFugBixs.NhemLogging;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Repositories;
@@ -14,6 +15,8 @@ namespace SolarPhobia.Composition.Installers
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance<INhemLogger>(new NhemUnityLogger());
+
             // ── Data-Driven Gameplay Config ──────────────────────────────────
             GameplayBalanceConfig gameplayBalanceConfig = GameplayBalanceConfigLoader.Load();
             builder.RegisterInstance(gameplayBalanceConfig);

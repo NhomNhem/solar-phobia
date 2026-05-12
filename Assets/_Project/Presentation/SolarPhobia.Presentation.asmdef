@@ -5,6 +5,7 @@
     "SolarPhobia.Domain",
     "SolarPhobia.Application",
     "SolarPhobia.Shared",
+    "NhemDangFugBixs.Logging",
     "Unity.InputSystem",
     "UnityEngine.UIElements",
     "VContainer",

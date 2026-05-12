@@ -1,8 +1,10 @@
 using System;
+using NhemDangFugBixs.NhemLogging;
 using R3;
 using UnityEngine;
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Domain.ValueObjects;
+using VContainer;
 
 namespace SolarPhobia.Application.Services
 {
@@ -12,6 +14,8 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class DayPhaseMechanicsService : IDayPhaseMechanicsService
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+
         // ── R3 Reactive Events ─────────────────────────────────────────
         private readonly Subject<SwapEvent> _swapSubject = new();
         private readonly Subject<ShoveEvent> _shoveSubject = new();
@@ -52,25 +56,25 @@ namespace SolarPhobia.Application.Services
         {
             if (currentPhase != PhaseState.DayService)
             {
-                Debug.LogWarning($"DayPhaseMechanics: Swap not allowed in {currentPhase}. Only DayService permitted.");
+                _logger.LogWarning($"DayPhaseMechanics: Swap not allowed in {currentPhase}. Only DayService permitted.");
                 return false;
             }
 
             if (string.IsNullOrEmpty(soulId) || string.IsNullOrEmpty(playerId))
             {
-                Debug.LogError("DayPhaseMechanics: Player ID and Soul ID must be non-empty.");
+                _logger.LogError("DayPhaseMechanics: Player ID and Soul ID must be non-empty.");
                 return false;
             }
 
             if (!_soulRepository.IsAtShadowEdge(soulId))
             {
-                Debug.LogWarning($"DayPhaseMechanics: Soul {soulId} is not at shadow edge.");
+                _logger.LogWarning($"DayPhaseMechanics: Soul {soulId} is not at shadow edge.");
                 return false;
             }
 
             if (_isSwapInProgress)
             {
-                Debug.LogWarning("DayPhaseMechanics: Swap already in progress.");
+                _logger.LogWarning("DayPhaseMechanics: Swap already in progress.");
                 return false;
             }
 
@@ -83,7 +87,7 @@ namespace SolarPhobia.Application.Services
             var swapEvent = new SwapEvent(playerId, soulId);
             _swapSubject.OnNext(swapEvent);
 
-            Debug.Log($"DayPhaseMechanics: Swap initiated between {playerId} and {soulId}. Animation: {SwapAnimationDuration}s");
+            _logger.Log($"DayPhaseMechanics: Swap initiated between {playerId} and {soulId}. Animation: {SwapAnimationDuration}s");
 
             SimulateAnimationCompletion();
 
@@ -99,20 +103,20 @@ namespace SolarPhobia.Application.Services
         {
             if (currentPhase != PhaseState.DayService && currentPhase != PhaseState.ChoiceLock)
             {
-                Debug.LogWarning($"DayPhaseMechanics: Shove not allowed in {currentPhase}. DayService/ChoiceLock required.");
+                _logger.LogWarning($"DayPhaseMechanics: Shove not allowed in {currentPhase}. DayService/ChoiceLock required.");
                 return false;
             }
 
             if (string.IsNullOrEmpty(soulId))
             {
-                Debug.LogError("DayPhaseMechanics: Soul ID must be non-empty for shove.");
+                _logger.LogError("DayPhaseMechanics: Soul ID must be non-empty for shove.");
                 return false;
             }
 
             var soul = _soulRepository.GetSoul(soulId);
             if (soul == null)
             {
-                Debug.LogError($"DayPhaseMechanics: Soul {soulId} not found.");
+                _logger.LogError($"DayPhaseMechanics: Soul {soulId} not found.");
                 return false;
             }
 
@@ -128,7 +132,7 @@ namespace SolarPhobia.Application.Services
             var shoveEvent = new ShoveEvent(soulId, _sacrificedGhostId);
             _shoveSubject.OnNext(shoveEvent);
 
-            Debug.Log($"DayPhaseMechanics: Soul {soulId} shoved into sunlight. SacrificedGhostId set: {_sacrificedGhostId}. Animation: {ShoveAnimationDuration}s");
+            _logger.Log($"DayPhaseMechanics: Soul {soulId} shoved into sunlight. SacrificedGhostId set: {_sacrificedGhostId}. Animation: {ShoveAnimationDuration}s");
 
             return true;
         }
@@ -150,7 +154,7 @@ namespace SolarPhobia.Application.Services
         {
             _sacrificedGhostId = null;
             _isSwapInProgress = false;
-            Debug.Log("DayPhaseMechanics: Service reset.");
+            _logger.Log("DayPhaseMechanics: Service reset.");
         }
 
         // ── Private Methods ─────────────────────────────────────────

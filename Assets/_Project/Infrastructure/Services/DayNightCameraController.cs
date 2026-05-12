@@ -1,8 +1,10 @@
-// Assets/_Project/Application/Services/DayNightCameraController.cs
+// Assets/_Project/Infrastructure/Services/DayNightCameraController.cs
 using System;
 using DG.Tweening;
+using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Messages;
+using SolarPhobia.Application.Services;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
@@ -13,7 +15,7 @@ using UnityEngine.Rendering.Universal;
 using VContainer;
 using VContainer.Unity;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Infrastructure.Services
 {
     /// <summary>
     /// Phase-driven camera controller subscribing to <see cref="IPhaseStateMachine"/>
@@ -23,6 +25,8 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class DayNightCameraController : IDayNightCameraController, IInitializable, ITickable, IDisposable
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+
         // ── Tuning Knob Ranges ──────────────────────────────────────
         public const float MinDayDistance = 3f;
         public const float MaxDayDistance = 8f;
@@ -104,11 +108,11 @@ namespace SolarPhobia.Application.Services
         public ISensoryTierService SensoryTierService
         {
             get => _sensoryTierService;
-            internal set => _sensoryTierService = value;
+            set => _sensoryTierService = value;
         }
 
         /// <summary>Override camera reference for testing. When set, Initialize skips Camera.main lookup.</summary>
-        internal Camera TestCamera
+        public Camera TestCamera
         {
             set
             {
@@ -134,7 +138,6 @@ namespace SolarPhobia.Application.Services
         // ── Current Tweens ──────────────────────────────────────────
         private Tween _activeTween;
 
-        // ── Constructor ────────────────────────────────────────────
         [Inject]
         public DayNightCameraController(IPhaseStateMachine phaseState, IObjectResolver resolver, SolarPhobiaInputActions inputActions)
         {
@@ -143,11 +146,6 @@ namespace SolarPhobia.Application.Services
             _inputActions = inputActions;
         }
 
-        // ── IInitializable ─────────────────────────────────────────
-        /// <summary>
-        /// Initializes camera references, finds player and post-processing volume,
-        /// and subscribes to all phase change observables.
-        /// </summary>
         public void Initialize()
         {
             if (_camera == null)
@@ -157,7 +155,7 @@ namespace SolarPhobia.Application.Services
 
             if (_camera == null)
             {
-                Debug.LogError("[DayNightCameraController] Camera.main not found");
+                _logger.LogError("[DayNightCameraController] Camera.main not found");
                 return;
             }
 
@@ -168,20 +166,17 @@ namespace SolarPhobia.Application.Services
 
             _dayPosition = _cameraTransform.position;
 
-            // Find player
             var player = GameObject.FindWithTag(PlayerTag);
             if (player != null)
             {
                 _playerTransform = player.transform;
             }
 
-            // Resolve optional sensory tier service
             if (_resolver.TryResolve<ISensoryTierService>(out var sensoryService))
             {
                 _sensoryTierService = sensoryService;
             }
 
-            // Find post-processing volume
             _postProcessVolume = UnityEngine.Object.FindFirstObjectByType<Volume>();
             if (_postProcessVolume != null && _postProcessVolume.profile != null)
             {
@@ -190,7 +185,6 @@ namespace SolarPhobia.Application.Services
                 _postProcessVolume.profile.TryGet(out _whiteBalance);
             }
 
-            // ── R3 Subscriptions ──────────────────────────────────
             _phaseState.OnPhaseChanged
                 .Subscribe(OnPhaseChanged)
                 .AddTo(_subscriptions);
@@ -214,15 +208,9 @@ namespace SolarPhobia.Application.Services
                     .AddTo(_subscriptions);
             }
 
-            // Set initial state from current phase
             ApplyPhaseState(_phaseState.CurrentState);
         }
 
-        // ── ITickable ─────────────────────────────────────────────
-        /// <summary>
-        /// Per-frame update: smooth-follows player X position during night phases,
-        /// applies mouse-look Y-axis rotation.
-        /// </summary>
         public void Tick()
         {
             if (!IsNight || _playerTransform == null || _cameraTransform == null)
@@ -230,7 +218,6 @@ namespace SolarPhobia.Application.Services
                 return;
             }
 
-            // Smooth follow player X position
             Vector3 targetPos = _cameraTransform.position;
             targetPos.x = _playerTransform.position.x;
             _cameraTransform.position = Vector3.Lerp(
@@ -238,7 +225,6 @@ namespace SolarPhobia.Application.Services
                 targetPos,
                 _cameraFollowSmooth);
 
-            // Mouse-look Y-axis (New Input System)
             float mouseY = _inputActions.Player.Look.ReadValue<Vector2>().y * MouseSensitivity;
             if (Mathf.Abs(mouseY) > 0.001f)
             {
@@ -246,15 +232,12 @@ namespace SolarPhobia.Application.Services
             }
         }
 
-        // ── IDisposable ────────────────────────────────────────────
         public void Dispose()
         {
             _activeTween?.Kill();
             _subscriptions.Dispose();
         }
 
-        // ── IDayNightCameraController ─────────────────────────────
-        /// <inheritdoc/>
         public void ApplyMouseLook(float mouseDeltaY)
         {
             if (!IsNight || _cameraTransform == null)
@@ -271,7 +254,6 @@ namespace SolarPhobia.Application.Services
             _cameraTransform.localEulerAngles = currentEuler;
         }
 
-        /// <inheritdoc/>
         public void HandleNightFailed(NightFailedEvent evt)
         {
             if (_cameraTransform == null)
@@ -281,7 +263,6 @@ namespace SolarPhobia.Application.Services
 
             _activeTween?.Kill();
 
-            // Rapid darken + camera shake + fade to black
             Sequence failSeq = DOTween.Sequence();
             failSeq.Append(_cameraTransform.DOShakePosition(0.5f, 0.5f, 10));
             failSeq.Join(DOVirtual.Float(
@@ -311,7 +292,6 @@ namespace SolarPhobia.Application.Services
             _activeTween = failSeq;
         }
 
-        // ── Phase Event Handlers ────────────────────────────────────
         private void OnPhaseChanged(PhaseChangedEvent e)
         {
             ApplyPhaseState(e.NewPhase);
@@ -335,7 +315,6 @@ namespace SolarPhobia.Application.Services
         {
         }
 
-        // ── Phase State Application ─────────────────────────────────
         private void ApplyPhaseState(PhaseState phase)
         {
             switch (phase)
@@ -415,7 +394,6 @@ namespace SolarPhobia.Application.Services
 
             _activeTween?.Kill();
 
-            // Slow cinematic pan to shrine (player position)
             Vector3 shrineTarget = new Vector3(
                 _playerTransform.position.x,
                 _dayPosition.y,
@@ -425,7 +403,6 @@ namespace SolarPhobia.Application.Services
                 .SetEase(Ease.InOutSine);
         }
 
-        // ── Transitions ─────────────────────────────────────────────
         private void TransitionToNight()
         {
             if (_cameraTransform == null)
@@ -435,7 +412,6 @@ namespace SolarPhobia.Application.Services
 
             _activeTween?.Kill();
 
-            // Calculate night camera position: follow player X at extended distance
             float playerX = _playerTransform != null
                 ? _playerTransform.position.x
                 : _dayPosition.x;
@@ -447,11 +423,9 @@ namespace SolarPhobia.Application.Services
 
             Sequence nightSeq = DOTween.Sequence();
 
-            // Camera zoom out
             nightSeq.Join(_cameraTransform.DOMove(nightPos, _transitionDurationDayToNight)
                 .SetEase(Ease.OutQuad));
 
-            // Vignette spike
             if (_vignette != null)
             {
                 _vignette.active = true;
@@ -462,7 +436,6 @@ namespace SolarPhobia.Application.Services
                     _transitionDurationDayToNight));
             }
 
-            // Color grading: warm to cold (white balance temperature)
             if (_whiteBalance != null)
             {
                 _whiteBalance.active = true;
@@ -488,11 +461,9 @@ namespace SolarPhobia.Application.Services
 
             Sequence daySeq = DOTween.Sequence();
 
-            // Camera zoom in to day position
             daySeq.Join(_cameraTransform.DOMove(_dayPosition, _transitionDurationNightToDay)
                 .SetEase(Ease.InQuad));
 
-            // Vignette reset
             if (_vignette != null)
             {
                 daySeq.Join(DOTween.To(
@@ -502,7 +473,6 @@ namespace SolarPhobia.Application.Services
                     _transitionDurationNightToDay));
             }
 
-            // Color grading: cold to warm (white balance temperature)
             if (_whiteBalance != null)
             {
                 daySeq.Join(DOTween.To(

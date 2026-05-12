@@ -1,4 +1,5 @@
 using System;
+using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
@@ -17,6 +18,8 @@ namespace SolarPhobia.Presentation.Player
     /// </summary>
     public class StrikeWarningUI : MonoBehaviour, IInitializable, IDisposable
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+
         // ── Injected Dependencies ──────────────────────────────────
         [Inject] internal IStrikeWarningController _strikeWarningController;
 
@@ -35,14 +38,14 @@ namespace SolarPhobia.Presentation.Player
             var uiDocument = GetComponent<UIDocument>();
             if (uiDocument == null)
             {
-                Debug.LogError("[StrikeWarningUI] UIDocument component not found on GameObject.");
+                _logger.LogError("[StrikeWarningUI] UIDocument component not found on GameObject.", this);
                 return;
             }
 
             _rootElement = uiDocument.rootVisualElement;
             if (_rootElement == null)
             {
-                Debug.LogError("[StrikeWarningUI] Root visual element not found.");
+                _logger.LogError("[StrikeWarningUI] Root visual element not found.", this);
                 return;
             }
 

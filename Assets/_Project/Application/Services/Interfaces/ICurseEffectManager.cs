@@ -1,6 +1,5 @@
 using System;
 using R3;
-using UnityEngine;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Services
@@ -69,6 +68,5 @@ namespace SolarPhobia.Application.Services
     {
         public string HazardId { get; set; }
         public NightOutcomeState CurseType { get; set; }
-        public Vector3 Position { get; set; }
     }
 }

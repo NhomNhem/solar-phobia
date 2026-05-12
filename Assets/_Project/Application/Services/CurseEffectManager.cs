@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using R3;
-using UnityEngine;
 using VContainer;
 using SolarPhobia.Domain.ValueObjects;
 
@@ -108,8 +107,7 @@ namespace SolarPhobia.Application.Services
             var evt = new HazardEvent
             {
                 HazardId = hazardId,
-                CurseType = _currentCurseType,
-                Position = Vector3.zero
+                CurseType = _currentCurseType
             };
             _hazardTriggeredSubject.OnNext(evt);
         }
@@ -130,8 +128,7 @@ namespace SolarPhobia.Application.Services
             var evt = new HazardEvent
             {
                 HazardId = hazardId,
-                CurseType = _currentCurseType,
-                Position = Vector3.zero
+                CurseType = _currentCurseType
             };
             _hazardClearedSubject.OnNext(evt);
 

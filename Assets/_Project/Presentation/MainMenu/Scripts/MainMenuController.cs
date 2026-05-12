@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Services;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace SolarPhobia.Presentation.MainMenu
 {
     public class MainMenuController : MonoBehaviour, IDisposable
     {
+        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+
         public static event Action OnNewGameRequested;
         public static event Action OnContinueRequested;
         public static event Action OnQuitRequested;
@@ -96,14 +99,14 @@ namespace SolarPhobia.Presentation.MainMenu
 
             if (_document == null)
             {
-                Debug.LogError("[MainMenuController] UIDocument is required.");
+                _logger.LogError("[MainMenuController] UIDocument is required.", this);
                 enabled = false;
                 return;
             }
 
             if (_mainMenuService == null)
             {
-                Debug.LogError("[MainMenuController] IMainMenuApplicationService was not injected.");
+                _logger.LogError("[MainMenuController] IMainMenuApplicationService was not injected.", this);
                 enabled = false;
                 return;
             }
