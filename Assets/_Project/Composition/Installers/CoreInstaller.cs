@@ -1,6 +1,7 @@
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Repositories;
+using SolarPhobia.Shared.Configuration;
 using SolarPhobia.Shared.InputActions;
 using SolarPhobia.Infrastructure.Services;
 using VContainer.Unity;
@@ -12,6 +13,10 @@ namespace SolarPhobia.Composition.Installers
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            // ── Data-Driven Gameplay Config ──────────────────────────────────
+            GameplayBalanceConfig gameplayBalanceConfig = GameplayBalanceConfigLoader.Load();
+            builder.RegisterInstance(gameplayBalanceConfig);
+
             // ── Audio Service ───────────────────────────────────────────────
             builder.Register<BroAudioService>(Lifetime.Singleton).As<SolarPhobia.Application.Services.IAudioService>();
 
@@ -45,7 +50,11 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<DayNightCameraController>(Lifetime.Singleton).As<IDayNightCameraController>();
 
             // ── Ward Timer ─────────────────────────────────────────────────
-            builder.RegisterEntryPoint<WardTimerService>(Lifetime.Singleton);
+            builder.Register<WardTimerService>(Lifetime.Singleton)
+                .AsSelf()
+                .As<SolarPhobia.Domain.IWardTimerService>()
+                .As<IWardTimerService>();
+            builder.RegisterEntryPoint<WardTimerServiceEntryPoint>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SolarPhobia.Application.Services.Objective.WardDeathTriggerService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SolarPhobia.Application.Services.Phase.NightToDayResetService>(Lifetime.Singleton);
 
@@ -60,6 +69,9 @@ namespace SolarPhobia.Composition.Installers
 
             // ── Ritual Assignment ──────────────────────────────────────
             builder.Register<RitualAssignmentService>(Lifetime.Singleton).As<IRitualAssignmentService>();
+
+            // ── Resource Effects ───────────────────────────────────────
+            builder.Register<ResourceEffectsService>(Lifetime.Singleton).As<IResourceEffectsService>();
 
             // ── Curse Effect Manager ──────────────────────────────────────
             builder.Register<CurseEffectManager>(Lifetime.Singleton).As<ICurseEffectManager>();

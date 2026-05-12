@@ -1,4 +1,6 @@
 using R3;
+using SolarPhobia.Shared.Configuration;
+using VContainer;
 
 namespace SolarPhobia.Application.Services
 {
@@ -7,6 +9,8 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class ResourceEffectsService : IResourceEffectsService
     {
+        private readonly GameplayBalanceConfig _balanceConfig;
+
         // Reactive properties
         private readonly ReactiveProperty<ResourceType> _resourcePickedUp = new(ResourceType.NgocCot);
         private readonly ReactiveProperty<bool> _isTimeDrainActive = new(false);
@@ -15,7 +19,17 @@ namespace SolarPhobia.Application.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceEffectsService"/> class.
         /// </summary>
-        public ResourceEffectsService() { }
+        public ResourceEffectsService()
+            : this(GameplayBalanceConfig.CreateDefault())
+        {
+        }
+
+        [Inject]
+        public ResourceEffectsService(GameplayBalanceConfig balanceConfig)
+        {
+            _balanceConfig = balanceConfig ?? GameplayBalanceConfig.CreateDefault();
+            _timeDrainMultiplier.Value = _balanceConfig.ResourceEffects.DefaultNgocCotDrainMultiplier;
+        }
 
         // IResourceEffectsService implementation
         public ReadOnlyReactiveProperty<ResourceType> OnResourcePickedUp => _resourcePickedUp;
@@ -34,7 +48,7 @@ namespace SolarPhobia.Application.Services
                 // Activate Time Drain
                 _isTimeDrainActive.Value = true;
                 // Multiplier will be provided by NgocCotService in future integration
-                _timeDrainMultiplier.Value = 1.0f;
+                _timeDrainMultiplier.Value = _balanceConfig.ResourceEffects.DefaultNgocCotDrainMultiplier;
             }
         }
     }

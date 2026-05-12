@@ -1,15 +1,15 @@
 using System.Collections.Generic;
-using ObservableCollections;
+using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Domain
 {
     public class Order
     {
-        private readonly ObservableDictionary<OrderType, int> _itemsNeeded = new();
+        private readonly Dictionary<OrderType, int> _itemsNeeded = new();
 
         public string Id { get; set; }
         public string GhostId { get; set; }
-        public IEnumerable<KeyValuePair<OrderType, int>> ItemsNeeded => _itemsNeeded;
+        public IReadOnlyDictionary<OrderType, int> ItemsNeeded => _itemsNeeded;
         public int RemainingItemTypeCount => _itemsNeeded.Count;
         public float TimeLimitSeconds { get; set; } = 30f;
         public bool IsComplete { get; private set; }

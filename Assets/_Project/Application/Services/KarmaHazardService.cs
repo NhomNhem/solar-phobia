@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using R3;
+using SolarPhobia.Domain.ValueObjects;
+using SolarPhobia.Shared.Configuration;
 using UnityEngine;
 using VContainer;
-using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Services
 {
@@ -17,6 +18,7 @@ namespace SolarPhobia.Application.Services
     public class KarmaHazardService : IKarmaHazardService, IDisposable
     {
         // ── Dependencies ──────────────────────────────
+        private readonly GameplayBalanceConfig _balanceConfig;
         private PhaseState _currentPhaseValue;
         private IDisposable _phaseSubscription;
 
@@ -33,8 +35,9 @@ namespace SolarPhobia.Application.Services
         /// Initializes a new instance of the KarmaHazardService class.
         /// </summary>
         [Inject]
-        public KarmaHazardService(IPhaseStateMachine phaseStateMachine)
+        public KarmaHazardService(IPhaseStateMachine phaseStateMachine, GameplayBalanceConfig balanceConfig)
         {
+            _balanceConfig = balanceConfig ?? GameplayBalanceConfig.CreateDefault();
             _phaseSubscription = phaseStateMachine.CurrentPhase
                 .Subscribe(newPhase => _currentPhaseValue = newPhase);
         }
@@ -49,7 +52,7 @@ namespace SolarPhobia.Application.Services
                 return;
 
             string hazardType = MapGhostToHazard(ghostType);
-            float effectValue = GetEffectValue(hazardType);
+            float effectValue = GetConfiguredEffectValue(hazardType);
 
             var hazardData = new KarmaHazardData
             {
@@ -152,6 +155,17 @@ namespace SolarPhobia.Application.Services
         private bool IsNightSurvivalPhase()
         {
             return _currentPhaseValue == PhaseState.NightSurvival;
+        }
+
+        private float GetConfiguredEffectValue(string hazardType)
+        {
+            return hazardType switch
+            {
+                "LuoiMau" => _balanceConfig.KarmaHazard.LuoiMauEffectValue,
+                "VungNuoc" => _balanceConfig.KarmaHazard.VungNuocEffectValue,
+                "BeDaDaoAnh" => _balanceConfig.KarmaHazard.BeDaDaoAnhEffectValue,
+                _ => 0f
+            };
         }
 
         /// <summary>

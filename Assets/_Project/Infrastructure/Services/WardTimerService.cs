@@ -2,6 +2,7 @@
 using R3;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.ValueObjects;
+using SolarPhobia.Shared.Configuration;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,19 +23,12 @@ namespace SolarPhobia.Infrastructure.Services
 
         // ── Dependencies ────────────────────────────────────────
         private readonly IPhaseStateMachine _phaseStateMachine;
+        private readonly GameplayBalanceConfig _balanceConfig;
 
         // ── State ────────────────────────────────────────────────
         private float _maxWard;
         private float _drainRate;
         private bool _isDepleted;
-
-        // ── Constants ────────────────────────────────────────────
-        private const float BaseWardSec = 10.0f;
-        private const float WardPerGhostSec = 30.0f;
-        private const float FailedLightInterruptPenalty = 10.0f;
-        private const float SoulPanicPenalty = 5.0f;
-        private const float MaxDayPenalties = 30.0f;
-        private const float DefaultBaseDrain = 1.0f;
 
         // ── Public Properties ─────────────────────────────────────
         public float CurrentWard => _currentWard.Value;
@@ -73,10 +67,17 @@ namespace SolarPhobia.Infrastructure.Services
 
         // ── Constructor ───────────────────────────────────────────
         public WardTimerService(IPhaseStateMachine phaseStateMachine)
+            : this(GameplayBalanceConfig.CreateDefault(), phaseStateMachine)
         {
+        }
+
+        [Inject]
+        public WardTimerService(GameplayBalanceConfig balanceConfig, IPhaseStateMachine phaseStateMachine)
+        {
+            _balanceConfig = balanceConfig ?? GameplayBalanceConfig.CreateDefault();
             _phaseStateMachine = phaseStateMachine;
             _maxWard = 0f;
-            _drainRate = DefaultBaseDrain;
+            _drainRate = _balanceConfig.WardTimer.DefaultBaseDrain;
             _isDepleted = false;
 
             // Subscribe to ward changes to update sensory tier
@@ -113,13 +114,15 @@ namespace SolarPhobia.Infrastructure.Services
         /// </summary>
         public void Initialize(int ghostsSaved, int failedLightInterrupts, int soulPanicEvents)
         {
+            WardTimerBalanceConfig config = _balanceConfig.WardTimer;
+
             // Calculate day penalties (capped at 30s)
-            float dayPenalties = (failedLightInterrupts * FailedLightInterruptPenalty)
-                               + (soulPanicEvents * SoulPanicPenalty);
-            dayPenalties = Mathf.Min(dayPenalties, MaxDayPenalties);
+            float dayPenalties = (failedLightInterrupts * config.FailedLightInterruptPenalty)
+                               + (soulPanicEvents * config.SoulPanicPenalty);
+            dayPenalties = Mathf.Min(dayPenalties, config.MaxDayPenalties);
 
             // Calculate initial ward (can go negative, clamped to 0 for gameplay)
-            float initialWard = BaseWardSec + (ghostsSaved * WardPerGhostSec) - dayPenalties;
+            float initialWard = config.BaseWardSec + (ghostsSaved * config.WardPerGhostSec) - dayPenalties;
 
             _maxWard = Mathf.Max(0f, initialWard);
             _currentWard.Value = _maxWard;

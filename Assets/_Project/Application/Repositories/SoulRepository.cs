@@ -37,7 +37,6 @@ namespace SolarPhobia.Application.Repositories
         {
             if (currentPhase != PhaseState.DayService)
             {
-                UnityEngine.Debug.LogWarning($"SoulRepository: Cannot write selection outside DayService phase (current: {currentPhase})");
                 return false;
             }
 
@@ -49,7 +48,6 @@ namespace SolarPhobia.Application.Repositories
 
             if (state == DaySelectionState.Saved && soul.DaySelection == DaySelectionState.Abandoned)
             {
-                UnityEngine.Debug.LogError($"SoulRepository: Cannot mark {soulId} as Saved when Abandoned");
                 return false;
             }
 
@@ -65,14 +63,12 @@ namespace SolarPhobia.Application.Repositories
         {
             if (currentPhase != PhaseState.ChoiceLock && currentPhase != PhaseState.NightSurvival)
             {
-                UnityEngine.Debug.LogWarning($"SoulRepository: Cannot write night outcome outside ChoiceLock/NightSurvival");
                 return false;
             }
 
             var soul = GetSoul(soulId);
             if (soul == null || soul.DaySelection != DaySelectionState.Abandoned)
             {
-                UnityEngine.Debug.LogError($"SoulRepository: Night outcome only valid for abandoned soul");
                 return false;
             }
 
@@ -116,7 +112,6 @@ namespace SolarPhobia.Application.Repositories
 
         public void SwapPositions(string playerId, string soulId)
         {
-            UnityEngine.Debug.Log($"SwapPositions: player {playerId} swapped with soul {soulId}");
         }
 
         public string GetFirstSoulAtShadowEdge()
@@ -130,14 +125,12 @@ namespace SolarPhobia.Application.Repositories
             if (soul != null)
             {
                 soul.SetDaySelection(DaySelectionState.Abandoned);
-                UnityEngine.Debug.Log($"Soul {soulId} marked as abandoned.");
             }
         }
 
         public void SetSacrificedGhostId(string soulId)
         {
             _sacrificedGhostId = soulId;
-            UnityEngine.Debug.Log($"Sacrificed ghost id set to {soulId}.");
         }
     }
 }

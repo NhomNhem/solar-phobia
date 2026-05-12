@@ -2,6 +2,7 @@
 using System;
 using R3;
 using SolarPhobia.Application.Services.Map;
+using SolarPhobia.Shared.Configuration;
 using UnityEngine;
 using VContainer;
 
@@ -13,11 +14,6 @@ namespace SolarPhobia.Application.Services
     /// </summary>
     public class MapSpawnDirector : IMapSpawnDirector
     {
-        // ── Constants ─────────────────────────────────────────────
-        public const int    DefaultSafeMoundsPerChunk  = 2;
-        public const double CursedMoundProbability     = 0.4;
-        public const double FalseSafeMoundProbability  = 0.15;
-
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly Subject<bool>   _onStrikeWarning = new();
         private readonly Subject<string> _onEnterCover    = new();
@@ -28,6 +24,7 @@ namespace SolarPhobia.Application.Services
         private bool _initialized;
         private Vector2 _playerPosition;
         private Bounds  _playerBounds;
+        private readonly GameplayBalanceConfig _balanceConfig;
 
         // ── Public Interface ───────────────────────────────────────
         public int Seed => _seed;
@@ -38,8 +35,16 @@ namespace SolarPhobia.Application.Services
         public Observable<string> OnExitCover     => _onExitCover;
 
         // ── Constructor ────────────────────────────────────────────
+        public MapSpawnDirector()
+            : this(GameplayBalanceConfig.CreateDefault())
+        {
+        }
+
         [Inject]
-        public MapSpawnDirector() { }
+        public MapSpawnDirector(GameplayBalanceConfig balanceConfig)
+        {
+            _balanceConfig = balanceConfig ?? GameplayBalanceConfig.CreateDefault();
+        }
 
         // ── IMapSpawnDirector ──────────────────────────────────────
         public void Initialize(int seed)
@@ -56,19 +61,20 @@ namespace SolarPhobia.Application.Services
 
             int chunkSeed = _seed + index;
             var rng = new System.Random(chunkSeed);
+            MapSpawnBalanceConfig config = _balanceConfig.MapSpawn;
 
-            int safeMoundCount = DefaultSafeMoundsPerChunk;
+            int safeMoundCount = config.DefaultSafeMoundsPerChunk;
             var safeMoundPositions = new float[safeMoundCount];
             for (int i = 0; i < safeMoundCount; i++)
                 safeMoundPositions[i] = (float)rng.NextDouble();
 
-            bool hasCursedMound = rng.NextDouble() < CursedMoundProbability;
+            bool hasCursedMound = rng.NextDouble() < config.CursedMoundProbability;
             int  cursedCount    = hasCursedMound ? 1 : 0;
             var  cursedPositions = new float[cursedCount];
             if (hasCursedMound)
                 cursedPositions[0] = (float)rng.NextDouble();
 
-            bool hasFalseSafeMound = rng.NextDouble() < FalseSafeMoundProbability;
+            bool hasFalseSafeMound = rng.NextDouble() < config.FalseSafeMoundProbability;
 
             return new ChunkData(index, chunkSeed, safeMoundCount, cursedCount,
                                  hasFalseSafeMound, safeMoundPositions, cursedPositions);

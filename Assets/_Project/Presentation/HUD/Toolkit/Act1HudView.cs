@@ -1,7 +1,8 @@
-﻿using System;
-using ObservableCollections;
+using System;
+using System.Collections.Generic;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Domain;
+using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -38,7 +39,7 @@ namespace SolarPhobia.Presentation.HUD
             _dialogueView?.Show(node);
         }
 
-        public void RenderOrders(ObservableDictionary<OrderType, int> itemsNeeded)
+        public void RenderOrders(IReadOnlyDictionary<OrderType, int> itemsNeeded)
         {
             _orderQueueView?.Render(itemsNeeded);
         }
@@ -73,5 +74,3 @@ namespace SolarPhobia.Presentation.HUD
         }
     }
 }
-
-
