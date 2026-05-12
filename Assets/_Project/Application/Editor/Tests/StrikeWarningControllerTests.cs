@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using NhemDangFugBixs.NhemLogging;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Map.Generation;
@@ -64,7 +65,7 @@ namespace SolarPhobia.Application.Tests
         public void Setup()
         {
             _mockDirector = new MockMapSpawnDirector();
-            _controller = new StrikeWarningController(_mockDirector);
+            _controller = new StrikeWarningController(new NhemUnityLogger(), _mockDirector);
         }
 
         [Test]
@@ -119,7 +120,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void NullMapDirector_ReportPlayerPosition_DoesNotThrow()
         {
-            var controllerWithNull = new StrikeWarningController(null);
+            var controllerWithNull = new StrikeWarningController(new NhemUnityLogger(), null);
             Assert.DoesNotThrow(() =>
                 controllerWithNull.ReportPlayerPosition(
                     new Float2(5f, 5f),
@@ -135,7 +136,7 @@ namespace SolarPhobia.Application.Tests
 
             for (int i = 0; i < 100; i++)
             {
-                var controller = new StrikeWarningController(_mockDirector);
+                var controller = new StrikeWarningController(new NhemUnityLogger(), _mockDirector);
                 var mode = nonNightModes[rng.Next(nonNightModes.Length)];
                 var warningValue = rng.Next(2) == 1;
                 var position = new Float2(
@@ -156,7 +157,7 @@ namespace SolarPhobia.Application.Tests
 
             for (int i = 0; i < 100; i++)
             {
-                var controller = new StrikeWarningController(_mockDirector);
+                var controller = new StrikeWarningController(new NhemUnityLogger(), _mockDirector);
                 int n = rng.Next(1, 11);
 
                 for (int t = 0; t < n; t++)
@@ -184,7 +185,7 @@ namespace SolarPhobia.Application.Tests
 
             for (int i = 0; i < 100; i++)
             {
-                var controller = new StrikeWarningController(_mockDirector);
+                var controller = new StrikeWarningController(new NhemUnityLogger(), _mockDirector);
                 int length = rng.Next(5, 16);
                 int expectedCount = 0;
 
@@ -217,7 +218,7 @@ namespace SolarPhobia.Application.Tests
 
             for (int i = 0; i < 100; i++)
             {
-                var controller = new StrikeWarningController(_mockDirector);
+                var controller = new StrikeWarningController(new NhemUnityLogger(), _mockDirector);
                 int n = rng.Next(1, 21);
 
                 for (int w = 0; w < n; w++)
@@ -243,7 +244,7 @@ namespace SolarPhobia.Application.Tests
             for (int i = 0; i < 100; i++)
             {
                 var mock = new MockMapSpawnDirector();
-                var controller = new StrikeWarningController(mock);
+                var controller = new StrikeWarningController(new NhemUnityLogger(), mock);
 
                 var position = new Float2(
                     (float)(rng.NextDouble() * 200.0 - 100.0),

@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Map.Directors;
 using SolarPhobia.Domain.ValueObjects;
 using VContainer;
-
 namespace SolarPhobia.Application.Player.Warnings
 {
     /// <summary>
@@ -13,9 +13,9 @@ namespace SolarPhobia.Application.Player.Warnings
     /// </summary>
     public class StrikeWarningController : IStrikeWarningController
     {
-        [Inject] public INhemLogger _logger;
-
         // ── R3 Reactive State ──────────────────────────────────────
+        private readonly INhemLogger _logger;
+
         private readonly ReactiveProperty<bool> _isWarningActive = new(false);
 
         // ── State ─────────────────────────────────────────────────
@@ -30,9 +30,15 @@ namespace SolarPhobia.Application.Player.Warnings
         public IReadOnlyList<StrikeWarning> ActiveWarnings => _activeWarnings;
 
         [Inject]
-        public StrikeWarningController(IMapSpawnDirector mapDirector)
+        public StrikeWarningController(INhemLogger logger, IMapSpawnDirector mapDirector)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapDirector = mapDirector;
+        }
+
+        public StrikeWarningController(IMapSpawnDirector mapDirector)
+            : this(new NhemUnityLogger(), mapDirector)
+        {
         }
 
         public void OnStrikeWarningReceived(bool warningActive, PlayerInputMode mode, Float2 playerPosition)

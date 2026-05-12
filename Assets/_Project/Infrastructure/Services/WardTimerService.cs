@@ -1,21 +1,19 @@
-﻿// Assets/_Project/Infrastructure/Services/WardTimerService.cs
 using R3;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Ward;
 using SolarPhobia.Domain.ValueObjects;
 using SolarPhobia.Shared.Configuration;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-
 namespace SolarPhobia.Infrastructure.Services
 {
     /// <summary>
     /// Implementation of Ward Timer service.
     /// Implements TR-state-005: Ward Timer Initialization — Base + (Saved × 30) Formula
-    /// Also implements Application-layer IWardTimerService for cross-layer cost operations.
+    /// Also implements Application-layer IWardTimerPort for cross-layer cost operations.
     /// </summary>
-    public class WardTimerService : Domain.IWardTimerService, IWardTimerService, IInitializable, ITickable
+    public class WardTimerService : Domain.IWardTimerService, IWardTimerPort, IInitializable, ITickable
     {
         // ── R3 Reactive State ──────────────────────────────────────
         private readonly ReactiveProperty<float> _currentWard = new(0f);
@@ -42,9 +40,9 @@ namespace SolarPhobia.Infrastructure.Services
 
         public float MaxWard => _maxWard;
 
-        // ── Application-layer IWardTimerService ─────────────────────
+        // ── Application-layer IWardTimerPort ─────────────────────
 
-        float IWardTimerService.CurrentWard
+        float IWardTimerPort.CurrentWard
         {
             get => _currentWard.Value;
             set => _currentWard.Value = value;
@@ -201,3 +199,4 @@ namespace SolarPhobia.Infrastructure.Services
         }
     }
 }
+

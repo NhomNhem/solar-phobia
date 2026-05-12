@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using R3;
@@ -12,13 +12,13 @@ namespace SolarPhobia.Application.Day
 {
     public class DayServiceUIController : IDayServiceUIController, IDisposable
     {
-        // â”€â”€ Dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Dependencies ────────────────────────────────────────────
         private readonly IPhaseStateMachine _phaseStateMachine;
         private readonly ISoulRepository _soulRepository;
         private readonly IDaySelectionValidator _validator;
         private readonly IRitualAssignmentService _ritualService;
 
-        // â”€â”€ Reactive State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Reactive State ──────────────────────────────────────────
         private readonly ReactiveProperty<bool> _isUIVisible = new(false);
         private readonly ReactiveProperty<SelectionConfirmedPayload> _lastPayload = new();
         private readonly ReactiveProperty<bool> _isConfirmEnabled = new(false);
@@ -32,7 +32,7 @@ namespace SolarPhobia.Application.Day
         public SelectionConfirmedPayload LastConfirmedPayloadValue => _lastPayload.Value;
         public bool IsConfirmEnabledValue => _isConfirmEnabled.Value;
 
-        // â”€â”€ Internal State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Internal State ──────────────────────────────────────────
         private readonly Dictionary<string, DaySelectionState> _localSelections = new();
         private bool _confirmed;
         private readonly IDisposable _phaseSubscription;
@@ -204,7 +204,7 @@ namespace SolarPhobia.Application.Day
             _isConfirmEnabled.Dispose();
         }
 
-        // â”€â”€ Private â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Private ──────────────────────────────────────────────────
 
         private void ResetLocalState()
         {

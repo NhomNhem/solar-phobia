@@ -36,7 +36,6 @@ namespace SolarPhobia.Application.Map.Cover
         public Observable<bool> OnFalseSafeMoundEntered => _onFalseSafeMoundEntered;
 
         // ── Constructor ────────────────────────────────────────────
-        [Inject]
         public CoverDetector2D() { }
 
         // ── ICoverDetector2D ───────────────────────────────────────

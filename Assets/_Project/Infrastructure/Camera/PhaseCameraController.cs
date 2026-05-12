@@ -1,13 +1,10 @@
 using Unity.Cinemachine;
 using R3;
-using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Messages;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using VContainer;
-using System;
-
 namespace SolarPhobia.Infrastructure.Camera
 {
     /// <summary>
@@ -91,3 +88,4 @@ namespace SolarPhobia.Infrastructure.Camera
         }
     }
 }
+

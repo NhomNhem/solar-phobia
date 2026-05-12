@@ -3,10 +3,37 @@ using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.ValueObjects;
 using SolarPhobia.Infrastructure.Services;
+
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
 
 namespace SolarPhobia.Infrastructure.Tests
 {
@@ -219,3 +246,4 @@ namespace SolarPhobia.Infrastructure.Tests
         }
     }
 }
+

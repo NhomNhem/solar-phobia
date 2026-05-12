@@ -1,12 +1,11 @@
-﻿// Assets/_Project/Application/Editor/Tests/PhaseGatedInputTests.cs
+// Assets/_Project/Application/Editor/Tests/PhaseGatedInputTests.cs
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -30,11 +29,15 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-player-001, TR-player-008 â€” Phase-Gated Input.
-    /// Story 001: Phase-Gated Input â€” Day UI / Night Movement / Disabled.
+    /// Validates: TR-player-001, TR-player-008 — Phase-Gated Input.
+    /// Story 001: Phase-Gated Input — Day UI / Night Movement / Disabled.
     ///
     /// Verifies that PlayerInputHandler routes to the correct PlayerInputMode
     /// for every game phase, synchronously and without frame delay.
@@ -42,7 +45,7 @@ namespace SolarPhobia.Application.Tests
     [TestFixture]
     public class PhaseGatedInputTests
     {
-        // â”€â”€ Test Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Test Helpers ───────────────────────────────────────────
 
         /// <summary>
         /// Minimal fake phase state machine for unit testing PlayerInputHandler in isolation.
@@ -87,7 +90,7 @@ namespace SolarPhobia.Application.Tests
             _handler.Initialize();
         }
 
-        // â”€â”€ AC-1: DayService â†’ DayUI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: DayService → DayUI ───────────────────────────────
 
         [Test]
         public void AC1_DayService_SetsMode_DayUI()
@@ -113,7 +116,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_handler.IsMovementEnabled);
         }
 
-        // â”€â”€ AC-2: NightSurvival â†’ NightMovement â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: NightSurvival → NightMovement ───────────────────
 
         [Test]
         public void AC2_NightSurvival_SetsMode_NightMovement()
@@ -139,7 +142,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_handler.IsUIEnabled);
         }
 
-        // â”€â”€ AC-3: ChoiceLock â†’ Disabled â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: ChoiceLock → Disabled ───────────────────────────
 
         [Test]
         public void AC3_ChoiceLock_SetsMode_Disabled()
@@ -164,7 +167,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(PlayerInputMode.Disabled, _handler.CurrentMode.CurrentValue);
         }
 
-        // â”€â”€ AC-4: Clean exit from NightSurvival â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Clean exit from NightSurvival ───────────────────
 
         [Test]
         public void AC4_ExitNightSurvival_ToEndingEvaluation_SetsDisabled()
@@ -190,7 +193,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(PlayerInputMode.Disabled, _handler.CurrentMode.CurrentValue);
         }
 
-        // â”€â”€ AC-5: No combat inputs (structural â€” mode never enables combat) â”€â”€
+        // ── AC-5: No combat inputs (structural — mode never enables combat) ──
 
         [Test]
         public void AC5_NoCombatMode_ExistsInEnum()
@@ -207,12 +210,12 @@ namespace SolarPhobia.Application.Tests
             }
         }
 
-        // â”€â”€ Mode Transition Sequence â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Mode Transition Sequence ───────────────────────────────
 
         [Test]
         public void ModeTransition_FullCycle_CorrectSequence()
         {
-            // Boot â†’ DayService â†’ NightSurvival â†’ EndingEvaluation â†’ ChoiceLock â†’ DayService
+            // Boot → DayService → NightSurvival → EndingEvaluation → ChoiceLock → DayService
             Assert.AreEqual(PlayerInputMode.Disabled, _handler.CurrentMode.CurrentValue);
 
             _psm.SetPhase(PhaseState.DayService);
@@ -234,14 +237,14 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void ModeTransition_IsSynchronous_NoFrameDelay()
         {
-            // Mode must update in the same call â€” no deferred/async update
+            // Mode must update in the same call — no deferred/async update
             _psm.SetPhase(PhaseState.NightSurvival);
 
-            // Immediately after SetPhase â€” no yield, no tick required
+            // Immediately after SetPhase — no yield, no tick required
             Assert.AreEqual(PlayerInputMode.NightMovement, _handler.CurrentMode.CurrentValue);
         }
 
-        // â”€â”€ ReactiveProperty Emission â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── ReactiveProperty Emission ──────────────────────────────
 
         [Test]
         public void CurrentMode_EmitsEvent_OnPhaseChange()
@@ -266,13 +269,13 @@ namespace SolarPhobia.Application.Tests
             using var sub = _handler.CurrentMode.Subscribe(_ => emitCount++);
             int baseline = emitCount;
 
-            _psm.SetPhase(PhaseState.EndingEvaluation); // Also Disabled â€” no change
+            _psm.SetPhase(PhaseState.EndingEvaluation); // Also Disabled — no change
 
             // ReactiveProperty only emits on value change
             Assert.AreEqual(baseline, emitCount, "No emission when mode stays Disabled");
         }
 
-        // â”€â”€ Travel / Intermediate Phases â†’ Disabled â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Travel / Intermediate Phases → Disabled ───────────────
 
         [Test]
         public void IntermediatePhases_AllMapTo_Disabled()
@@ -298,4 +301,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

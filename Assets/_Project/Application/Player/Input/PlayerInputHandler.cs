@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/PlayerInputHandler.cs
+// Assets/_Project/Application/Services/PlayerInputHandler.cs
 using System;
 using R3;
 using SolarPhobia.Application.Phase.Flow;
@@ -13,27 +13,27 @@ namespace SolarPhobia.Application.Player.Input
     /// Implements TR-player-001, TR-player-008: Phase-gated input.
     ///
     /// Mode mapping:
-    ///   NightSurvival                          â†’ NightMovement
-    ///   DayService                             â†’ DayUI
-    ///   ChoiceLock / EndingEvaluation / Boot   â†’ Disabled
-    ///   All other phases (travel, dialogueâ€¦)   â†’ Disabled
+    ///   NightSurvival                          → NightMovement
+    ///   DayService                             → DayUI
+    ///   ChoiceLock / EndingEvaluation / Boot   → Disabled
+    ///   All other phases (travel, dialogue…)   → Disabled
     ///
-    /// Mode switches synchronously on phase change â€” no frame delay.
+    /// Mode switches synchronously on phase change — no frame delay.
     /// No combat inputs exist in any mode (flight-only survival design).
     /// </summary>
     public class PlayerInputHandler : IPlayerInputHandler, IInitializable, IDisposable
     {
-        // â”€â”€ R3 Reactive State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── R3 Reactive State ──────────────────────────────────────
         private readonly ReactiveProperty<PlayerInputMode> _currentMode
             = new(PlayerInputMode.Disabled);
 
-        // â”€â”€ Dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Dependencies ───────────────────────────────────────────
         private readonly IPhaseStateMachine _phaseStateMachine;
 
-        // â”€â”€ Subscriptions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Subscriptions ──────────────────────────────────────────
         private IDisposable _phaseSubscription;
 
-        // â”€â”€ Public Interface â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Public Interface ───────────────────────────────────────
         /// <inheritdoc/>
         public ReadOnlyReactiveProperty<PlayerInputMode> CurrentMode => _currentMode;
 
@@ -43,14 +43,13 @@ namespace SolarPhobia.Application.Player.Input
         /// <inheritdoc/>
         public bool IsUIEnabled => _currentMode.Value == PlayerInputMode.DayUI;
 
-        // â”€â”€ Constructor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        [Inject]
+        // ── Constructor ────────────────────────────────────────────
         public PlayerInputHandler(IPhaseStateMachine phaseStateMachine)
         {
             _phaseStateMachine = phaseStateMachine;
         }
 
-        // â”€â”€ IInitializable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IInitializable ─────────────────────────────────────────
         /// <summary>
         /// Subscribes to phase changes and sets the initial mode from the current phase.
         /// </summary>
@@ -59,12 +58,12 @@ namespace SolarPhobia.Application.Player.Input
             // Set initial mode from current phase (handles hot-reload / late init)
             _currentMode.Value = ResolveModeForPhase(_phaseStateMachine.CurrentState);
 
-            // Subscribe to future phase changes â€” synchronous update
+            // Subscribe to future phase changes — synchronous update
             _phaseSubscription = _phaseStateMachine.CurrentPhase
                 .Subscribe(phase => _currentMode.Value = ResolveModeForPhase(phase));
         }
 
-        // â”€â”€ Private Methods â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Private Methods ────────────────────────────────────────
         /// <summary>
         /// Maps a <see cref="PhaseState"/> to the corresponding <see cref="PlayerInputMode"/>.
         /// </summary>
@@ -78,7 +77,7 @@ namespace SolarPhobia.Application.Player.Input
             };
         }
 
-        // â”€â”€ IDisposable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IDisposable ───────────────────────────────────────────────
         public void Dispose()
         {
             _phaseSubscription?.Dispose();

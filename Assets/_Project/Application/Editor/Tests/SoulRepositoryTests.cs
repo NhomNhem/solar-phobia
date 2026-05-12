@@ -1,15 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -32,6 +31,10 @@ using SolarPhobia.Application.Player.Interactions;
 using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
+
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -215,4 +218,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

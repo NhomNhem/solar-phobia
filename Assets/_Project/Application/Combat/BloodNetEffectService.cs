@@ -1,11 +1,10 @@
-using SolarPhobia.Application.Consequences;
-using R3;
-using SolarPhobia.Application.Services.Interfaces;
-using SolarPhobia.Domain;
-using SolarPhobia.Domain.ValueObjects;
 using System;
+using R3;
+using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Ward;
+using SolarPhobia.Domain.ValueObjects;
 
-namespace SolarPhobia.Application.Services.Combat
+namespace SolarPhobia.Application.Combat
 {
     public class BloodNetEffectService : IBloodNetEffectService
     {
@@ -14,7 +13,7 @@ namespace SolarPhobia.Application.Services.Combat
         public const float DefaultSlowMultiplier = 0.5f;
 
         private readonly ICurseEffectManager _curseEffectManager;
-        private readonly IWardTimerService _wardTimerService;
+        private readonly IWardTimerPort _wardTimerService;
         private readonly IDisposable _hazardTriggeredSub;
         private float _slowTimeRemaining;
         private float _totalPenaltyApplied;
@@ -23,13 +22,13 @@ namespace SolarPhobia.Application.Services.Combat
         public float SlowTimeRemaining => _slowTimeRemaining;
         public float TotalPenaltyApplied => _totalPenaltyApplied;
 
-        public BloodNetEffectService(ICurseEffectManager curseEffectManager, IWardTimerService wardTimerService)
+        public BloodNetEffectService(ICurseEffectManager curseEffectManager, IWardTimerPort wardTimerService)
         {
             _curseEffectManager = curseEffectManager;
             _wardTimerService = wardTimerService;
 
             _hazardTriggeredSub = _curseEffectManager.OnHazardTriggered
-            .Subscribe(OnHazardTriggered);
+                .Subscribe(OnHazardTriggered);
         }
 
         public void Tick(float deltaTime)

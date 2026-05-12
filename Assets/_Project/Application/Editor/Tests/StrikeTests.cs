@@ -1,11 +1,10 @@
-﻿// Assets/_Project/Application/Editor/Tests/StrikeTests.cs
+// Assets/_Project/Application/Editor/Tests/StrikeTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -29,10 +28,14 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-map-004 â€” Strike Telegraph + Penalty.
+    /// Validates: TR-map-004 — Strike Telegraph + Penalty.
     /// Story 003: Strike telegraph fires OnStrikeWarning, resolves with -30s Ward cost.
     /// </summary>
     [TestFixture]
@@ -54,7 +57,7 @@ namespace SolarPhobia.Application.Tests
             _strike.OnWardCostIncurred.Subscribe(c => _wardCosts.Add(c));
         }
 
-        // â”€â”€ AC-1: Telegraph fires OnStrikeWarning â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Telegraph fires OnStrikeWarning ──────────────────
 
         [Test]
         public void AC1_Exposed_NightMode_StartsTelegraph()
@@ -74,7 +77,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsTrue(_warnings[0]);
         }
 
-        // â”€â”€ AC-2: Unresolved exposure â†’ OnWardCostIncurred â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Unresolved exposure → OnWardCostIncurred ─────────
 
         [Test]
         public void AC2_StillExposed_AfterTelegraph_FiresWardCost()
@@ -102,7 +105,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1.5f, StrikeController.DefaultStrikeTelegraphSec);
         }
 
-        // â”€â”€ AC-3: Player takes cover â†’ strike cancelled â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Player takes cover → strike cancelled ────────────
 
         [Test]
         public void AC3_TookCover_BeforeTelegraphExpires_CancelsStrike()
@@ -124,7 +127,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_warnings[1], "Warning must clear when telegraph cancelled");
         }
 
-        // â”€â”€ AC-4: Strike never fires in shrine safe zone â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Strike never fires in shrine safe zone ───────────
 
         [Test]
         public void AC4_InShrineZone_Exposed_NoTelegraph()
@@ -146,7 +149,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0, _wardCosts.Count);
         }
 
-        // â”€â”€ AC-5: Strike only active in NightMovement â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Strike only active in NightMovement ─────────────
 
         [Test]
         public void AC5_DayUI_Exposed_NoTelegraph()
@@ -165,7 +168,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_strike.IsTelegraphActive);
         }
 
-        // â”€â”€ AC-6: StrikeTimePenaltySec configurable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-6: StrikeTimePenaltySec configurable ────────────────
 
         [Test]
         public void AC6_CustomPenalty_UsedOnStrike()
@@ -184,7 +187,7 @@ namespace SolarPhobia.Application.Tests
             _strike.StrikeTelegraphSec = 2.0f;
             _strike.Tick(true, false, PlayerInputMode.NightMovement, DeltaSmall);
 
-            // Advance 1.5s â€” should NOT have fired yet (duration is 2.0s)
+            // Advance 1.5s — should NOT have fired yet (duration is 2.0s)
             _strike.Tick(true, false, PlayerInputMode.NightMovement, 1.5f);
 
             Assert.IsTrue(_strike.IsTelegraphActive, "Telegraph must still be active at 1.5s with 2.0s duration");
@@ -207,7 +210,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(StrikeController.MaxTelegraphSec, _strike.StrikeTelegraphSec);
         }
 
-        // â”€â”€ TelegraphRemaining counts down â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── TelegraphRemaining counts down ─────────────────────────
 
         [Test]
         public void TelegraphRemaining_CountsDown_WhileExposed()
@@ -228,4 +231,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

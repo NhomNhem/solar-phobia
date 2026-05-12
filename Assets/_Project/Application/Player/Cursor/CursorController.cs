@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/CursorController.cs
+// Assets/_Project/Application/Services/CursorController.cs
 using SolarPhobia.Domain.ValueObjects;
 using VContainer;
 
@@ -6,12 +6,12 @@ namespace SolarPhobia.Application.Player.Cursor
 {
     /// <summary>
     /// Determines the desired cursor state for each game phase.
-    /// Implements TR-player-007: Cursor Visibility â€” Phase-Driven Show/Hide.
+    /// Implements TR-player-007: Cursor Visibility — Phase-Driven Show/Hide.
     ///
-    /// Phase â†’ cursor mapping:
-    ///   NightSurvival â†’ hidden + Locked   (mouselook active)
-    ///   DayService    â†’ visible + None    (UI interaction)
-    ///   all others    â†’ visible + None    (ChoiceLock, EndingEvaluation, etc.)
+    /// Phase → cursor mapping:
+    ///   NightSurvival → hidden + Locked   (mouselook active)
+    ///   DayService    → visible + None    (UI interaction)
+    ///   all others    → visible + None    (ChoiceLock, EndingEvaluation, etc.)
     ///
     /// The MonoBehaviour layer applies the result to Unity's Cursor API:
     ///   Cursor.visible   = GetCursorVisible(phase)
@@ -22,11 +22,10 @@ namespace SolarPhobia.Application.Player.Cursor
     /// </summary>
     public class CursorController : ICursorController
     {
-        // â”€â”€ Constructor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        [Inject]
+        // ── Constructor ────────────────────────────────────────────
         public CursorController() { }
 
-        // â”€â”€ ICursorController â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── ICursorController ──────────────────────────────────────
         /// <inheritdoc/>
         public bool GetCursorVisible(PhaseState phase)
         {

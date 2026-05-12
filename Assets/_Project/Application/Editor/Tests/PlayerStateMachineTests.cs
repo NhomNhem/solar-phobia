@@ -1,15 +1,14 @@
-﻿// Assets/_Project/Application/Editor/Tests/PlayerStateMachineTests.cs
+// Assets/_Project/Application/Editor/Tests/PlayerStateMachineTests.cs
 using System;
 using System.Linq;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -33,13 +32,17 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: ADR-0003-v2 + TR-player-009 â€” PlayerStateMachine FSM Foundation.
-    /// Story 009: PlayerStateMachine Core â€” FSM Foundation.
+    /// Validates: ADR-0003-v2 + TR-player-009 — PlayerStateMachine FSM Foundation.
+    /// Story 009: PlayerStateMachine Core — FSM Foundation.
     ///
-    /// Pure C# logic â€” no Unity scene or physics dependencies.
+    /// Pure C# logic — no Unity scene or physics dependencies.
     /// </summary>
     [TestFixture]
     public class PlayerStateMachineTests
@@ -68,7 +71,7 @@ namespace SolarPhobia.Application.Tests
             _fsm.Initialize();
         }
 
-        // â”€â”€ AC-1: Idle â†’ Moving on A/D input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Idle → Moving on A/D input ─────────────────────
 
         [Test]
         public void AC1_IdleToMoving_TransitionAllowed()
@@ -91,7 +94,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_fsm.CurrentStateValue, Is.EqualTo(EPlayerState.Moving));
         }
 
-        // â”€â”€ AC-2: Moving â†’ Sprinting on Shift held â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Moving → Sprinting on Shift held ──────────────
 
         [Test]
         public void AC2_MovingToSprinting_TransitionAllowed()
@@ -124,7 +127,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(can, Is.False);
         }
 
-        // â”€â”€ AC-3: Falling â†’ Gliding on Jump held while airborne â”€
+        // ── AC-3: Falling → Gliding on Jump held while airborne ─
 
         [Test]
         public void AC3_FallingToGliding_TransitionAllowed()
@@ -164,7 +167,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(can, Is.True);
         }
 
-        // â”€â”€ AC-4: Low Ward triggers Exhausted â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Low Ward triggers Exhausted ────────────────────
 
         [Test]
         public void AC4_AnyStateToExhausted_TransitionAllowed()
@@ -214,7 +217,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(can, Is.True);
         }
 
-        // â”€â”€ AC-5: State change emits event â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: State change emits event ─────────────────────
 
         [Test]
         public void AC5_TryTransitionTo_EmitsPlayerStateChangedEvent()
@@ -268,7 +271,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(observed, Is.True);
         }
 
-        // â”€â”€ AC-6: Invalid transitions rejected â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-6: Invalid transitions rejected ──────────────────
 
         [Test]
         public void AC6_ExhaustedToDashing_IsRejected()
@@ -322,7 +325,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_fsm.CanTransitionTo(EPlayerState.Gliding), Is.False);
         }
 
-        // â”€â”€ FSM invariant checks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── FSM invariant checks ─────────────────────────────────
 
         [Test]
         public void Initialize_SetsIdleState()
@@ -372,4 +375,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

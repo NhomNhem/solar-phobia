@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Editor/Tests/SweepExposureTests.cs
+// Assets/_Project/Application/Editor/Tests/SweepExposureTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Map.Analysis;
 
@@ -29,13 +29,13 @@ using SolarPhobia.Application.Player.Events;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-map-003 â€” Sweep Exposure Check.
+    /// Validates: TR-map-003 — Sweep Exposure Check.
     /// Story 002: is_exposed = in_sweep_cone AND (not in_valid_cover).
     /// </summary>
     [TestFixture]
     public class SweepExposureTests
     {
-        // â”€â”€ AC-1: In cone + not in cover â†’ exposed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: In cone + not in cover → exposed ─────────────────
 
         [Test]
         public void AC1_InCone_NotInCover_IsExposed_True()
@@ -46,7 +46,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsTrue(result);
         }
 
-        // â”€â”€ AC-2: In cone + in cover â†’ not exposed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: In cone + in cover → not exposed ─────────────────
 
         [Test]
         public void AC2_InCone_InCover_IsExposed_False()
@@ -57,7 +57,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(result, "Player fully in cover must not be exposed");
         }
 
-        // â”€â”€ AC-3: Outside cone â†’ never exposed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Outside cone → never exposed ─────────────────────
 
         [Test]
         public void AC3_OutsideCone_NotInCover_IsExposed_False()
@@ -77,7 +77,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(result);
         }
 
-        // â”€â”€ AC-4: Missing cover treated as not in cover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Missing cover treated as not in cover ────────────
 
         [Test]
         public void AC4_MissingCover_InCone_IsExposed_True()
@@ -90,7 +90,7 @@ namespace SolarPhobia.Application.Tests
                 "Missing cover collider must be treated as exposed");
         }
 
-        // â”€â”€ AC-5: Shrine safe zone suppresses exposure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Shrine safe zone suppresses exposure ─────────────
 
         [Test]
         public void AC5_InShrineZone_InCone_NotInCover_IsExposed_False()
@@ -114,7 +114,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC5_NotInShrineZone_Default_BehaviorUnchanged()
         {
-            // Default inShrineZone = false â€” normal exposure rules apply
+            // Default inShrineZone = false — normal exposure rules apply
             bool result = SweepExposureCalculator.IsExposed(
                 inSweepCone: true, inValidCover: false);
 

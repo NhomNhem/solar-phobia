@@ -1,10 +1,11 @@
-﻿// Assets/_Project/Application/Editor/Tests/DayNightCameraTransitionTests.cs
+// Assets/_Project/Application/Editor/Tests/DayNightCameraTransitionTests.cs
 using System;
+using NhemDangFugBixs.NhemLogging;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
@@ -14,7 +15,6 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using VContainer;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -38,6 +38,10 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
@@ -47,7 +51,7 @@ namespace SolarPhobia.Application.Tests
     [TestFixture]
     public class DayNightCameraTransitionTests
     {
-        // â”€â”€ Stubs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Stubs ──────────────────────────────────────────────────
         private class PhaseStateMachineStub : IPhaseStateMachine
         {
             public PhaseState CurrentState { get; set; } = PhaseState.Boot;
@@ -85,7 +89,7 @@ namespace SolarPhobia.Application.Tests
             public void Dispose() { }
         }
 
-        // â”€â”€ Fixture â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Fixture ───────────────────────────────────────────────
         private DayNightCameraController _controller;
         private PhaseStateMachineStub _phaseStub;
         private SensoryTierServiceStub _sensoryStub;
@@ -105,7 +109,7 @@ namespace SolarPhobia.Application.Tests
             return angle;
         }
 
-        // â”€â”€ Setup / Teardown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Setup / Teardown ───────────────────────────────────────
         [SetUp]
         public void SetUp()
         {
@@ -133,7 +137,7 @@ namespace SolarPhobia.Application.Tests
             var builder = new ContainerBuilder();
             var resolver = builder.Build();
             _inputActions = new SolarPhobiaInputActions();
-            _controller = new DayNightCameraController(_phaseStub, resolver, _inputActions);
+            _controller = new DayNightCameraController(new NhemUnityLogger(), _phaseStub, resolver, _inputActions);
             _controller.TestCamera = _cameraGo.GetComponent<Camera>();
             _controller.SensoryTierService = _sensoryStub;
             _controller.Initialize();
@@ -149,9 +153,9 @@ namespace SolarPhobia.Application.Tests
             if (_profile != null) ScriptableObject.DestroyImmediate(_profile);
             }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Initialization â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Initialization ─────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Initialize_StartsInDayMode()
@@ -163,7 +167,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void Initialize_FindsPlayerByTag()
         {
-            // Player position used for night follow â€” reference stored without error
+            // Player position used for night follow — reference stored without error
             _phaseStub.OnNightStartSubject.OnNext(new NightStartEvent());
             _playerGo.transform.position = new Vector3(50f, 0f, 0f);
 
@@ -178,7 +182,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void Initialize_FindsPostProcessVolume()
         {
-            // Vignette and ColorAdjustments found â€” transitions animate without null ref
+            // Vignette and ColorAdjustments found — transitions animate without null ref
             _phaseStub.OnNightStartSubject.OnNext(new NightStartEvent());
 
             Assert.DoesNotThrow(() =>
@@ -187,9 +191,9 @@ namespace SolarPhobia.Application.Tests
             });
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Phase-to-Camera Mapping â€” ALL PhaseState values â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Phase-to-Camera Mapping — ALL PhaseState values ────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void PhaseChanged_DayService_SetsDayFixed()
@@ -291,9 +295,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.IsInChoiceLock, Is.False);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Night / Day Start Events â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Night / Day Start Events ───────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void OnNightStart_SetsIsNightTrue()
@@ -358,9 +362,9 @@ namespace SolarPhobia.Application.Tests
             });
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ ChoiceLock â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── ChoiceLock ─────────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void ChoiceLock_NightFollow_Disabled()
@@ -388,9 +392,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.IsInChoiceLock, Is.True);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Mouse-Look â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Mouse-Look ─────────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void ApplyMouseLook_NightMode_RotatesY()
@@ -433,9 +437,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(x, Is.EqualTo(0f).Within(0.01f));
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Night Follow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Night Follow ───────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Tick_NightMode_FollowsPlayerX()
@@ -480,9 +484,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_cameraGo.transform.position, Is.EqualTo(startPos));
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ HandleNightFailed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── HandleNightFailed ──────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void HandleNightFailed_DoesNotThrow()
@@ -503,9 +507,9 @@ namespace SolarPhobia.Application.Tests
             });
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Tuning Knobs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Tuning Knobs ───────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void DayCameraDistance_ClampedToRange()
@@ -574,9 +578,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_controller.CameraFollowSmooth, Is.EqualTo(0.3f));
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Lifecycle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Lifecycle ──────────────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Dispose_KillsActiveTween()
@@ -611,9 +615,9 @@ namespace SolarPhobia.Application.Tests
             });
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // â”€â”€ Resolve Cinematics â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
+        // ── Resolve Cinematics ─────────────────────────────────────
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void ShrineArrival_PansToPlayerX()
@@ -635,4 +639,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

@@ -40,7 +40,6 @@ namespace SolarPhobia.Infrastructure.Services
         public Observable<NightFailedEvent> OnNightFailed => _onNightFailed;
 
         // ── Constructor ───────────────────────────────────────────
-        [Inject]
         public SensoryTierService(Subject<NightFailedEvent> onNightFailed)
         {
             _onNightFailed = onNightFailed;

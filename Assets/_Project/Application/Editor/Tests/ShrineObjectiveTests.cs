@@ -1,12 +1,11 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using System;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -30,6 +29,10 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     [TestFixture]
@@ -52,7 +55,7 @@ namespace SolarPhobia.Application.Tests
             _phaseMachine?.Dispose();
         }
 
-        // â”€â”€ AC-1: Within range during NightSurvival â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Within range during NightSurvival ────────────────
 
         [Test]
         public void AC1_WithinRange_NightSurvival_TransitionsToShrineArrival()
@@ -93,7 +96,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(received, Is.Not.Null);
         }
 
-        // â”€â”€ AC-2: Outside range â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Outside range ────────────────────────────────────
 
         [Test]
         public void AC2_OutsideRange_Ignored()
@@ -112,7 +115,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(result, Is.False);
         }
 
-        // â”€â”€ AC-3: Phase gating â€” only NightSurvival â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Phase gating — only NightSurvival ────────────────
 
         [Test]
         public void AC3_DayService_Ignored()
@@ -155,7 +158,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_service.TryTriggerShrineArrival(2.0f), Is.False);
         }
 
-        // â”€â”€ AC-4: One-shot â€” fires only once per run â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: One-shot — fires only once per run ───────────────
 
         [Test]
         public void AC4_AfterFirstFire_SubsequentCallsFail()
@@ -175,7 +178,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(second, Is.False);
         }
 
-        // â”€â”€ AC-5: Transition to ShrineArrival phase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Transition to ShrineArrival phase ────────────────
 
         [Test]
         public void AC5_TryTransitionCalled_WithShrineArrival()
@@ -185,7 +188,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_phaseMachine.LastTransitionTarget, Is.EqualTo(PhaseState.ShrineArrival));
         }
 
-        // â”€â”€ Edge cases â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Edge cases ─────────────────────────────────────────────
 
         [Test]
         public void EdgeCase_NegativeDistance_TriggersWin()
@@ -203,7 +206,7 @@ namespace SolarPhobia.Application.Tests
             Assert.DoesNotThrow(() => _service.TryTriggerShrineArrival(2.0f));
         }
 
-        // â”€â”€ Test Doubles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Test Doubles ───────────────────────────────────────────
 
         private class TestPhaseStateMachine : IPhaseStateMachine, IDisposable
         {
@@ -258,4 +261,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

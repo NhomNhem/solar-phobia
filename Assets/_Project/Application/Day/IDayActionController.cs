@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/Interfaces/IDayActionController.cs
+// Assets/_Project/Application/Services/Interfaces/IDayActionController.cs
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 
@@ -6,13 +6,13 @@ namespace SolarPhobia.Application.Day
 {
     /// <summary>
     /// Manages Day phase special actions: Swap (Space) and Shove (F).
-    /// Implements Master GDD V5.0 Section 2.1 â€” X-axis soul management.
+    /// Implements Master GDD V5.0 Section 2.1 — X-axis soul management.
     ///
     /// Swap (Space): Exchange positions with a nearby soul.
-    ///   Fires OnSwap â€” Soul system subscribes and executes the swap.
+    ///   Fires OnSwap — Soul system subscribes and executes the swap.
     ///
     /// Shove (F): Push a soul away from the player (out of shadow).
-    ///   Fires OnShove â€” Soul system subscribes and applies the push.
+    ///   Fires OnShove — Soul system subscribes and applies the push.
     ///
     /// Both actions only active during DayUI mode.
     /// </summary>

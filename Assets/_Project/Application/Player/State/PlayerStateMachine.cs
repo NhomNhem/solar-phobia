@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/PlayerStateMachine.cs
+// Assets/_Project/Application/Services/PlayerStateMachine.cs
 using System;
 using System.Collections.Generic;
 using R3;
@@ -12,7 +12,7 @@ namespace SolarPhobia.Application.Player.State
 {
     /// <summary>
     /// Centralized Finite State Machine for player states during night survival.
-    /// Pure C# logic â€” fully testable without Unity scene dependencies.
+    /// Pure C# logic — fully testable without Unity scene dependencies.
     /// Implements TR-player-009, ADR-0003-v2.
     /// </summary>
     /// <remarks>
@@ -42,14 +42,13 @@ namespace SolarPhobia.Application.Player.State
         /// </summary>
         public float MovementSpeedMultiplier => _currentState.Value == EPlayerState.Exhausted ? 0.5f : 1.0f;
 
-        // â”€â”€ Constructor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        [Inject]
+        // ── Constructor ───────────────────────────────────────────
         public PlayerStateMachine(IPhaseStateMachine phaseStateMachine)
         {
             _phaseStateMachine = phaseStateMachine;
         }
 
-        // â”€â”€ IInitializable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IInitializable ─────────────────────────────────────────
         public void Initialize()
         {
             _currentState.Value = EPlayerState.Idle;
@@ -67,7 +66,7 @@ namespace SolarPhobia.Application.Player.State
             _isNightMovement = phase == PhaseState.NightSurvival;
         }
 
-        // â”€â”€ IPlayerStateMachine Implementation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IPlayerStateMachine Implementation ─────────────────────
         public bool TryTransitionTo(EPlayerState targetState)
         {
             if (!CanTransitionTo(targetState))
@@ -90,7 +89,7 @@ namespace SolarPhobia.Application.Player.State
             return IsValidTransition(current, targetState);
         }
 
-        // â”€â”€ IDisposable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IDisposable ───────────────────────────────────────────
         public void Dispose()
         {
             _currentState.Dispose();
@@ -102,14 +101,14 @@ namespace SolarPhobia.Application.Player.State
             _disposables.Clear();
         }
 
-        // â”€â”€ SOLID Compliance â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── SOLID Compliance ───────────────────────────────────────
         // SRP: Manages only state transitions
         // OCP: Add new states/transitions without modifying existing
         // LSP: Interface-based design allows substitution
         // ISP: Focused interface with minimal methods
         // DIP: Depends on IPlayerStateMachine abstraction
 
-        // â”€â”€ Private â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Private ───────────────────────────────────────────────
         private static bool IsValidTransition(EPlayerState from, EPlayerState to)
         {
             if (from == to)
@@ -174,7 +173,7 @@ namespace SolarPhobia.Application.Player.State
                 // Interacting
                 (EPlayerState.Interacting, _) => true,
 
-                // Exhausted â€” only allow movement restoration
+                // Exhausted — only allow movement restoration
                 (EPlayerState.Exhausted, EPlayerState.Idle) => true,
                 (EPlayerState.Exhausted, EPlayerState.Moving) => true,
                 (EPlayerState.Exhausted, EPlayerState.Crouching) => true,

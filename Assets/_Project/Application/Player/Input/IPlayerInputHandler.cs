@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/Interfaces/IPlayerInputHandler.cs
+// Assets/_Project/Application/Services/Interfaces/IPlayerInputHandler.cs
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 
@@ -6,14 +6,14 @@ namespace SolarPhobia.Application.Player.Input
 {
     /// <summary>
     /// Manages player input mode routing based on game phase.
-    /// Implements TR-player-001, TR-player-008: Phase-gated input â€”
+    /// Implements TR-player-001, TR-player-008: Phase-gated input —
     /// DayService = UI only, NightSurvival = movement + actions, all others = Disabled.
-    /// Phase mode switches synchronously on phase change â€” no frame delay.
+    /// Phase mode switches synchronously on phase change — no frame delay.
     /// </summary>
     public interface IPlayerInputHandler
     {
         /// <summary>
-        /// Current input processing mode (reactive â€” updates synchronously on phase change).
+        /// Current input processing mode (reactive — updates synchronously on phase change).
         /// </summary>
         ReadOnlyReactiveProperty<PlayerInputMode> CurrentMode { get; }
 

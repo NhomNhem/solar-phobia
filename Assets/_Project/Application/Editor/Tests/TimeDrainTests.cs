@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Editor/Tests/TimeDrainTests.cs
+// Assets/_Project/Application/Editor/Tests/TimeDrainTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Map.Analysis;
 
@@ -29,13 +29,13 @@ using SolarPhobia.Application.Player.Events;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-map-008 â€” Bone Relic Time Drain.
+    /// Validates: TR-map-008 — Bone Relic Time Drain.
     /// Story 007: effective_drain = base * (1 + bones * hallucination_multiplier).
     /// </summary>
     [TestFixture]
     public class TimeDrainTests
     {
-        // â”€â”€ AC-1: Formula correctness â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Formula correctness ──────────────────────────────
 
         [Test]
         public void AC1_NoBones_DrainEqualsBase()
@@ -80,7 +80,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(2.5f, drain, 0.001f);
         }
 
-        // â”€â”€ AC-2: Configurable parameters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Configurable parameters ─────────────────────────
 
         [Test]
         public void AC2_DefaultBaseDrainRate_Is1()
@@ -97,7 +97,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC2_CustomBaseDrainRate_ScalesResult()
         {
-            // base=2.0, bones=1, mult=0.5 â†’ 2.0 * 1.5 = 3.0
+            // base=2.0, bones=1, mult=0.5 → 2.0 * 1.5 = 3.0
             float drain = TimeDrainCalculator.CalculateEffectiveDrain(
                 baseDrainRate: 2.0f, bonesCarried: 1,
                 hallucinationMultiplier: 0.5f);
@@ -108,7 +108,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC2_CustomMultiplier_AffectsResult()
         {
-            // base=1.0, bones=1, mult=1.0 â†’ 1.0 * 2.0 = 2.0
+            // base=1.0, bones=1, mult=1.0 → 1.0 * 2.0 = 2.0
             float drain = TimeDrainCalculator.CalculateEffectiveDrain(
                 baseDrainRate: 1.0f, bonesCarried: 1,
                 hallucinationMultiplier: 1.0f);
@@ -116,12 +116,12 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(2.0f, drain, 0.001f);
         }
 
-        // â”€â”€ AC-3: Clamped to max safe cap â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Clamped to max safe cap ─────────────────────────
 
         [Test]
         public void AC3_ExtremeValues_ClampedToMaxSafeDrainRate()
         {
-            // base=10, bones=3, mult=3.0 â†’ 10 * (1+9) = 100 â†’ clamped to 20
+            // base=10, bones=3, mult=3.0 → 10 * (1+9) = 100 → clamped to 20
             float drain = TimeDrainCalculator.CalculateEffectiveDrain(
                 baseDrainRate: 10f, bonesCarried: 3,
                 hallucinationMultiplier: 3.0f);
@@ -136,7 +136,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(20f, TimeDrainCalculator.MaxSafeDrainRate);
         }
 
-        // â”€â”€ Default parameter usage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Default parameter usage ────────────────────────────────
 
         [Test]
         public void DefaultMultiplier_UsedWhenNotSpecified()

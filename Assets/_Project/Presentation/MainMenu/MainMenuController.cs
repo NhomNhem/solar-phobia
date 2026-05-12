@@ -11,13 +11,20 @@ namespace SolarPhobia.Presentation.MainMenu
 {
     public class MainMenuController : MonoBehaviour, IDisposable
     {
-        [Inject] public INhemLogger _logger = new NhemUnityLogger();
-
         public static event Action OnNewGameRequested;
         public static event Action OnContinueRequested;
         public static event Action OnQuitRequested;
 
-        [Inject] public IMainMenuApplicationService _mainMenuService;
+        private INhemLogger _logger;
+        private IMainMenuApplicationService _mainMenuService;
+
+        [Inject]
+        public void Construct(INhemLogger logger, IMainMenuApplicationService mainMenuService)
+        {
+            _logger = logger;
+            _mainMenuService = mainMenuService;
+        }
+
         [SerializeField] private UIDocument _document;
 
         // ── UI Root ────────────────────────────────────────────────────

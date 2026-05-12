@@ -44,6 +44,7 @@
 ## Forbidden Patterns
 
 <!-- Add patterns that should never appear in this project's codebase -->
+- Feature-specific application code living in `Application/Services` instead of `Application/<Feature>/...`
 - Hardcoded gameplay values in code when the value can live in data/config
 - `ObservableCollections` types in `Domain` or public contracts that cross architectural layers
 - Using `MessagePipe` as authoritative state storage or for request/response flows
@@ -67,6 +68,7 @@
 - Prefer **ObservableCollections** when collection add/remove/move/replace changes must be observed efficiently.
 - Prefer **MessagePipe** when producers should not know who consumes an event and multiple modules may subscribe.
 - Prefer plain loops or `System.Linq` by default; only bring in **ZLinq** for justified hot paths.
+- Use `Application/Services` only for cross-cutting services; feature-specific application code belongs under `Application/<Feature>/...`.
 
 ## Architecture Decisions Log
 

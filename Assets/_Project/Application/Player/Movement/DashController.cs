@@ -69,7 +69,6 @@ namespace SolarPhobia.Application.Player.Movement
         }
 
         // ── Constructor ────────────────────────────────────────────
-        [Inject]
         public DashController()
         {
             _cooldownRemaining = 0f;

@@ -56,7 +56,6 @@ namespace SolarPhobia.Application.Player.Movement
         public bool IsJumpBuffered => _jumpBufferRemaining > 0f;
 
         // ── Constructor ────────────────────────────────────────────
-        [Inject]
         public PlatformerFeelController() { }
 
         // ── IPlatformerFeelController ──────────────────────────────

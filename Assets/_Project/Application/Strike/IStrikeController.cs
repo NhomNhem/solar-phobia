@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/Interfaces/IStrikeController.cs
+// Assets/_Project/Application/Services/Interfaces/IStrikeController.cs
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 
@@ -10,9 +10,9 @@ namespace SolarPhobia.Application.Strike
     ///
     /// Flow:
     ///   1. Player becomes exposed (in sweep cone, not in cover)
-    ///   2. Telegraph timer starts â†’ OnStrikeWarning fires (Player Controller shows icon)
-    ///   3. If still exposed when telegraph expires â†’ OnWardCostIncurred fires (-30s)
-    ///   4. If player takes cover before telegraph expires â†’ strike cancelled
+    ///   2. Telegraph timer starts → OnStrikeWarning fires (Player Controller shows icon)
+    ///   3. If still exposed when telegraph expires → OnWardCostIncurred fires (-30s)
+    ///   4. If player takes cover before telegraph expires → strike cancelled
     ///   5. Strike never fires inside shrine safe zone
     /// </summary>
     public interface IStrikeController
@@ -47,7 +47,7 @@ namespace SolarPhobia.Application.Strike
         /// </summary>
         /// <param name="isExposed">Whether the player is currently exposed (from SweepExposureCalculator).</param>
         /// <param name="inShrineZone">Whether the player is in the shrine safe zone.</param>
-        /// <param name="mode">Current player input mode â€” strike only active in NightMovement.</param>
+        /// <param name="mode">Current player input mode — strike only active in NightMovement.</param>
         /// <param name="deltaTime">Frame delta time in seconds.</param>
         void Tick(bool isExposed, bool inShrineZone, PlayerInputMode mode, float deltaTime);
     }

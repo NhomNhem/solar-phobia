@@ -1,5 +1,3 @@
-﻿using UnityEngine;
-
 using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
@@ -28,20 +26,14 @@ using SolarPhobia.Application.Combat;
 
 using SolarPhobia.Application.Phase.Reset;
 
-namespace SolarPhobia.Application.Services
+namespace SolarPhobia.Application.Phase.Day
 {
     /// <summary>
-    /// Interface for character movement operations.
-    /// Allows faking in tests without Unity dependencies.
+    /// Service responsible for playing animation effects.
     /// </summary>
-    public interface ICharacterController
+    public interface IAnimationService
     {
-        /// <summary>Move the character by the given vector.</summary>
-        void Move(Vector3 motion);
-
-        /// <summary>Whether the character is grounded.</summary>
-        bool IsGrounded { get; }
+        void PlaySwapAnimation(string playerId, string soulId, float duration);
+        void PlayShoveAnimation(string playerId, string soulId);
     }
 }
-
-

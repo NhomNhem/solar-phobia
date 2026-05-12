@@ -1,56 +1,42 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using SolarPhobia.Application.Consequences;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Ward;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Consequences.WaterTrap
 {
     /// <summary>
     /// Water Trap curse effect (Drag - Linh abandoned).
-    /// Applies continuous DoT (-3.0/s) when player stands in water hazard zones.
+    /// Applies continuous DoT when the player stands in water hazard zones.
     /// </summary>
     public class WaterTrapEffectService : IWaterTrapEffectService
     {
-        // â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         public const float DefaultDamagePerSecond = 3.0f;
 
-        // â”€â”€ Dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         private readonly ICurseEffectManager _curseEffectManager;
-        private readonly IWardTimerService _wardTimerService;
+        private readonly IWardTimerPort _wardTimerService;
         private readonly IDisposable _hazardTriggeredSub;
         private readonly IDisposable _hazardClearedSub;
-
-        // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        private readonly HashSet<string> _activeWaterHazards = new();
         private bool _isActive;
         private float _totalDamageApplied;
-        private readonly HashSet<string> _activeWaterHazards = new();
 
-        /// <inheritdoc/>
         public bool IsActive => _isActive;
-
-        /// <inheritdoc/>
         public float TotalDamageApplied => _totalDamageApplied;
 
-        /// <summary>
-        /// Initializes a new instance of the WaterTrapEffectService class.
-        /// </summary>
         public WaterTrapEffectService(
             ICurseEffectManager curseEffectManager,
-            IWardTimerService wardTimerService)
+            IWardTimerPort wardTimerService)
         {
             _curseEffectManager = curseEffectManager;
             _wardTimerService = wardTimerService;
 
-            _hazardTriggeredSub = _curseEffectManager.OnHazardTriggered
-                .Subscribe(OnHazardTriggered);
-
-            _hazardClearedSub = _curseEffectManager.OnHazardCleared
-                .Subscribe(OnHazardCleared);
+            _hazardTriggeredSub = _curseEffectManager.OnHazardTriggered.Subscribe(OnHazardTriggered);
+            _hazardClearedSub = _curseEffectManager.OnHazardCleared.Subscribe(OnHazardCleared);
         }
 
-        /// <inheritdoc/>
         public void Tick(float deltaTime)
         {
             if (!_isActive)
@@ -58,21 +44,18 @@ namespace SolarPhobia.Application.Consequences.WaterTrap
                 return;
             }
 
-            float damage = DefaultDamagePerSecond * deltaTime;
+            var damage = DefaultDamagePerSecond * deltaTime;
             if (_wardTimerService.TryApplyCost(damage))
             {
                 _totalDamageApplied += damage;
             }
         }
 
-        /// <inheritdoc/>
         public void Dispose()
         {
             _hazardTriggeredSub?.Dispose();
             _hazardClearedSub?.Dispose();
         }
-
-        // â”€â”€ Private Methods â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private void OnHazardTriggered(HazardEvent evt)
         {
@@ -102,5 +85,3 @@ namespace SolarPhobia.Application.Consequences.WaterTrap
         }
     }
 }
-
-

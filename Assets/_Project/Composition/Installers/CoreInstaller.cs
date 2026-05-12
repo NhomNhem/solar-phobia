@@ -1,4 +1,6 @@
 using NhemDangFugBixs.NhemLogging;
+using SolarPhobia.Application.Combat;
+using SolarPhobia.Application.Audio;
 using SolarPhobia.Application.Consequences;
 using SolarPhobia.Application.Consequences.WaterTrap;
 using SolarPhobia.Application.Day;
@@ -10,27 +12,27 @@ using SolarPhobia.Application.Phase.Day;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Phase.Reset;
 using SolarPhobia.Application.Phase.Timeline;
-using SolarPhobia.Application.Player.Movement;
 using SolarPhobia.Application.Player.Cursor;
 using SolarPhobia.Application.Player.Input;
 using SolarPhobia.Application.Player.Interactions;
+using SolarPhobia.Application.Player.Movement;
 using SolarPhobia.Application.Player.State;
 using SolarPhobia.Application.Player.Warnings;
+using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Resources;
 using SolarPhobia.Application.Rituals;
+using SolarPhobia.Application.Ward;
+using SolarPhobia.Application.Services;
 using SolarPhobia.Application.Shrines;
 using SolarPhobia.Application.Strike;
-using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Infrastructure.Hazards;
 using SolarPhobia.Infrastructure.MainMenu;
 using SolarPhobia.Infrastructure.Services;
 using SolarPhobia.Shared.Configuration;
 using SolarPhobia.Shared.InputActions;
-using VContainer.Unity;
 using VContainer;
-
+using VContainer.Unity;
 namespace SolarPhobia.Composition.Installers
 {
     public class CoreLifetimeScope : LifetimeScope
@@ -44,7 +46,7 @@ namespace SolarPhobia.Composition.Installers
             builder.RegisterInstance(gameplayBalanceConfig);
 
             // ── Audio Service ───────────────────────────────────────────────
-            builder.Register<BroAudioService>(Lifetime.Singleton).As<SolarPhobia.Application.Services.IAudioService>();
+            builder.Register<BroAudioService>(Lifetime.Singleton).As<IAudioCueService>();
 
             // ── Phase State Machine ─────────────────────────────────────────
             builder.Register<PhaseStateMachine>(Lifetime.Singleton).As<IPhaseStateMachine>();
@@ -80,9 +82,9 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<WardTimerService>(Lifetime.Singleton)
                 .AsSelf()
                 .As<SolarPhobia.Domain.IWardTimerService>()
-                .As<IWardTimerService>();
+                .As<IWardTimerPort>();
             builder.RegisterEntryPoint<WardTimerServiceEntryPoint>(Lifetime.Singleton);
-            builder.RegisterEntryPoint<SolarPhobia.Application.Services.Objective.WardDeathTriggerService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<WardDeathTriggerService>(Lifetime.Singleton);
             builder.RegisterEntryPoint<NightToDayResetService>(Lifetime.Singleton);
 
             // ── Day Selection Validator ──────────────────────────────────
@@ -117,3 +119,4 @@ namespace SolarPhobia.Composition.Installers
         }
     }
 }
+

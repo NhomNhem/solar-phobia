@@ -1,10 +1,10 @@
-// Assets/_Project/Infrastructure/Services/DayNightCameraController.cs
 using System;
 using DG.Tweening;
 using NhemDangFugBixs.NhemLogging;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
@@ -15,7 +15,6 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using VContainer;
 using VContainer.Unity;
-
 namespace SolarPhobia.Infrastructure.Services
 {
     /// <summary>
@@ -26,7 +25,7 @@ namespace SolarPhobia.Infrastructure.Services
     /// </summary>
     public class DayNightCameraController : IDayNightCameraController, IInitializable, ITickable, IDisposable
     {
-        [Inject] public INhemLogger _logger = new NhemUnityLogger();
+
 
         // ── Tuning Knob Ranges ──────────────────────────────────────
         public const float MinDayDistance = 3f;
@@ -51,6 +50,7 @@ namespace SolarPhobia.Infrastructure.Services
         private const float FadeToBlackExposure = -10f;
 
         // ── Dependencies ───────────────────────────────────────────
+        private readonly INhemLogger _logger;
         private readonly IPhaseStateMachine _phaseState;
         private readonly IObjectResolver _resolver;
         private readonly SolarPhobiaInputActions _inputActions;
@@ -140,11 +140,17 @@ namespace SolarPhobia.Infrastructure.Services
         private Tween _activeTween;
 
         [Inject]
-        public DayNightCameraController(IPhaseStateMachine phaseState, IObjectResolver resolver, SolarPhobiaInputActions inputActions)
+        public DayNightCameraController(INhemLogger logger, IPhaseStateMachine phaseState, IObjectResolver resolver, SolarPhobiaInputActions inputActions)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _phaseState = phaseState;
             _resolver = resolver;
             _inputActions = inputActions;
+        }
+
+        public DayNightCameraController(INhemLogger logger, IPhaseStateMachine phaseState, IObjectResolver resolver)
+            : this(logger, phaseState, resolver, new SolarPhobiaInputActions())
+        {
         }
 
         public void Initialize()
@@ -488,3 +494,4 @@ namespace SolarPhobia.Infrastructure.Services
         }
     }
 }
+

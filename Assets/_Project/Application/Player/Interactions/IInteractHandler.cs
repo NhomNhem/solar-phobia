@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/Interfaces/IInteractHandler.cs
+// Assets/_Project/Application/Services/Interfaces/IInteractHandler.cs
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 
@@ -6,15 +6,15 @@ namespace SolarPhobia.Application.Player.Interactions
 {
     /// <summary>
     /// Handles E-key contextual interaction dispatch.
-    /// Implements TR-player-005: E-Key Contextual Interact â€” Relic Pickup + Shrine Trigger.
+    /// Implements TR-player-005: E-Key Contextual Interact — Relic Pickup + Shrine Trigger.
     ///
     /// The MonoBehaviour layer performs the Physics.Raycast and passes the hit tag here.
-    /// This service owns the tag â†’ interaction-type mapping and the phase gate.
+    /// This service owns the tag → interaction-type mapping and the phase gate.
     ///
     /// Interaction types:
-    ///   "CursedMound" tag â†’ fires <see cref="OnInteract"/> with payload <c>"relic"</c>
-    ///   "EndShrine"   tag â†’ fires <see cref="OnInteract"/> with payload <c>"shrine"</c>
-    ///   Any other tag / null â†’ silently ignored (no event, no log)
+    ///   "CursedMound" tag → fires <see cref="OnInteract"/> with payload <c>"relic"</c>
+    ///   "EndShrine"   tag → fires <see cref="OnInteract"/> with payload <c>"shrine"</c>
+    ///   Any other tag / null → silently ignored (no event, no log)
     ///
     /// Interaction is only processed when mode is <see cref="PlayerInputMode.NightMovement"/>.
     /// </summary>

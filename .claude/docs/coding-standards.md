@@ -1,5 +1,10 @@
 # Coding Standards
 
+- Feature-specific application code belongs under `Assets/_Project/Application/<Feature>/...`
+- `Assets/_Project/Application/Services/...` is reserved for cross-cutting services only
+- Folder and namespace should match the feature or layer path 1:1
+- Do not use `Services` as a catch-all for unrelated gameplay code
+
 - All game code must include doc comments on public APIs
 - Every system must have a corresponding architecture decision record in `docs/architecture/`
 - Gameplay values must be data-driven (external config), never hardcoded

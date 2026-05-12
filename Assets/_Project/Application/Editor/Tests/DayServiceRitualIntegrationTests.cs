@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -6,10 +6,9 @@ using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -32,6 +31,10 @@ using SolarPhobia.Application.Player.Interactions;
 using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
+
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -60,9 +63,9 @@ namespace SolarPhobia.Application.Tests
             _controller.Dispose();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
         // AC-2: Ritual Assignment via Controller
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void AssignRitual_DayServicePhase_Succeeds()
@@ -139,9 +142,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(result, Is.False);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
         // Ritual Removal via Controller
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void RemoveRitual_Existing_Succeeds()
@@ -165,9 +168,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(removed, Is.False);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
         // Preferred Ritual
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void IsPreferredRitual_LinhTea_ReturnsTrue()
@@ -185,9 +188,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(preferred, Is.False);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
         // Confirm Flow with Ritual Assignments
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void ConfirmFlow_RitualsIncludedInPayload()
@@ -240,9 +243,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(payload.RitualAssignments, Does.Not.ContainKey("minh"));
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
         // Reset clears ritual assignments
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Reset_ClearsRitualAssignments()
@@ -284,9 +287,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(result, Is.False);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
         // Phase re-entry resets rituals
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void PhaseReentry_ClearsRitualAssignments()
@@ -333,4 +336,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/StrikeController.cs
+// Assets/_Project/Application/Services/StrikeController.cs
 using R3;
 using SolarPhobia.Domain.ValueObjects;
 using SolarPhobia.Shared.Configuration;
@@ -12,8 +12,8 @@ namespace SolarPhobia.Application.Strike
     /// Implements TR-map-004: Strike Telegraph + Penalty.
     ///
     /// State machine:
-    ///   Idle â†’ (exposed) â†’ Telegraphing â†’ (still exposed at end) â†’ Strike fires â†’ Idle
-    ///                                   â†’ (took cover before end) â†’ Cancelled â†’ Idle
+    ///   Idle → (exposed) → Telegraphing → (still exposed at end) → Strike fires → Idle
+    ///                                   → (took cover before end) → Cancelled → Idle
     ///
     /// Strike is suppressed in shrine safe zone and outside NightMovement mode.
     /// </summary>
@@ -24,18 +24,18 @@ namespace SolarPhobia.Application.Strike
         public static float MinTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.MinTelegraphSec;
         public static float MaxTelegraphSec => GameplayBalanceConfig.CreateDefault().Strike.MaxTelegraphSec;
 
-        // â”€â”€ R3 Reactive State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── R3 Reactive State ──────────────────────────────────────
         private readonly Subject<bool>  _onStrikeWarning     = new();
         private readonly Subject<float> _onWardCostIncurred  = new();
 
-        // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── State ─────────────────────────────────────────────────
         private float _strikeTimePenalty;
         private float _telegraphDuration;
         private float _telegraphRemaining;
         private bool  _isTelegraphActive;
         private readonly GameplayBalanceConfig _balanceConfig;
 
-        // â”€â”€ Public Interface â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Public Interface ───────────────────────────────────────
         /// <inheritdoc/>
         public bool  IsTelegraphActive   => _isTelegraphActive;
 
@@ -62,7 +62,7 @@ namespace SolarPhobia.Application.Strike
             set => _telegraphDuration = Math.Clamp(value, _balanceConfig.Strike.MinTelegraphSec, _balanceConfig.Strike.MaxTelegraphSec);
         }
 
-        // â”€â”€ Constructor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Constructor ────────────────────────────────────────────
         public StrikeController()
             : this(GameplayBalanceConfig.CreateDefault())
         {
@@ -79,7 +79,7 @@ namespace SolarPhobia.Application.Strike
                 _balanceConfig.Strike.MaxTelegraphSec);
         }
 
-        // â”€â”€ IStrikeController â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IStrikeController ──────────────────────────────────────
         /// <inheritdoc/>
         public void Tick(bool isExposed, bool inShrineZone, PlayerInputMode mode, float deltaTime)
         {
@@ -104,17 +104,17 @@ namespace SolarPhobia.Application.Strike
             {
                 if (!isExposed)
                 {
-                    // Player took cover â€” cancel telegraph
+                    // Player took cover — cancel telegraph
                     CancelTelegraph();
                 }
                 else
                 {
-                    // Still exposed â€” count down
+                    // Still exposed — count down
                     _telegraphRemaining -= deltaTime;
 
                     if (_telegraphRemaining <= 0f)
                     {
-                        // Telegraph expired while exposed â€” strike fires
+                        // Telegraph expired while exposed — strike fires
                         _telegraphRemaining = 0f;
                         _isTelegraphActive  = false;
                         _onStrikeWarning.OnNext(false);
@@ -124,7 +124,7 @@ namespace SolarPhobia.Application.Strike
             }
         }
 
-        // â”€â”€ Private â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Private ────────────────────────────────────────────────
         private void CancelTelegraph()
         {
             if (_isTelegraphActive)

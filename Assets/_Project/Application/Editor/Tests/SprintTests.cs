@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Editor/Tests/SprintTests.cs
+// Assets/_Project/Application/Editor/Tests/SprintTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
@@ -33,7 +33,7 @@ using SolarPhobia.Application.Player.Events;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-player-003 â€” Sprint â€” Shift Key Speed Multiplier + Stamina Integration.
+    /// Validates: TR-player-003 — Sprint — Shift Key Speed Multiplier + Stamina Integration.
     /// Story 003-v2: Sprint (2D Rigidbody).
     ///
     /// Tests SprintController state machine and Movement2DCalculator sprint formula.
@@ -56,7 +56,7 @@ namespace SolarPhobia.Application.Tests
             _sprint.OnSprintChanged.Subscribe(v => _sprintEvents.Add(v));
         }
 
-        // â”€â”€ AC-1: Shift activates sprint speed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Shift activates sprint speed ────────────────────
 
         [Test]
         public void AC1_SprintInput_NightMode_SetsSprinting_True()
@@ -78,7 +78,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC1_SprintSpeed_IsBase_Times_Multiplier()
         {
-            // base=5.0, multiplier=1.8 â†’ effective=9.0
+            // base=5.0, multiplier=1.8 → effective=9.0
             _calc.NightMoveSpeed   = 5.0f;
             _calc.SprintMultiplier = 1.8f;
 
@@ -92,7 +92,7 @@ namespace SolarPhobia.Application.Tests
                 "Sprint speed must be nightMoveSpeed * sprintMultiplier");
         }
 
-        // â”€â”€ AC-2: Releasing Shift returns to base speed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Releasing Shift returns to base speed ───────────
 
         [Test]
         public void AC2_ReleaseSprint_SetsSprinting_False()
@@ -128,7 +128,7 @@ namespace SolarPhobia.Application.Tests
                 "Base speed must be used when not sprinting");
         }
 
-        // â”€â”€ AC-3: OnStaminaDepleted forces sprint exit â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: OnStaminaDepleted forces sprint exit ────────────
 
         [Test]
         public void AC3_StaminaDepleted_WhileSprinting_StopsSprint()
@@ -155,7 +155,7 @@ namespace SolarPhobia.Application.Tests
             _sprint.Tick(true, PlayerInputMode.NightMovement);
             _sprint.NotifyStaminaDepleted();
 
-            // After depletion, isSprinting = false â†’ base speed
+            // After depletion, isSprinting = false → base speed
             float velocity = _calc.CalculateNightVelocityX(
                 inputX: 1f,
                 PlayerInputMode.NightMovement,
@@ -165,7 +165,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(5.0f, velocity, 0.001f);
         }
 
-        // â”€â”€ AC-4: Sprint blocked with 0 stamina â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Sprint blocked with 0 stamina ───────────────────
 
         [Test]
         public void AC4_SprintInput_AfterStaminaDepleted_DoesNotActivate()
@@ -199,7 +199,7 @@ namespace SolarPhobia.Application.Tests
                 "Sprint must be re-activatable after stamina is restored");
         }
 
-        // â”€â”€ AC-5: Sprint only in NightSurvival â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Sprint only in NightSurvival ────────────────────
 
         [Test]
         public void AC5_DayUI_SprintInput_DoesNotActivate()
@@ -236,7 +236,7 @@ namespace SolarPhobia.Application.Tests
                 "Sprint must stop when mode leaves NightMovement");
         }
 
-        // â”€â”€ AC-6: sprint_multiplier is configurable â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-6: sprint_multiplier is configurable ───────────────
 
         [Test]
         public void AC6_DefaultMultiplier_Is1d8()
@@ -275,15 +275,15 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(Movement2DCalculator.MaxSprintMultiplier, _calc.SprintMultiplier);
         }
 
-        // â”€â”€ No duplicate events â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── No duplicate events ───────────────────────────────────
 
         [Test]
         public void NoEvent_WhenSprintStateUnchanged()
         {
-            _sprint.Tick(true, PlayerInputMode.NightMovement); // start â†’ event
+            _sprint.Tick(true, PlayerInputMode.NightMovement); // start → event
             int countAfterFirst = _sprintEvents.Count;
 
-            _sprint.Tick(true, PlayerInputMode.NightMovement); // still sprinting â†’ no event
+            _sprint.Tick(true, PlayerInputMode.NightMovement); // still sprinting → no event
             _sprint.Tick(true, PlayerInputMode.NightMovement);
 
             Assert.AreEqual(countAfterFirst, _sprintEvents.Count,
@@ -293,7 +293,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void NoEvent_WhenNotSprintingAndInputReleased()
         {
-            // Already not sprinting â€” releasing input should not fire
+            // Already not sprinting — releasing input should not fire
             _sprint.Tick(false, PlayerInputMode.NightMovement);
 
             Assert.AreEqual(0, _sprintEvents.Count);

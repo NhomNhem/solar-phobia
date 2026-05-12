@@ -1,14 +1,13 @@
-﻿// Assets/_Project/Application/Editor/Tests/PlayerStateMachinePhaseTests.cs
+// Assets/_Project/Application/Editor/Tests/PlayerStateMachinePhaseTests.cs
 using System;
 using System.Linq;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -32,13 +31,17 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-player-010 â€” PlayerStateMachine Phase Integration.
-    /// Story 010: PlayerStateMachine Phase Integration â€” Day/Night State Binding.
+    /// Validates: TR-player-010 — PlayerStateMachine Phase Integration.
+    /// Story 010: PlayerStateMachine Phase Integration — Day/Night State Binding.
     ///
-    /// Pure C# logic â€” no Unity scene or physics dependencies.
+    /// Pure C# logic — no Unity scene or physics dependencies.
     /// Tests phase-to-player-state mapping and Day/Night behavior binding.
     /// </summary>
     [TestFixture]
@@ -113,7 +116,7 @@ namespace SolarPhobia.Application.Tests
             _phaseStateMachine?.Dispose();
         }
 
-        // â”€â”€ AC-1: Phase DayService restricts to slow X-axis movement â”€â”€
+        // ── AC-1: Phase DayService restricts to slow X-axis movement ──
 
         [Test]
         public void AC1_DayService_IsNightPhase_False()
@@ -140,7 +143,7 @@ namespace SolarPhobia.Application.Tests
                 "DayService phase should keep IsNightPhase as false");
         }
 
-        // â”€â”€ AC-2: Phase NightSurvival enables full 2D movement â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Phase NightSurvival enables full 2D movement ───────
 
         [Test]
         public void AC2_NightSurvival_IsNightPhase_True()
@@ -170,7 +173,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_playerStateMachine.CanTransitionTo(EPlayerState.Jumping), Is.True);
         }
 
-        // â”€â”€ AC-3: Phase ChoiceLock disables all input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Phase ChoiceLock disables all input ────────────────
 
         [Test]
         public void AC3_ChoiceLock_IsNightPhase_False()
@@ -208,7 +211,7 @@ namespace SolarPhobia.Application.Tests
             bootPlayer.Dispose();
         }
 
-        // â”€â”€ AC-4: Dayâ†’Night transition enables skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Day→Night transition enables skills ─────────────────
 
         [Test]
         public void AC4_DayToNight_EnablesFullMovement()
@@ -231,7 +234,7 @@ namespace SolarPhobia.Application.Tests
                 "Phase transition should be synchronous - no frame delay");
         }
 
-        // â”€â”€ AC-5: Nightâ†’Day transition disables skills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Night→Day transition disables skills ───────────────
 
         [Test]
         public void AC5_NightToDay_DisablesAllSkills()
@@ -254,7 +257,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_playerStateMachine.CanTransitionTo(EPlayerState.Sprinting), Is.False);
         }
 
-        // â”€â”€ AC-6: No orphaned states on phase transition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-6: No orphaned states on phase transition ────────────
 
         [Test]
         public void AC6_MovingToDay_ResetsToIdle()
@@ -326,7 +329,7 @@ namespace SolarPhobia.Application.Tests
             }
         }
 
-        // â”€â”€ Additional: IsNightPhase Property Queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Additional: IsNightPhase Property Queries ────────────────
 
         [Test]
         public void IsNightPhase_Queryable_AfterPhaseChange()
@@ -343,7 +346,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_playerStateMachine.IsNightPhase, Is.False);
         }
 
-        // â”€â”€ Additional: Full Phase Cycle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Additional: Full Phase Cycle ─────────────────────────────
 
         [Test]
         public void FullCycle_ProducesCorrectIsNightPhase()
@@ -375,7 +378,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_playerStateMachine.IsNightPhase, Is.False);
         }
 
-        // â”€â”€ Additional: Constructor Dependency Behavior â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Additional: Constructor Dependency Behavior ────────────
 
         [Test]
         public void Constructor_WithBootPhase_IsNightPhase_False()
@@ -403,4 +406,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

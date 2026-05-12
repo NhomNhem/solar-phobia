@@ -1,14 +1,17 @@
+using System;
 using NhemDangFugBixs.NhemLogging;
-using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
-
+using SolarPhobia.Application.Audio;
 using VContainer;
-
 namespace SolarPhobia.Infrastructure.Services
 {
-    public class BroAudioService : IAudioService
+    public class BroAudioService : IAudioCueService
     {
-        [Inject] public INhemLogger _logger = new NhemUnityLogger();
+        private readonly INhemLogger _logger;
+
+        public BroAudioService(INhemLogger logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         // NOTE: In a real implementation, these strings should correspond to
         // SoundIDs or names configured in the BroAudio Library Manager.
@@ -62,3 +65,4 @@ namespace SolarPhobia.Infrastructure.Services
         }
     }
 }
+

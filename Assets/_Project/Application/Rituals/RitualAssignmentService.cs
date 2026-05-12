@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NhemDangFugBixs.NhemLogging;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using VContainer;
-using SolarPhobia.Application.Resources;
 
 namespace SolarPhobia.Application.Rituals
 {
     public class RitualAssignmentService : IRitualAssignmentService, IDisposable
     {
-        [Inject] public INhemLogger _logger = new NhemUnityLogger();
+        private readonly INhemLogger _logger;
         private readonly Dictionary<string, RitualType> _assignments = new();
         private readonly IResourceEffectApplier _effectApplier;
         private readonly bool _hasEffectApplier;
@@ -28,13 +28,21 @@ namespace SolarPhobia.Application.Rituals
         public IReadOnlyDictionary<string, RitualType> Assignments => _assignments;
 
         public RitualAssignmentService()
+            : this(new NhemUnityLogger())
         {
+        }
+
+        public RitualAssignmentService(INhemLogger logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _effectApplier = null;
             _hasEffectApplier = false;
         }
 
-        public RitualAssignmentService(IResourceEffectApplier effectApplier)
+        [Inject]
+        public RitualAssignmentService(INhemLogger logger, IResourceEffectApplier effectApplier)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _effectApplier = effectApplier ?? throw new ArgumentNullException(nameof(effectApplier));
             _hasEffectApplier = true;
         }
@@ -42,19 +50,20 @@ namespace SolarPhobia.Application.Rituals
         public bool TryAssignRitual(string soulId, RitualType ritual)
         {
             if (!IsValidSoulId(soulId))
+            {
                 return false;
+            }
 
             _assignments[soulId] = ritual;
 
             if (_hasEffectApplier && _effectApplier != null)
             {
-                float scalingRatio = 1f;
-                bool preferred = IsPreferredRitual(soulId, ritual);
+                var scalingRatio = 1f;
+                var preferred = IsPreferredRitual(soulId, ritual);
 
                 if (_effectApplier.TrySpendHuongHoa(15))
                 {
-                    scalingRatio = Math.Clamp(
-                        (float)_effectApplier.GetCurrentHuongHoa() / 15f, 0.5f, 1f);
+                    scalingRatio = Math.Clamp((float)_effectApplier.GetCurrentHuongHoa() / 15f, 0.5f, 1f);
                 }
 
                 switch (ritual)
@@ -73,7 +82,7 @@ namespace SolarPhobia.Application.Rituals
             else
             {
                 _logger.LogWarning(
-                    "[RitualAssignmentService] IResourceEffectApplier not registered â€” " +
+                    "[RitualAssignmentService] IResourceEffectApplier not registered - " +
                     $"ritual {ritual} assigned to {soulId} without gameplay effect");
             }
 
@@ -83,7 +92,9 @@ namespace SolarPhobia.Application.Rituals
         public bool TryRemoveRitual(string soulId)
         {
             if (!IsValidSoulId(soulId))
+            {
                 return false;
+            }
 
             return _assignments.Remove(soulId);
         }
@@ -95,8 +106,7 @@ namespace SolarPhobia.Application.Rituals
 
         public bool IsPreferredRitual(string soulId, RitualType ritual)
         {
-            return PreferredRituals.TryGetValue(soulId, out var preferred)
-                   && preferred == ritual;
+            return PreferredRituals.TryGetValue(soulId, out var preferred) && preferred == ritual;
         }
 
         public void Dispose()
@@ -110,4 +120,3 @@ namespace SolarPhobia.Application.Rituals
         }
     }
 }
-

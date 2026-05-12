@@ -77,7 +77,6 @@ namespace SolarPhobia.Application.Player.Movement
         }
 
         // ── Constructor ────────────────────────────────────────────
-        [Inject]
         public Movement2DCalculator() { }
 
         // ── IMovement2DCalculator ──────────────────────────────────

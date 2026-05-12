@@ -1,36 +1,12 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Consequences;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Interfaces;
-using SolarPhobia.Domain.ValueObjects;
-
 using SolarPhobia.Application.Resources;
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
+using SolarPhobia.Application.Services.Interfaces;
+using SolarPhobia.Application.Phase.Reset;
+using SolarPhobia.Domain.ValueObjects;
 namespace SolarPhobia.Application.Editor.Tests
 {
     public class IllusionPlatformTests
@@ -59,7 +35,7 @@ namespace SolarPhobia.Application.Editor.Tests
             _curseManager?.Dispose();
         }
 
-        // â”€â”€ AC-1: Platform collapses after 0.2s â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Platform collapses after 0.2s ───────────────────
 
         [Test]
         public void AC1_AfterExactCollapseDelay_PlatformCollapses()
@@ -92,7 +68,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.IsPlatformCollapsed("platform_1"), Is.False);
         }
 
-        // â”€â”€ AC-2: Immediate collapse when standing at end â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Immediate collapse when standing at end ─────────
 
         [Test]
         public void AC2_AfterQuarterSecond_PlatformCollapsed()
@@ -117,7 +93,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.IsPlatformCollapsed("platform_1"), Is.True);
         }
 
-        // â”€â”€ AC-3: Platform stays collapsed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Platform stays collapsed ────────────────────────
 
         [Test]
         public void AC3_AfterCollapse_PlatformStaysCollapsed()
@@ -144,7 +120,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.IsCollapseTimerActive("platform_1"), Is.False);
         }
 
-        // â”€â”€ Edge Cases â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Edge Cases ────────────────────────────────────────────
 
         [Test]
         public void EdgeCase_OnlyFakeShrineCurse_TriggersCollapse()
@@ -194,7 +170,7 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.IsCollapseTimerActive("nonexistent"), Is.False);
         }
 
-        // â”€â”€ Test Doubles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Test Doubles ───────────────────────────────────────────
 
         private class TestPhaseStateMachine : IPhaseStateMachine
         {
@@ -241,4 +217,5 @@ namespace SolarPhobia.Application.Editor.Tests
         }
     }
 }
+
 

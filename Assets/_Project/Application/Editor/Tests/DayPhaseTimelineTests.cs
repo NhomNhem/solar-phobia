@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Phase.Timeline;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -29,6 +28,10 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
@@ -46,7 +49,7 @@ namespace SolarPhobia.Application.Tests
             _timeline = new DayPhaseTimelineService();
         }
 
-        // â”€â”€ Initial State Tests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Initial State Tests ─────────────────────────────────────────────────
         
         [Test]
         public void StartTimeline_BeginsAtStability()
@@ -74,7 +77,7 @@ namespace SolarPhobia.Application.Tests
             sub.Dispose();
         }
 
-        // â”€â”€ Phase Transition Tests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Phase Transition Tests ─────────────────────────────────────────────
 
         [Test]
         public void PhaseTransition_StabilityToTension_At90Seconds()
@@ -112,7 +115,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_timeline.CurrentPhase, Is.EqualTo(TimelinePhase.ChoiceLock));
         }
 
-        // â”€â”€ Event Emission Tests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Event Emission Tests ───────────────────────────────────────────────
 
         [Test]
         public void PhaseTransition_EmitsTimelinePhaseChangedEvent_At90Seconds()
@@ -137,10 +140,10 @@ namespace SolarPhobia.Application.Tests
             var sub = _timeline.OnTimelinePhaseChanged.Subscribe(e => allEvents.Add(e));
             
             _timeline.StartTimeline();
-            _timeline.Tick(90f);  // Stability â†’ Tension
-            _timeline.Tick(90f);  // Tension â†’ Crisis (total 180s)
+            _timeline.Tick(90f);  // Stability → Tension
+            _timeline.Tick(90f);  // Tension → Crisis (total 180s)
             
-            // Last event should be Tension â†’ Crisis
+            // Last event should be Tension → Crisis
             Assert.That(allEvents.Count, Is.GreaterThan(0));
             var last = allEvents[allEvents.Count - 1];
             Assert.That(last.PreviousPhase, Is.EqualTo(TimelinePhase.Tension));
@@ -155,9 +158,9 @@ namespace SolarPhobia.Application.Tests
             var sub = _timeline.OnTimelinePhaseChanged.Subscribe(e => allEvents.Add(e));
             
             _timeline.StartTimeline();
-            _timeline.Tick(90f);  // Stability â†’ Tension
-            _timeline.Tick(90f);  // Tension â†’ Crisis
-            _timeline.Tick(90f);  // Crisis â†’ Collapse (total 270s)
+            _timeline.Tick(90f);  // Stability → Tension
+            _timeline.Tick(90f);  // Tension → Crisis
+            _timeline.Tick(90f);  // Crisis → Collapse (total 270s)
             
             Assert.That(allEvents.Count, Is.GreaterThan(0));
             var last = allEvents[allEvents.Count - 1];
@@ -173,10 +176,10 @@ namespace SolarPhobia.Application.Tests
             var sub = _timeline.OnTimelinePhaseChanged.Subscribe(e => received = e);
             
             _timeline.StartTimeline();
-            _timeline.Tick(90f);   // Stability â†’ Tension
-            _timeline.Tick(90f);   // Tension â†’ Crisis
-            _timeline.Tick(90f);   // Crisis â†’ Collapse
-            _timeline.Tick(30f);   // Collapse â†’ ChoiceLock (total 300s)
+            _timeline.Tick(90f);   // Stability → Tension
+            _timeline.Tick(90f);   // Tension → Crisis
+            _timeline.Tick(90f);   // Crisis → Collapse
+            _timeline.Tick(30f);   // Collapse → ChoiceLock (total 300s)
             
             Assert.That(received, Is.Not.Null);
             Assert.That(received.Value.PreviousPhase, Is.EqualTo(TimelinePhase.Collapse));
@@ -197,7 +200,7 @@ namespace SolarPhobia.Application.Tests
             sub.Dispose();
         }
 
-        // â”€â”€ Reset Tests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Reset Tests ─────────────────────────────────────────────────────────
 
         [Test]
         public void Reset_ReturnsToStability()
@@ -219,7 +222,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_timeline.CurrentPhase, Is.EqualTo(TimelinePhase.Stability));
         }
 
-        // â”€â”€ Capacity Tests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Capacity Tests ─────────────────────────────────────────────────────
 
         [Test]
         public void PhaseDuration_Is300Seconds()
@@ -259,4 +262,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

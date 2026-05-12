@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Hazards;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -32,11 +31,15 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
     /// Unity-compilable tests for KarmaHazardService.
-    /// Validates: TR-state-004 â€” Night phase mechanics (hazards, karma).
+    /// Validates: TR-state-004 — Night phase mechanics (hazards, karma).
     /// </summary>
     [TestFixture]
     public class KarmaHazardsTests
@@ -169,4 +172,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

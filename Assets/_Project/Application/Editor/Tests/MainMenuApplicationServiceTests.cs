@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.MainMenu;
 using System.Collections.Generic;

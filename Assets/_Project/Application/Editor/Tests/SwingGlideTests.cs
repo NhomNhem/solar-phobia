@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Editor/Tests/SwingGlideTests.cs
+// Assets/_Project/Application/Editor/Tests/SwingGlideTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
@@ -32,7 +32,7 @@ using SolarPhobia.Application.Player.Events;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 3.1 â€” Swing + Glide skills.
+    /// Validates: Master GDD V5.0 Section 3.1 — Swing + Glide skills.
     /// Story 004-v2: Swing (-2s Ward) + Glide (-1s/sec Ward).
     /// </summary>
     [TestFixture]
@@ -53,7 +53,7 @@ namespace SolarPhobia.Application.Tests
             _ctrl.OnWardCostIncurred.Subscribe(c => _wardCosts.Add(c));
         }
 
-        // â”€â”€ Swing: AC-1 â€” Left Click near anchor activates Swing â”€â”€
+        // ── Swing: AC-1 — Left Click near anchor activates Swing ──
 
         [Test]
         public void Swing_Input_NightMode_SufficientWard_SetsSwinging_True()
@@ -145,7 +145,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(2, _wardCosts.Count);
         }
 
-        // â”€â”€ Glide: AC-2 â€” Hold while airborne activates Glide â”€â”€â”€â”€â”€
+        // ── Glide: AC-2 — Hold while airborne activates Glide ─────
 
         [Test]
         public void Glide_HoldInput_Airborne_NightMode_SufficientWard_SetsGliding_True()

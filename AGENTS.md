@@ -32,12 +32,17 @@ Unity.exe -quit -batchmode -projectPath "I:\unityVers\Solar phobia" -buildTarget
 
 ## Code Style Guidelines
 
+### Layered Folder Rule
+- Feature-specific application code should live under `Assets/_Project/Application/<Feature>/...`
+- `Assets/_Project/Application/Services/...` is reserved for cross-cutting services only
+- Keep folder and namespace aligned 1:1 with the feature or layer path
+- Avoid using `Services` as a catch-all bucket for unrelated gameplay features
+
 ### Naming Conventions
-- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Services` (PascalCase with dots)
+- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Combat`, `SolarPhobia.Application.Consequences` (PascalCase with dots)
 - **Classes/Interfaces**: `PhaseStateMachine`, `ISoulRepository` (PascalCase, prefix I for interfaces)
 - **Methods**: `TrySetSelection`, `AdvancePhase` (PascalCase)
 - **Private fields**: `_mode`, `_subscriptions`, `_mapDirector` (underscore + camelCase)
-- **Internal injected fields**: `_mapDirector` (used with VContainer `[Inject]`) — must be `internal`, not `private`, for source generator compatibility (VCON0007)
 - **Local variables**: `tempRoot`, `snapshot` (camelCase)
 - **Constants**: `Rng` (static readonly), or UPPER_SNAKE_CASE for true constants
 - **Assembly Definitions**: `SolarPhobia.Domain.asmdef` matching namespace
@@ -46,7 +51,7 @@ Unity.exe -quit -batchmode -projectPath "I:\unityVers\Solar phobia" -buildTarget
 ```csharp
 using System;                    // System imports first
 using System.Collections.Generic;
-using SolarPhobia.Application.Services; // Third-party/Project imports after
+using SolarPhobia.Application.Combat; // Third-party/Project imports after
 using UnityEditor;
 using UnityEngine;
 
@@ -103,7 +108,7 @@ namespace SolarPhobia.Application.Systems {
 - Use `rootNamespace` matching assembly name
 
 ## Key Packages
-- **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — `[Inject]` fields must be `internal` (not `private`) for source generator compatibility
+- **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — see [Dependency Injection Rules](#dependency-injection-rules)
 - **NhemDangFugBixs.Logging**: Project logging abstraction — use `INhemLogger` in DI-managed classes; keep `NhemUnityLogger` construction limited to static loaders and non-DI runtime components
 - **R3**: Reactive programming (com.cysharp.r3) — replaces reactive patterns
 - **ObservableCollections**: Collection-level change tracking (Cysharp) — use for add/remove/move/replace deltas, never in Domain or public cross-layer contracts
@@ -112,6 +117,18 @@ namespace SolarPhobia.Application.Systems {
 - **DOTween**: Animation tweens (Demigiant)
 - **Odin Inspector**: Editor enhancements (Sirenix)
 - **MessagePipe**: Event/message bus (com.cysharp.messagepipe)
+
+## Dependency Injection Rules
+
+- **No `[Inject]` on public fields.** All injected dependencies must be private fields (underscore + camelCase naming).
+- **Injected fields**: If field injection is used in a legacy or exceptional case, the field must be `internal` for source generator compatibility.
+- **MonoBehaviour injection**: Use `[Inject] public void Construct(...)` method — never field injection.
+  - Example: `[Inject] public void Construct(IPhaseStateMachine phaseMachine) { _phaseMachine = phaseMachine; }`
+- **Plain C# class injection**: Use constructor injection — never field injection.
+  - Example: `public MyService(IPhaseStateMachine phaseMachine) { _phaseMachine = phaseMachine; }`
+- **Too many constructor parameters**: Split the class or group dependencies via facade/service pattern (aim for ≤4 parameters).
+- **INhemLogger in constructors**: Add `INhemLogger logger` as a constructor parameter; the DI container resolves it. Never assign `new NhemUnityLogger()` as a default.
+- **Parameterless constructors**: Do NOT add `[Inject]` to parameterless constructors. VContainer resolves via constructor automatically.
 
 ## Package Usage Policy
 

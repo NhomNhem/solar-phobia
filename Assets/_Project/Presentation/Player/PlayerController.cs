@@ -1,38 +1,13 @@
-﻿// Assets/_Project/Presentation/Player/PlayerController.cs
 using System;
 using R3;
 using SolarPhobia.Application.Map.Directors;
+using SolarPhobia.Application.Player.Input;
 using SolarPhobia.Application.Player.Warnings;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
-
-using SolarPhobia.Application.Resources;
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
 namespace SolarPhobia.Presentation.Player
 {
     /// <summary>
@@ -56,19 +31,32 @@ namespace SolarPhobia.Presentation.Player
         /// </summary>
         public event Action<string> OnInteract;
 
-        // â”€â”€ Injected Dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        [Inject] public IMapSpawnDirector        _mapDirector;
-        [Inject] public IStrikeWarningController _strikeWarningController;
-        [Inject] public IPlayerInputHandler      _inputHandler;
-        [Inject] public IResourceEffectsService  _resourceEffectsService;
+        // ── Injected Dependencies ──────────────────────────────────
+        private IMapSpawnDirector        _mapDirector;
+        private IStrikeWarningController _strikeWarningController;
+        private IPlayerInputHandler      _inputHandler;
+        private IResourceEffectsService  _resourceEffectsService;
 
-        // â”€â”€ Private State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        [Inject]
+        public void Construct(
+            IMapSpawnDirector mapDirector,
+            IStrikeWarningController strikeWarningController,
+            IPlayerInputHandler inputHandler,
+            IResourceEffectsService resourceEffectsService)
+        {
+            _mapDirector = mapDirector;
+            _strikeWarningController = strikeWarningController;
+            _inputHandler = inputHandler;
+            _resourceEffectsService = resourceEffectsService;
+        }
+
+        // ── Private State ──────────────────────────────────────────
         private PlayerInputMode _mode;
         private IDisposable     _modeSubscription;
         private IDisposable     _strikeWarningSubscription;
         private Collider2D      _cachedCollider;
 
-        // â”€â”€ Unity Lifecycle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Unity Lifecycle ────────────────────────────────────────
         private void Start()
         {
             _cachedCollider = GetComponent<Collider2D>();
@@ -115,7 +103,7 @@ namespace SolarPhobia.Presentation.Player
             _strikeWarningController?.ClearAll();
         }
 
-        // â”€â”€ Private Methods â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Private Methods ────────────────────────────────────────
         /// <summary>
         /// Handles mode transitions. Subscribes to strike warnings on NightMovement entry
         /// and disposes the subscription on exit.
@@ -186,4 +174,5 @@ namespace SolarPhobia.Presentation.Player
         }
     }
 }
+
 

@@ -55,7 +55,6 @@ namespace SolarPhobia.Application.Consequences
         /// <summary>
         /// Initializes a new instance of the CurseEffectManager class.
         /// </summary>
-        [Inject]
         public CurseEffectManager(IPhaseStateMachine phaseStateMachine)
         {
             _phaseStateMachine = phaseStateMachine;

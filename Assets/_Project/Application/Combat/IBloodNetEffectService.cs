@@ -1,6 +1,6 @@
 using System;
 
-namespace SolarPhobia.Application.Services.Interfaces
+namespace SolarPhobia.Application.Combat
 {
     public interface IBloodNetEffectService : IDisposable
     {

@@ -32,7 +32,6 @@ namespace SolarPhobia.Application.Player.Movement
         public Observable<bool> OnSprintChanged => _onSprintChanged;
 
         // ── Constructor ────────────────────────────────────────────
-        [Inject]
         public SprintController()
         {
             _isSprinting = false;

@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Editor/Tests/MapSeedTests.cs
+// Assets/_Project/Application/Editor/Tests/MapSeedTests.cs
 using NUnit.Framework;
 using SolarPhobia.Application.Map.Directors;
 
@@ -29,8 +29,8 @@ using SolarPhobia.Application.Player.Events;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-map-001 â€” Deterministic Seed + Chunk Generation.
-    /// Story 001: Deterministic Seed â€” Chunk Generation + Run Reproducibility.
+    /// Validates: TR-map-001 — Deterministic Seed + Chunk Generation.
+    /// Story 001: Deterministic Seed — Chunk Generation + Run Reproducibility.
     ///
     /// Tests MapSpawnDirector in isolation.
     /// No Unity scene, no MonoBehaviour required.
@@ -46,7 +46,7 @@ namespace SolarPhobia.Application.Tests
             _director = new MapSpawnDirector();
         }
 
-        // â”€â”€ AC-1: Initialize(seed) sets deterministic RNG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Initialize(seed) sets deterministic RNG ──────────
 
         [Test]
         public void AC1_Initialize_SetsSeed()
@@ -73,7 +73,7 @@ namespace SolarPhobia.Application.Tests
             );
         }
 
-        // â”€â”€ AC-2: Same seed + index â†’ identical ChunkData â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Same seed + index → identical ChunkData ──────────
 
         [Test]
         public void AC2_SameSeedAndIndex_ProducesIdenticalChunk()
@@ -127,7 +127,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(7, chunk.Index);
         }
 
-        // â”€â”€ AC-3: Different seeds â†’ different layouts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: Different seeds → different layouts ──────────────
 
         [Test]
         public void AC3_DifferentSeeds_ProduceDifferentChunks()
@@ -154,7 +154,7 @@ namespace SolarPhobia.Application.Tests
                 "Different chunk indices must produce different chunk seeds");
         }
 
-        // â”€â”€ AC-4: Seed retrievable for snapshot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Seed retrievable for snapshot ────────────────────
 
         [Test]
         public void AC4_Seed_IsRetrievableAfterInitialize()
@@ -175,7 +175,7 @@ namespace SolarPhobia.Application.Tests
                 "Re-initializing must update the stored seed");
         }
 
-        // â”€â”€ AC-5: Pure math â€” no Unity scene state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Pure math — no Unity scene state ─────────────────
 
         [Test]
         public void AC5_GenerateChunk_ReturnsValidChunkData()
@@ -215,7 +215,7 @@ namespace SolarPhobia.Application.Tests
             }
         }
 
-        // â”€â”€ Multiple chunks in sequence â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Multiple chunks in sequence ────────────────────────────
 
         [Test]
         public void MultipleChunks_AllDeterministic()

@@ -1,6 +1,6 @@
 using System;
 
-namespace SolarPhobia.Application.Services.Interfaces
+namespace SolarPhobia.Application.Phase.Reset
 {
     public interface IWardDeathTriggerService : IDisposable
     {

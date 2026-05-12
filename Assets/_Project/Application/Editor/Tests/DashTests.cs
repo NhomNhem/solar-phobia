@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Editor/Tests/DashTests.cs
+// Assets/_Project/Application/Editor/Tests/DashTests.cs
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
@@ -32,8 +32,8 @@ using SolarPhobia.Application.Player.Events;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 3.1 â€” Spirit Dash (KhÄƒn Tang burst skill).
-    /// Story 003-v2: Spirit Dash â€” Ward cost -5.0s, cooldown, phase gate.
+    /// Validates: Master GDD V5.0 Section 3.1 — Spirit Dash (KhÄƒn Tang burst skill).
+    /// Story 003-v2: Spirit Dash — Ward cost -5.0s, cooldown, phase gate.
     /// </summary>
     [TestFixture]
     public class DashTests
@@ -54,7 +54,7 @@ namespace SolarPhobia.Application.Tests
             _dash.OnWardCostIncurred.Subscribe(c => _wardCosts.Add(c));
         }
 
-        // â”€â”€ AC-1: Shift triggers Spirit Dash â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: Shift triggers Spirit Dash ──────────────────────
 
         [Test]
         public void AC1_DashInput_NightMode_SufficientWard_SetsDashing_True()
@@ -72,7 +72,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(1, _wardCosts.Count);
         }
 
-        // â”€â”€ AC-2: Spirit Dash costs -5.0s Ward â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: Spirit Dash costs -5.0s Ward ────────────────────
 
         [Test]
         public void AC2_WardCostEvent_Payload_Is5Seconds()
@@ -89,7 +89,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(5.0f, DashController.DefaultDashWardCost);
         }
 
-        // â”€â”€ AC-3: OnWardCostIncurred fires on each dash â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-3: OnWardCostIncurred fires on each dash ────────────
 
         [Test]
         public void AC3_TwoDashes_FiresTwoEvents()
@@ -109,7 +109,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(0, _wardCosts.Count);
         }
 
-        // â”€â”€ AC-4: Dash only active in NightSurvival â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-4: Dash only active in NightSurvival ───────────────
 
         [Test]
         public void AC4_DayUI_DashInput_NoActivation()
@@ -128,7 +128,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_dash.IsDashing);
         }
 
-        // â”€â”€ AC-5: Cooldown prevents spam â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-5: Cooldown prevents spam ──────────────────────────
 
         [Test]
         public void AC5_DefaultCooldown_Is0p5Seconds()
@@ -188,12 +188,12 @@ namespace SolarPhobia.Application.Tests
             Assert.IsTrue(_dash.CanDash);
         }
 
-        // â”€â”€ AC-6: Dash blocked when Ward insufficient â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-6: Dash blocked when Ward insufficient ─────────────
 
         [Test]
         public void AC6_Ward_ExactlyEqualToCost_BlocksDash()
         {
-            // Ward <= cost â†’ blocked (need strictly more)
+            // Ward <= cost → blocked (need strictly more)
             _dash.TryDash(true, PlayerInputMode.NightMovement, ExactCost);
 
             Assert.IsFalse(_dash.IsDashing,
@@ -227,7 +227,7 @@ namespace SolarPhobia.Application.Tests
             Assert.IsFalse(_dash.IsDashing);
         }
 
-        // â”€â”€ IsDashing is one-frame flag â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── IsDashing is one-frame flag ───────────────────────────
 
         [Test]
         public void IsDashing_ResetToFalse_OnNextTryDash_WithNoInput()
@@ -235,13 +235,13 @@ namespace SolarPhobia.Application.Tests
             _dash.TryDash(true, PlayerInputMode.NightMovement, FullWard);
             Assert.IsTrue(_dash.IsDashing);
 
-            // Next frame â€” no input
+            // Next frame — no input
             _dash.TryDash(false, PlayerInputMode.NightMovement, FullWard);
 
             Assert.IsFalse(_dash.IsDashing, "IsDashing must reset when no dash input");
         }
 
-        // â”€â”€ Cooldown clamping â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Cooldown clamping ─────────────────────────────────────
 
         [Test]
         public void CooldownBelowMin_ClampedTo0p1()

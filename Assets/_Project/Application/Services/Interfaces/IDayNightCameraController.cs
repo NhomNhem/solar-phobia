@@ -1,6 +1,34 @@
 // Assets/_Project/Application/Services/Interfaces/IDayNightCameraController.cs
 using SolarPhobia.Domain.Events;
 
+using SolarPhobia.Application.Resources;
+
+using SolarPhobia.Application.Strike;
+
+using SolarPhobia.Application.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Rituals;
+
+using SolarPhobia.Application.Shrines;
+
+using SolarPhobia.Application.Day;
+
+using SolarPhobia.Application.Flow;
+
+using SolarPhobia.Application.Player.State;
+
+using SolarPhobia.Application.Player.Input;
+
+using SolarPhobia.Application.Player.Interactions;
+
+using SolarPhobia.Application.Player.Cursor;
+
+using SolarPhobia.Application.Player.Events;
+
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Services
 {
     /// <summary>
@@ -43,7 +71,7 @@ namespace SolarPhobia.Application.Services
         /// <summary>
         /// Apply mouse look rotation for night phases.
         /// Called from Tick() with Input.GetAxis("Mouse Y"), or directly from tests.
-        /// Clamped to ±30° on the Y-axis.
+        /// Clamped to Â±30Â° on the Y-axis.
         /// </summary>
         void ApplyMouseLook(float mouseDeltaY);
 
@@ -57,3 +85,4 @@ namespace SolarPhobia.Application.Services
         void HandleNightFailed(NightFailedEvent evt);
     }
 }
+

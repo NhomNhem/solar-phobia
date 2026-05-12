@@ -1,9 +1,8 @@
-﻿// Assets/_Project/Application/Editor/Tests/CursorVisibilityTests.cs
+// Assets/_Project/Application/Editor/Tests/CursorVisibilityTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Resources;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
 
 using SolarPhobia.Application.Strike;
 
@@ -27,13 +26,17 @@ using SolarPhobia.Application.Player.Cursor;
 
 using SolarPhobia.Application.Player.Events;
 
+using SolarPhobia.Application.Combat;
+
+using SolarPhobia.Application.Phase.Reset;
+
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-player-007 â€” Cursor Visibility â€” Phase-Driven Show/Hide.
+    /// Validates: TR-player-007 — Cursor Visibility — Phase-Driven Show/Hide.
     /// Story 006: Cursor Visibility.
     ///
-    /// Tests CursorController phase â†’ cursor state mapping in isolation.
+    /// Tests CursorController phase → cursor state mapping in isolation.
     /// Actual Cursor.visible / Cursor.lockState calls are applied by the
     /// MonoBehaviour layer and verified via manual walkthrough.
     /// </summary>
@@ -48,7 +51,7 @@ namespace SolarPhobia.Application.Tests
             _controller = new CursorController();
         }
 
-        // â”€â”€ AC-1: DayService â†’ cursor visible â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-1: DayService → cursor visible ─────────────────────
 
         [Test]
         public void AC1_DayService_CursorVisible_True()
@@ -62,7 +65,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(CursorLockState.None, _controller.GetCursorLockState(PhaseState.DayService));
         }
 
-        // â”€â”€ AC-2: NightSurvival â†’ cursor hidden + locked â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── AC-2: NightSurvival → cursor hidden + locked ──────────
 
         [Test]
         public void AC2_NightSurvival_CursorVisible_False()
@@ -76,7 +79,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(CursorLockState.Locked, _controller.GetCursorLockState(PhaseState.NightSurvival));
         }
 
-        // â”€â”€ AC-3: ChoiceLock / EndingEvaluation â†’ cursor visible â”€â”€
+        // ── AC-3: ChoiceLock / EndingEvaluation → cursor visible ──
 
         [Test]
         public void AC3_ChoiceLock_CursorVisible_True()
@@ -102,7 +105,7 @@ namespace SolarPhobia.Application.Tests
             Assert.AreEqual(CursorLockState.None, _controller.GetCursorLockState(PhaseState.EndingEvaluation));
         }
 
-        // â”€â”€ All intermediate phases â†’ cursor visible â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── All intermediate phases → cursor visible ──────────────
 
         [Test]
         public void IntermediatePhases_AllShowCursor()
@@ -131,7 +134,7 @@ namespace SolarPhobia.Application.Tests
             }
         }
 
-        // â”€â”€ NightSurvival is the only phase that hides cursor â”€â”€â”€â”€â”€â”€
+        // ── NightSurvival is the only phase that hides cursor ──────
 
         [Test]
         public void OnlyNightSurvival_HidesCursor()
@@ -152,4 +155,5 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
 

@@ -1,4 +1,4 @@
-﻿// Assets/_Project/Application/Services/NgocCotService.cs
+// Assets/_Project/Application/Services/NgocCotService.cs
 using SolarPhobia.Domain.Services;
 
 namespace SolarPhobia.Application.Resources
@@ -6,7 +6,7 @@ namespace SolarPhobia.Application.Resources
     /// <summary>
     /// Tracks Ngá»c Cá»‘t relic pickups and provides the ward drain multiplier.
     /// Maximum 3 pickups per night phase. Bone count resets at start of each night.
-    /// Formula: drainMultiplier = 1 + (boneCount Ã— 0.25)
+    /// Formula: drainMultiplier = 1 + (boneCount × 0.25)
     /// </summary>
     public class NgocCotService : INgocCotService
     {

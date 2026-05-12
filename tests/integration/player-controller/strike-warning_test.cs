@@ -39,12 +39,11 @@ namespace SolarPhobia.Tests.Integration.PlayerController
             // Create a fake controller
             _fakeController = new FakeStrikeWarningController();
 
-            // Inject the fake controller into the UI component
-            // We use reflection to set the private field because the component uses [Inject] internal field.
-            // In a real test with VContainer, we would use the container, but for simplicity we set the field directly.
-            var strikeWarningControllerField = typeof(StrikeWarningUI)
-                .GetField("_strikeWarningController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            strikeWarningControllerField.SetValue(_uiComponent, _fakeController);
+            // Inject dependencies via the Construct method (triggers DI setup path).
+            // In a real test with VContainer, the container calls Construct() automatically.
+            typeof(StrikeWarningUI)
+                .GetMethod("Construct", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .Invoke(_uiComponent, new object[] { null, _fakeController });
 
             // Initialize the component (this will set up the UI and subscribe)
             _uiComponent.Initialize();

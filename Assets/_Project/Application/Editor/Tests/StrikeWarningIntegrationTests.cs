@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using NhemDangFugBixs.NhemLogging;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Map.Directors;
@@ -43,7 +44,7 @@ namespace SolarPhobia.Application.Tests
         {
             _mapDirector = new MapSpawnDirector();
             _mapDirector.Initialize(42);
-            _controller = new StrikeWarningController(_mapDirector);
+            _controller = new StrikeWarningController(new NhemUnityLogger(), _mapDirector);
             _warningEvents = new List<bool>();
             _controller.IsWarningActive.Subscribe(v => _warningEvents.Add(v));
         }

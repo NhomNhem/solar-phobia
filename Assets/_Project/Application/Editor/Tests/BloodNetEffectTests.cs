@@ -1,36 +1,12 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Consequences;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Application.Phase.Flow;
 using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Combat;
+using SolarPhobia.Application.Combat;
+using SolarPhobia.Application.Ward;
 using SolarPhobia.Domain.ValueObjects;
-
-using SolarPhobia.Application.Resources;
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
 namespace SolarPhobia.Application.Editor.Tests
 {
     public class BloodNetEffectTests
@@ -61,7 +37,6 @@ namespace SolarPhobia.Application.Editor.Tests
             _curseManager?.Dispose();
         }
 
-        // â”€â”€ AC-1: Immediate penalty on contact â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC1_BloodNetContact_Applies5WardPenalty()
@@ -85,7 +60,6 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.TotalPenaltyApplied, Is.EqualTo(5.0f).Within(0.001f));
         }
 
-        // â”€â”€ AC-2: Slow applied for 3 seconds â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC2_BloodNetContact_StartsSlow()
@@ -112,7 +86,6 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.SlowTimeRemaining, Is.EqualTo(2.0f).Within(0.001f));
         }
 
-        // â”€â”€ AC-3: Slow restores after 3 seconds â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [Test]
         public void AC3_SlowEnds_After3Seconds()
@@ -136,9 +109,7 @@ namespace SolarPhobia.Application.Editor.Tests
             _service.Tick(1.5f);
             Assert.That(_service.IsSlowed, Is.False);
         }
-
-        // â”€â”€ Edge Cases â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
+        
         [Test]
         public void EdgeCase_OnlyBlockCurse_TriggersBloodNet()
         {
@@ -171,9 +142,8 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_wardTimer.TotalCostApplied, Is.EqualTo(0f));
         }
 
-        // â”€â”€ Test Doubles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-        private class TestWardTimerService : IWardTimerService
+        private class TestWardTimerService : IWardTimerPort
         {
             public float CurrentWard { get; set; } = 100f;
             public float TotalCostApplied { get; private set; }
@@ -245,4 +215,5 @@ namespace SolarPhobia.Application.Editor.Tests
             }
         }
     }
+
 

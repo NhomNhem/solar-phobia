@@ -37,7 +37,6 @@ namespace SolarPhobia.Application.Consequences
         // ── Dependencies ──────────────────────────────────────────────
         private readonly IGhostRepository _ghostRepository;
 
-        [Inject]
         public ConsequenceResolver(IGhostRepository ghostRepository)
         {
             _ghostRepository = ghostRepository;
