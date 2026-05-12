@@ -8,13 +8,14 @@ using SolarPhobia.Application.Services.Interfaces;
 using SolarPhobia.Application.Services.Objective;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
-using PhaseDayPhaseMechanicsService = SolarPhobia.Application.Services.Phase.DayPhaseMechanicsService;
-using PhaseDayPhaseTimelineService = SolarPhobia.Application.Services.Phase.DayPhaseTimelineService;
+using PhaseDayPhaseMechanicsService = SolarPhobia.Application.Services.DayPhaseMechanicsService;
+using PhaseDayPhaseTimelineService = SolarPhobia.Application.Services.DayPhaseTimelineService;
 using NightToDayResetService = SolarPhobia.Application.Services.Phase.NightToDayResetService;
 using ApplicationWardTimerService = SolarPhobia.Application.Services.IWardTimerService;
 using PhaseWardTimerService = SolarPhobia.Infrastructure.Services.WardTimerService;
-using NgocCotService = SolarPhobia.Application.Services.Objective.NgocCotService;
-using RitualAssignmentService = SolarPhobia.Application.Services.Objective.RitualAssignmentService;
+using NgocCotService = SolarPhobia.Application.Services.NgocCotService;
+using RitualAssignmentService = SolarPhobia.Application.Services.RitualAssignmentService;
+using WardDeathTriggerService = SolarPhobia.Application.Services.Objective.WardDeathTriggerService;
 
 namespace SolarPhobia.Application.Tests
 {

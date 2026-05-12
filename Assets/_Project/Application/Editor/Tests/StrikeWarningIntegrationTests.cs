@@ -21,14 +21,14 @@ namespace SolarPhobia.Application.Tests
     [TestFixture]
     public class StrikeWarningIntegrationTests
     {
-        private SolarPhobia.Application.Services.Map.MapSpawnDirector _mapDirector;
+        private SolarPhobia.Application.Services.MapSpawnDirector _mapDirector;
         private StrikeWarningController _controller;
         private List<bool>              _warningEvents;
 
         [SetUp]
         public void Setup()
         {
-            _mapDirector   = new SolarPhobia.Application.Services.Map.MapSpawnDirector();
+            _mapDirector   = new SolarPhobia.Application.Services.MapSpawnDirector();
             _mapDirector.Initialize(42);
             _controller    = new StrikeWarningController(_mapDirector);
             _warningEvents = new List<bool>();

@@ -1,7 +1,7 @@
 using SolarPhobia.Application.Repositories;
 using SolarPhobia.Application.Services;
 using SolarPhobia.Domain.Repositories;
-using SolarPhobia.Infrastructure.Services.Input;
+using SolarPhobia.Shared.InputActions;
 using SolarPhobia.Infrastructure.Services;
 using VContainer.Unity;
 using VContainer;
@@ -22,23 +22,23 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<SoulRepository>(Lifetime.Singleton).As<ISoulRepository>();
 
             // ── Day Phase Timeline ─────────────────────────────────────────────
-            builder.Register<SolarPhobia.Application.Services.Phase.DayPhaseTimelineService>(Lifetime.Singleton).As<IDayPhaseTimelineService>();
+            builder.Register<DayPhaseTimelineService>(Lifetime.Singleton).As<IDayPhaseTimelineService>();
 
             // ── Core Gameplay Services ────────────────────────────────────────
-            builder.Register<SolarPhobia.Application.Services.Input.PlayerInputHandler>(Lifetime.Singleton).As<IPlayerInputHandler>();
-            builder.Register<SolarPhobia.Application.Services.Phase.PlayerStateMachine>(Lifetime.Singleton).As<IPlayerStateMachine>();
-            builder.Register<SolarPhobia.Application.Services.Map.MapSpawnDirector>(Lifetime.Singleton).As<IMapSpawnDirector>();
+            builder.Register<PlayerInputHandler>(Lifetime.Singleton).As<IPlayerInputHandler>();
+            builder.Register<PlayerStateMachine>(Lifetime.Singleton).As<IPlayerStateMachine>();
+            builder.Register<MapSpawnDirector>(Lifetime.Singleton).As<IMapSpawnDirector>();
             builder.Register<SolarPhobia.Application.Services.StrikeWarningController>(Lifetime.Singleton).As<IStrikeWarningController>();
-            builder.Register<SolarPhobia.Application.Services.Combat.StrikeController>(Lifetime.Singleton).As<IStrikeController>();
-            builder.Register<SolarPhobia.Application.Services.Movement.SprintController>(Lifetime.Singleton).As<ISprintController>();
-            builder.Register<SolarPhobia.Application.Services.Movement.SwingGlideController>(Lifetime.Singleton).As<ISwingGlideController>();
-            builder.Register<SolarPhobia.Application.Services.Movement.DashController>(Lifetime.Singleton).As<IDashController>();
-            builder.Register<SolarPhobia.Application.Services.Phase.DayActionController>(Lifetime.Singleton).As<IDayActionController>();
+            builder.Register<StrikeController>(Lifetime.Singleton).As<IStrikeController>();
+            builder.Register<SprintController>(Lifetime.Singleton).As<ISprintController>();
+            builder.Register<SwingGlideController>(Lifetime.Singleton).As<ISwingGlideController>();
+            builder.Register<DashController>(Lifetime.Singleton).As<IDashController>();
+            builder.Register<DayActionController>(Lifetime.Singleton).As<IDayActionController>();
             builder.Register<InteractHandler>(Lifetime.Singleton).As<IInteractHandler>();
-            builder.Register<SolarPhobia.Application.Services.Cover.CoverDetector2D>(Lifetime.Singleton).As<ICoverDetector2D>();
-            builder.Register<SolarPhobia.Application.Services.Input.CursorController>(Lifetime.Singleton).As<ICursorController>();
-            builder.Register<SolarPhobia.Application.Services.Movement.Movement2DCalculator>(Lifetime.Singleton).As<IMovement2DCalculator>();
-            builder.Register<SolarPhobia.Application.Services.Movement.PlatformerFeelController>(Lifetime.Singleton).As<IPlatformerFeelController>();
+            builder.Register<CoverDetector2D>(Lifetime.Singleton).As<ICoverDetector2D>();
+            builder.Register<CursorController>(Lifetime.Singleton).As<ICursorController>();
+            builder.Register<Movement2DCalculator>(Lifetime.Singleton).As<IMovement2DCalculator>();
+            builder.Register<PlatformerFeelController>(Lifetime.Singleton).As<IPlatformerFeelController>();
             builder.Register<KarmaHazardService>(Lifetime.Singleton).As<IKarmaHazardService>();
 
             // ── Camera Service ───────────────────────────────────────────────
@@ -59,13 +59,13 @@ namespace SolarPhobia.Composition.Installers
             builder.Register<MainMenuApplicationService>(Lifetime.Singleton).As<IMainMenuApplicationService>();
 
             // ── Ritual Assignment ──────────────────────────────────────
-            builder.Register<SolarPhobia.Application.Services.Objective.RitualAssignmentService>(Lifetime.Singleton).As<IRitualAssignmentService>();
+            builder.Register<RitualAssignmentService>(Lifetime.Singleton).As<IRitualAssignmentService>();
 
             // ── Curse Effect Manager ──────────────────────────────────────
             builder.Register<CurseEffectManager>(Lifetime.Singleton).As<ICurseEffectManager>();
 
             // ── Water Trap Effect ──────────────────────────────────────
-            builder.Register<SolarPhobia.Application.Services.Combat.WaterTrapEffectService>(Lifetime.Singleton).As<IWaterTrapEffectService>();
+            builder.Register<WaterTrapEffectService>(Lifetime.Singleton).As<IWaterTrapEffectService>();
 
             // ── Consequence Resolver ────────────────────────────────────
             builder.Register<ConsequenceResolver>(Lifetime.Singleton).As<IConsequenceResolver>();
