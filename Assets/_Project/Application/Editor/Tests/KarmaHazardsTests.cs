@@ -1,39 +1,25 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Hazards;
+using SolarPhobia.Application.Features.Hazards;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Combat;
+using SolarPhobia.Application.Features.Phase.Reset;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
-using SolarPhobia.Application.Combat;
-
-using SolarPhobia.Application.Phase.Reset;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -139,7 +125,7 @@ namespace SolarPhobia.Application.Tests
             return new TestPhaseStateMachine(phase);
         }
 
-        private class TestPhaseStateMachine : IPhaseStateMachine
+        private class TestPhaseStateMachine : IPhaseStateMachine, System.IDisposable
         {
             private readonly ReactiveProperty<PhaseState> _phase;
             private readonly Subject<PhaseChangedEvent> _phaseChangedSubject = new();
@@ -169,8 +155,21 @@ namespace SolarPhobia.Application.Tests
 
             public bool IsActionAllowed(GameAction action) => true;
             public void Initialize() { }
+
+            public void Dispose()
+            {
+                _phase?.Dispose();
+                _phaseChangedSubject?.Dispose();
+                _dayStartSubject?.Dispose();
+                _nightStartSubject?.Dispose();
+                _resolveSubject?.Dispose();
+            }
         }
     }
 }
+
+
+
+
 
 

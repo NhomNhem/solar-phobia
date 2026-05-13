@@ -4,37 +4,13 @@ using System.Linq;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Domain.Repositories;
+using SolarPhobia.Application.Features.Resources;
 using SolarPhobia.Domain.ValueObjects;
-
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
-using SolarPhobia.Application.Combat;
-
-using SolarPhobia.Application.Phase.Reset;
+using SolarPhobia.Infrastructure.Features.Soul;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Rituals;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -435,7 +411,7 @@ namespace SolarPhobia.Application.Tests
         /// <summary>
         /// Stub IPhaseStateMachine for test isolation.
         /// </summary>
-        private class StubPhaseStateMachine : IPhaseStateMachine
+        private class StubPhaseStateMachine : IPhaseStateMachine, System.IDisposable
         {
             private readonly ReactiveProperty<PhaseState> _currentPhase = new(PhaseState.Boot);
             private readonly Subject<PhaseChangedEvent> _onPhaseChanged = new();
@@ -463,8 +439,21 @@ namespace SolarPhobia.Application.Tests
             public void Initialize() { }
 
             public void SetPhase(PhaseState phase) => _currentPhase.Value = phase;
+
+            public void Dispose()
+            {
+                _currentPhase?.Dispose();
+                _onPhaseChanged?.Dispose();
+                _onDayStart?.Dispose();
+                _onNightStart?.Dispose();
+                _onResolve?.Dispose();
+            }
         }
     }
 }
+
+
+
+
 
 

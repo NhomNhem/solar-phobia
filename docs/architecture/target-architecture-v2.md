@@ -1,9 +1,9 @@
 # Solar Phobia — Target Architecture v2
 
 ## Document Status
-- Version: 2.0-draft
-- Date: 2026-05-12
-- Status: Target-state architecture for long-scale project growth
+- Version: 2.0
+- Date: 2026-05-13
+- Status: Official architecture standard for this repo
 - Scope: Full project structure, DI scopes, package policy, scene architecture, migration phases
 - Replaces as target: ad-hoc layer usage in current `Assets/_Project/*`
 - Coexists with: [architecture.md](/I:/unityVers/Solar%20phobia/docs/architecture/architecture.md)
@@ -12,17 +12,18 @@
 
 ## Purpose
 
-This document defines the long-term architecture target for Solar Phobia.
+This document defines the official architecture standard for Solar Phobia.
 
 The goal is not a cosmetic folder rename. The goal is to establish:
 
 1. Strict dependency direction
 2. Multi-scope VContainer composition
 3. Clear separation between domain logic, orchestration, runtime adapters, and presentation
-4. Package usage rules that scale with project size
-5. A migration path from the current codebase to the target state
+4. Feature-first folder ownership inside each layer
+5. Package usage rules that scale with project size
+6. A migration path from the current codebase to the target state
 
-This target architecture assumes Solar Phobia will continue to scale in feature count, runtime complexity, tooling depth, and team size.
+This standard assumes Solar Phobia will continue to scale in feature count, runtime complexity, tooling depth, and team size.
 
 ---
 
@@ -37,6 +38,7 @@ This target architecture assumes Solar Phobia will continue to scale in feature 
 7. Keep Domain pure C# with no Unity runtime dependency
 8. Split runtime by scope, not by convenience singleton
 9. Treat scenes as runtime composition units, not state containers
+10. Organize feature-specific code under `Features/<Feature>/...` inside every layer
 
 ---
 
@@ -74,32 +76,61 @@ Assets/
 │   │   ├── ValueObjects/
 │   │   ├── Events/
 │   │   ├── Services/
-│   │   └── Repositories/
+│   │   ├── Repositories/
+│   │   ├── Rules/
+│   │   └── Features/                  ← feature-specific domain logic
+│   │       └── <Feature>/
 │   │
 │   ├── 02_Application/
+│   │   ├── Features/                  ← primary home for all feature code
+│   │   │   ├── Combat/
+│   │   │   ├── Consequences/
+│   │   │   ├── Day/
+│   │   │   ├── Flow/
+│   │   │   ├── Hazards/
+│   │   │   ├── MainMenu/
+│   │   │   ├── Map/
+│   │   │   ├── Phase/
+│   │   │   ├── Player/
+│   │   │   ├── Rituals/
+│   │   │   ├── Shrines/
+│   │   │   ├── Strike/
+│   │   │   ├── Ward/
+│   │   │   └── <Feature>/
+│   │   ├── Shared/                    ← cross-cutting utilities (narrow scope)
+│   │   ├── Contracts/                 ← cross-layer contracts only
+│   │   ├── Messages/                  ← cross-feature events/commands/queries
 │   │   ├── UseCases/
-│   │   ├── Services/
-│   │   ├── Messages/
-│   │   ├── Ports/
-│   │   └── DTOs/
+│   │   ├── Models/
+│   │   ├── Repositories/
+│   │   ├── Resources/
+│   │   └── Editor/
 │   │
 │   ├── 03_Infrastructure/
-│   │   ├── Configuration/
-│   │   ├── Persistence/
-│   │   ├── Runtime/
-│   │   ├── Input/
+│   │   ├── Features/                  ← feature-specific adapters
+│   │   │   └── <Feature>/
 │   │   ├── Audio/
-│   │   ├── SceneLoading/
-│   │   └── Networking/
+│   │   ├── Camera/
+│   │   ├── Dialogue/
+│   │   ├── Hazards/
+│   │   ├── Input/
+│   │   ├── Logging/
+│   │   ├── MainMenu/
+│   │   ├── Network/
+│   │   ├── Physics/
+│   │   ├── State/
+│   │   ├── VFX/
+│   │   └── Shared/                    ← cross-cutting infrastructure utilities
 │   │
 │   ├── 04_Presentation/
-│   │   ├── Player/
+│   │   ├── Features/                  ← feature-specific UI/presenters
+│   │   │   └── <Feature>/
 │   │   ├── HUD/
+│   │   │   └── Toolkit/
 │   │   ├── MainMenu/
-│   │   ├── Dialogue/
-│   │   ├── Camera/
-│   │   ├── Hazards/
-│   │   └── Rituals/
+│   │   │   ├── Scripts/
+│   │   │   └── Toolkit/
+│   │   └── Player/
 │   │
 │   ├── 05_Composition/
 │   │   ├── Scopes/
@@ -110,7 +141,8 @@ Assets/
 │       ├── Logging/
 │       ├── Extensions/
 │       ├── Constants/
-│       └── Utilities/
+│       ├── Conventions/
+│       └── Configuration/
 │
 ├── _Scenes/
 ├── _Art/
@@ -118,27 +150,63 @@ Assets/
 └── Editor/
 ```
 
+> **Note on naming**: The numbered prefixes (`01_Domain` through `06_Shared`) are the long-term target. The current project uses unprefixed layer names (`Domain`, `Application`, etc.). Both layouts follow the same structure rules below; only the root folder name differs.
+
 ---
 
 ## Namespace Rules
 
-Folder and namespace must match.
+Folder and namespace must match one-to-one.
 
-| Folder | Namespace |
+### Layer Prefix Mapping
+
+| Folder Prefix | Namespace Prefix |
 |---|---|
-| `01_Domain/...` | `SolarPhobia.Domain...` |
-| `02_Application/...` | `SolarPhobia.Application...` |
-| `03_Infrastructure/...` | `SolarPhobia.Infrastructure...` |
-| `04_Presentation/...` | `SolarPhobia.Presentation...` |
-| `05_Composition/...` | `SolarPhobia.Composition...` |
-| `06_Shared/...` | `SolarPhobia.Shared...` |
+| `01_Domain/...` or `Domain/...` | `SolarPhobia.Domain...` |
+| `02_Application/...` or `Application/...` | `SolarPhobia.Application...` |
+| `03_Infrastructure/...` or `Infrastructure/...` | `SolarPhobia.Infrastructure...` |
+| `04_Presentation/...` or `Presentation/...` | `SolarPhobia.Presentation...` |
+| `05_Composition/...` or `Composition/...` | `SolarPhobia.Composition...` |
+| `06_Shared/...` or `Shared/...` | `SolarPhobia.Shared...` |
+
+### Feature-First Namespace Examples
+
+| Folder Path | Namespace |
+|---|---|
+| `Application/Features/Combat/...` | `SolarPhobia.Application.Features.Combat...` |
+| `Application/Features/Phase/Day/...` | `SolarPhobia.Application.Features.Phase.Day...` |
+| `Application/Features/Player/Movement/...` | `SolarPhobia.Application.Features.Player.Movement...` |
+| `Application/Shared/...` | `SolarPhobia.Application.Shared...` |
+| `Application/Contracts/...` | `SolarPhobia.Application.Contracts...` |
+| `Application/Messages/...` | `SolarPhobia.Application.Messages...` |
+| `Domain/Features/Combat/...` | `SolarPhobia.Domain.Features.Combat...` |
+| `Infrastructure/Features/Combat/...` | `SolarPhobia.Infrastructure.Features.Combat...` |
+| `Presentation/Features/Combat/...` | `SolarPhobia.Presentation.Features.Combat...` |
+
+### Technical Subfolder Namespace Examples
+
+| Folder Path | Namespace |
+|---|---|
+| `Domain/ValueObjects/...` | `SolarPhobia.Domain.ValueObjects...` |
+| `Domain/Entities/...` | `SolarPhobia.Domain.Entities...` |
+| `Domain/Repositories/...` | `SolarPhobia.Domain.Repositories...` |
+| `Domain/Services/...` | `SolarPhobia.Domain.Services...` |
+| `Domain/Rules/...` | `SolarPhobia.Domain.Rules...` |
+| `Domain/Events/...` | `SolarPhobia.Domain.Events...` |
+| `Application/UseCases/...` | `SolarPhobia.Application.UseCases...` |
+| `Composition/Scopes/...` | `SolarPhobia.Composition.Scopes...` |
+| `Composition/Installers/...` | `SolarPhobia.Composition.Installers...` |
+| `Shared/Logging/...` | `SolarPhobia.Shared.Logging...` |
+| `Shared/Extensions/...` | `SolarPhobia.Shared.Extensions...` |
 
 ### Hard Rules
 
 1. No `SolarPhobia.Application` type may live under `Presentation` or `Infrastructure`
-2. No `SolarPhobia.Domain` type may live outside `01_Domain`
-3. No “temporary” namespace aliases as a long-term solution
+2. No `SolarPhobia.Domain` type may live outside `01_Domain` (or `Domain`)
+3. No "temporary" namespace aliases as a long-term solution
 4. Namespace migration must be done together with asmdef and scene/reference validation
+5. Feature code MUST go under `Features/<Feature>/...`, not at the layer root as a peer of technical folders
+6. `Shared`, `Contracts`, and `Messages` subfolders MUST contain only cross-cutting code — never feature-specific logic
 
 ---
 
@@ -165,6 +233,8 @@ Must not contain:
 
 Domain is the business truth layer.
 
+**Organization**: Feature-specific domain logic SHOULD be placed under `Domain/Features/<Feature>/...` when it improves ownership clarity. Purely technical subfolders (`Entities/`, `ValueObjects/`, `Events/`, `Services/`, `Repositories/`, `Rules/`) remain valid for cross-cutting or foundational domain concepts.
+
 ### 02_Application
 
 Contains:
@@ -174,6 +244,8 @@ Contains:
 - Cross-domain orchestration
 - Message contracts
 - Application service interfaces and ports
+
+**Organization**: Feature-specific code MUST reside under `Application/Features/<Feature>/...`. The `Application/Shared/`, `Application/Contracts/`, and `Application/Messages/` subfolders are reserved for cross-cutting concerns only. `Application/Services/...` MUST NOT be used as a catch-all bucket.
 
 May depend on:
 - `Domain`
@@ -203,6 +275,8 @@ Contains:
 
 Infrastructure is allowed to know Unity and external packages.
 
+**Organization**: Feature-specific infrastructure adapters SHOULD be placed under `Infrastructure/Features/<Feature>/...`. Truly shared adapters (config, logging, input) remain valid in `Infrastructure/Shared/...` or top-level technical folders.
+
 ### 04_Presentation
 
 Contains:
@@ -212,6 +286,8 @@ Contains:
 - presenter/adapters from application state to visuals
 - player-facing visual behavior
 - camera presentation behavior
+
+**Organization**: Feature-specific presentation code SHOULD be placed under `Presentation/Features/<Feature>/...`. Shell-level UI code (HUD, MainMenu) remains valid in dedicated top-level folders.
 
 Presentation does not own authoritative game state.
 
@@ -473,13 +549,15 @@ But all new scene architecture should move toward:
 
 ## Current Codebase Gaps Against Target
 
-These are the largest known gaps as of 2026-05-12:
+These are the largest known gaps as of 2026-05-13:
 
 1. `Application` still contains Unity-facing runtime services
 2. `Domain` and public APIs recently leaked package-specific collection types
 3. current composition root is still largely flat rather than truly scoped
 4. package usage is inconsistent: R3 is dominant, MessagePipe is mostly absent, ZLinq usage is sporadic
 5. documentation and runtime code are not yet aligned around full scope architecture
+6. `Application/Services/` still exists in a few migration seams but is no longer the preferred home for feature code
+7. `Features/` subfolders exist in the target and partially in the current repo; some remaining code still needs to be migrated into them
 
 ---
 

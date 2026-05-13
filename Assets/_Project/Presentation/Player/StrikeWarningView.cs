@@ -2,7 +2,7 @@
 using System;
 using NhemDangFugBixs.NhemLogging;
 using R3;
-using SolarPhobia.Application.Player.Warnings;
+using SolarPhobia.Application.Features.Player.Warnings;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -26,7 +26,7 @@ namespace SolarPhobia.Presentation.Player
         private IStrikeWarningController _controller;
 
         [Inject]
-        public void Construct(INhemLogger logger, IStrikeWarningController controller)
+        internal void Construct(INhemLogger logger, IStrikeWarningController controller)
         {
             _logger = logger;
             _controller = controller;

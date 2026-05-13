@@ -44,7 +44,7 @@
 ## Forbidden Patterns
 
 <!-- Add patterns that should never appear in this project's codebase -->
-- Feature-specific application code living in `Application/Services` instead of `Application/<Feature>/...`
+- Feature-specific code living outside `Features/<Feature>/...` in any layer
 - Hardcoded gameplay values in code when the value can live in data/config
 - `ObservableCollections` types in `Domain` or public contracts that cross architectural layers
 - Using `MessagePipe` as authoritative state storage or for request/response flows
@@ -68,12 +68,13 @@
 - Prefer **ObservableCollections** when collection add/remove/move/replace changes must be observed efficiently.
 - Prefer **MessagePipe** when producers should not know who consumes an event and multiple modules may subscribe.
 - Prefer plain loops or `System.Linq` by default; only bring in **ZLinq** for justified hot paths.
-- Use `Application/Services` only for cross-cutting services; feature-specific application code belongs under `Application/<Feature>/...`.
+- Use `Application/Features/<Feature>/...` for feature-specific application code; reserve `Application/Services` only for narrow cross-cutting services during migration.
 
 ## Architecture Decisions Log
 
 <!-- Quick reference linking to full ADRs in docs/architecture/ -->
-- [No ADRs yet — use /architecture-decision to create one]
+- Official architecture standard: `docs/architecture/target-architecture-v2.md`
+- Use this as the source of truth for folder layout, namespace rules, scope wiring, and package policy.
 
 ## Engine Specialists
 

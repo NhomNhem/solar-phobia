@@ -1,34 +1,39 @@
 using NhemDangFugBixs.NhemLogging;
-using SolarPhobia.Application.Combat;
-using SolarPhobia.Application.Audio;
-using SolarPhobia.Application.Consequences;
-using SolarPhobia.Application.Consequences.WaterTrap;
-using SolarPhobia.Application.Day;
-using SolarPhobia.Application.Hazards;
-using SolarPhobia.Application.MainMenu;
-using SolarPhobia.Application.Map.Cover;
-using SolarPhobia.Application.Map.Directors;
-using SolarPhobia.Application.Phase.Day;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Phase.Reset;
-using SolarPhobia.Application.Phase.Timeline;
-using SolarPhobia.Application.Player.Cursor;
-using SolarPhobia.Application.Player.Input;
-using SolarPhobia.Application.Player.Interactions;
-using SolarPhobia.Application.Player.Movement;
-using SolarPhobia.Application.Player.State;
-using SolarPhobia.Application.Player.Warnings;
-using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Resources;
-using SolarPhobia.Application.Rituals;
-using SolarPhobia.Application.Ward;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Shrines;
-using SolarPhobia.Application.Strike;
+using SolarPhobia.Application.Features.Combat;
+using SolarPhobia.Application.Features.Audio;
+using SolarPhobia.Application.Features.Consequences;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Hazards;
+using SolarPhobia.Application.Features.MainMenu;
+using SolarPhobia.Application.Features.Map.Cover;
+using SolarPhobia.Application.Features.Map.Directors;
+using SolarPhobia.Application.Features.Phase.Day;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Phase.Reset;
+using SolarPhobia.Application.Features.Phase.Timeline;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Movement;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Warnings;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Ward;
+using SolarPhobia.Domain.Features.Ward;
+using SolarPhobia.Application.Features.Phase;
+
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Infrastructure.Features.Soul;
+using SolarPhobia.Infrastructure.Features.Ghost;
 using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Infrastructure.Hazards;
 using SolarPhobia.Infrastructure.MainMenu;
-using SolarPhobia.Infrastructure.Services;
+using SolarPhobia.Infrastructure.Features.Audio;
+using SolarPhobia.Infrastructure.Features.CameraControl;
+using SolarPhobia.Infrastructure.Features.Ward;
 using SolarPhobia.Shared.Configuration;
 using SolarPhobia.Shared.InputActions;
 using VContainer;
@@ -81,7 +86,7 @@ namespace SolarPhobia.Composition.Installers
             // ── Ward Timer ─────────────────────────────────────────────────
             builder.Register<WardTimerService>(Lifetime.Singleton)
                 .AsSelf()
-                .As<SolarPhobia.Domain.IWardTimerService>()
+                .As<IWardTimerService>()
                 .As<IWardTimerPort>();
             builder.RegisterEntryPoint<WardTimerServiceEntryPoint>(Lifetime.Singleton);
             builder.RegisterEntryPoint<WardDeathTriggerService>(Lifetime.Singleton);
@@ -112,11 +117,15 @@ namespace SolarPhobia.Composition.Installers
 
             // ── Consequence Resolver ────────────────────────────────────
             builder.Register<ConsequenceResolver>(Lifetime.Singleton).As<IConsequenceResolver>();
-            builder.Register<SoulRepository>(Lifetime.Singleton).As<IGhostRepository>();
+            builder.Register<GhostRepository>(Lifetime.Singleton).As<IGhostRepository>();
 
             // ── Input Actions (New Input System) ─────────────────────────
             builder.Register<SolarPhobiaInputActions>(Lifetime.Singleton);
         }
     }
 }
+
+
+
+
 

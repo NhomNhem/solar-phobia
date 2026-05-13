@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NhemDangFugBixs.NhemLogging;
 using R3;
-using SolarPhobia.Application.MainMenu;
+using SolarPhobia.Application.Features.MainMenu;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -19,7 +19,7 @@ namespace SolarPhobia.Presentation.MainMenu
         private IMainMenuApplicationService _mainMenuService;
 
         [Inject]
-        public void Construct(INhemLogger logger, IMainMenuApplicationService mainMenuService)
+        internal void Construct(INhemLogger logger, IMainMenuApplicationService mainMenuService)
         {
             _logger = logger;
             _mainMenuService = mainMenuService;
@@ -552,3 +552,4 @@ namespace SolarPhobia.Presentation.MainMenu
         }
     }
 }
+

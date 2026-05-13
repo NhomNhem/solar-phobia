@@ -4,43 +4,28 @@ using NhemDangFugBixs.NhemLogging;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Phase.Reset;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Combat;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
-using SolarPhobia.Infrastructure.Services;
+using SolarPhobia.Infrastructure.Features.CameraControl;
 using SolarPhobia.Shared.InputActions;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using VContainer;
-
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
-using SolarPhobia.Application.Combat;
-
-using SolarPhobia.Application.Phase.Reset;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -52,7 +37,7 @@ namespace SolarPhobia.Application.Tests
     public class DayNightCameraTransitionTests
     {
         // ── Stubs ──────────────────────────────────────────────────
-        private class PhaseStateMachineStub : IPhaseStateMachine
+        private class PhaseStateMachineStub : IPhaseStateMachine, System.IDisposable
         {
             public PhaseState CurrentState { get; set; } = PhaseState.Boot;
 
@@ -74,6 +59,15 @@ namespace SolarPhobia.Application.Tests
             public bool TryTransition(PhaseState newPhase) => true;
             public bool IsActionAllowed(GameAction action) => true;
             public void Initialize() { }
+
+            public void Dispose()
+            {
+                _currentPhase?.Dispose();
+                OnPhaseChangedSubject?.Dispose();
+                OnNightStartSubject?.Dispose();
+                OnDayStartSubject?.Dispose();
+                OnResolveSubject?.Dispose();
+            }
         }
 
         private class SensoryTierServiceStub : ISensoryTierService
@@ -639,5 +633,9 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
 
 

@@ -2,7 +2,9 @@
 
 ## Project Overview
 Unity 6000.3.11f1 (Unity 6) project using C# 9.0 targeting .NET 4.7.1.
-Architecture follows clean layering with Assembly Definitions: Domain → Application → Infrastructure/Presentation → Composition.
+Architecture follows clean layering with Assembly Definitions and a feature-first structure:
+Domain → Application/Features → Infrastructure/Features → Presentation/Features → Composition → Shared.
+The official architecture standard is defined in `docs/architecture/target-architecture-v2.md` and should be treated as the source of truth for folder layout, namespace rules, scope wiring, and package policy.
 
 ## Build & Test Commands
 
@@ -33,19 +35,30 @@ Unity.exe -quit -batchmode -projectPath "I:\unityVers\Solar phobia" -buildTarget
 ## Code Style Guidelines
 
 ### Layered Folder Rule
-- Feature-specific application code should live under `Assets/_Project/Application/<Feature>/...`
-- `Assets/_Project/Application/Services/...` is reserved for cross-cutting services only
+- `Assets/_Project/<Layer>/Features/<Feature>/...` is the canonical home for feature-specific code in every layer
+- `Assets/_Project/Application/Services/...` MUST NOT be used as a catch-all — it is reserved only for narrow cross-cutting services during migration
+- `Assets/_Project/Application/Shared/...`, `Application/Contracts/...`, and `Application/Messages/...` are reserved for cross-cutting code only
 - Keep folder and namespace aligned 1:1 with the feature or layer path
-- Avoid using `Services` as a catch-all bucket for unrelated gameplay features
+- **Canonical feature locations per layer**:
+  - Application: `Application/Features/<Feature>/...`
+  - Domain: `Domain/Features/<Feature>/...`
+  - Infrastructure: `Infrastructure/Features/<Feature>/...`
+  - Presentation: `Presentation/Features/<Feature>/...`
 
 ### Naming Conventions
-- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Combat`, `SolarPhobia.Application.Consequences` (PascalCase with dots)
+- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Features.Combat`, `SolarPhobia.Application.Features.Consequences` (PascalCase with dots; feature code uses `.Features.<Feature>` sub-namespace)
 - **Classes/Interfaces**: `PhaseStateMachine`, `ISoulRepository` (PascalCase, prefix I for interfaces)
 - **Methods**: `TrySetSelection`, `AdvancePhase` (PascalCase)
 - **Private fields**: `_mode`, `_subscriptions`, `_mapDirector` (underscore + camelCase)
 - **Local variables**: `tempRoot`, `snapshot` (camelCase)
 - **Constants**: `Rng` (static readonly), or UPPER_SNAKE_CASE for true constants
 - **Assembly Definitions**: `SolarPhobia.Domain.asmdef` matching namespace
+
+### Architecture Standard
+- Follow `docs/architecture/target-architecture-v2.md` for the official six-assembly layout, scope model, package policy, and migration phases.
+- Treat `Application/Features` as the canonical home for feature-specific application code.
+- Treat `Shared` as cross-cutting only; do not use it as a generic dumping ground.
+- Preserve the Option B boundary model when adding new folders, namespaces, or scope markers.
 
 ### File Structure
 ```csharp

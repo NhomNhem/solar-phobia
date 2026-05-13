@@ -1,9 +1,9 @@
 using System;
 using R3;
-using SolarPhobia.Application.Map.Directors;
-using SolarPhobia.Application.Player.Input;
-using SolarPhobia.Application.Player.Warnings;
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Map.Directors;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Warnings;
+using SolarPhobia.Application.Features.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -38,7 +38,7 @@ namespace SolarPhobia.Presentation.Player
         private IResourceEffectsService  _resourceEffectsService;
 
         [Inject]
-        public void Construct(
+        internal void Construct(
             IMapSpawnDirector mapDirector,
             IStrikeWarningController strikeWarningController,
             IPlayerInputHandler inputHandler,
@@ -174,5 +174,6 @@ namespace SolarPhobia.Presentation.Player
         }
     }
 }
+
 
 

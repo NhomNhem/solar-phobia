@@ -1,11 +1,10 @@
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Features.Consequences;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Combat;
-using SolarPhobia.Application.Ward;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Combat;
+using SolarPhobia.Application.Features.Ward;
 using SolarPhobia.Domain.ValueObjects;
 namespace SolarPhobia.Application.Editor.Tests
 {
@@ -149,6 +148,10 @@ namespace SolarPhobia.Application.Editor.Tests
             public float TotalCostApplied { get; private set; }
             public float GetCurrentWard() => CurrentWard;
             public Observable<float> OnWardChanged => Observable.Empty<float>();
+            public ReadOnlyReactiveProperty<float> CurrentWardObservable => new ReactiveProperty<float>(CurrentWard);
+            public ReadOnlyReactiveProperty<SolarPhobia.Domain.ValueObjects.SensoryTier> CurrentTier => new ReactiveProperty<SolarPhobia.Domain.ValueObjects.SensoryTier>(SolarPhobia.Domain.ValueObjects.SensoryTier.Stable);
+            public float MaxWard => 100f;
+            public Observable<Unit> OnDepleted => Observable.Empty<Unit>();
 
             private bool _canApply = true;
 
@@ -170,7 +173,7 @@ namespace SolarPhobia.Application.Editor.Tests
             }
         }
 
-            private class TestPhaseStateMachine : IPhaseStateMachine
+            private class TestPhaseStateMachine : IPhaseStateMachine, System.IDisposable
             {
                 private readonly ReactiveProperty<PhaseState> _phase;
                 private readonly Subject<PhaseChangedEvent> _phaseChangedSubject = new();
@@ -212,8 +215,20 @@ namespace SolarPhobia.Application.Editor.Tests
                 {
                     _nightStartSubject.OnNext(new NightStartEvent());
                 }
+
+                public void Dispose()
+                {
+                    _phase?.Dispose();
+                    _phaseChangedSubject?.Dispose();
+                    _dayStartSubject?.Dispose();
+                    _nightStartSubject?.Dispose();
+                    _resolveSubject?.Dispose();
+                }
             }
         }
     }
+
+
+
 
 

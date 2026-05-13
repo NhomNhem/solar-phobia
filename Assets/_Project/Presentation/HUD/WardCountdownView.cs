@@ -1,10 +1,10 @@
 using System;
 using R3;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.ValueObjects;
-using SolarPhobia.Application.Ward;
+using SolarPhobia.Application.Features.Ward;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -19,7 +19,7 @@ namespace SolarPhobia.Presentation.HUD
         private Label _timerLabel;
 
         [Inject]
-        public void Construct(IWardTimerPort wardTimer, IPhaseStateMachine phaseStateMachine)
+        internal void Construct(IWardTimerPort wardTimer, IPhaseStateMachine phaseStateMachine)
         {
             _wardTimer = wardTimer;
             _phaseStateMachine = phaseStateMachine;
@@ -100,5 +100,8 @@ namespace SolarPhobia.Presentation.HUD
         }
     }
 }
+
+
+
 
 

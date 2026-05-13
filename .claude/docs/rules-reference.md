@@ -25,7 +25,8 @@ Rules in `.claude/rules/` are automatically enforced when editing files in match
 
 ## Solar Phobia Folder Rule
 
-- Feature-specific application code lives under `Assets/_Project/Application/<Feature>/...`
-- `Assets/_Project/Application/Services/...` is reserved for cross-cutting services only
+- Feature-specific application code lives under `Assets/_Project/Application/Features/<Feature>/...`
+- Feature-specific code in other layers lives under `Assets/_Project/<Layer>/Features/<Feature>/...`
+- `Assets/_Project/Application/Services/...` is reserved for narrow cross-cutting services only during migration
 - Namespace must match the folder path and the feature boundary
 - Do not use `Services` as a default bucket for unrelated gameplay modules

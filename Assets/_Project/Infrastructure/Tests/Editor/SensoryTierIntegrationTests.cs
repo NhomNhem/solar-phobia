@@ -2,39 +2,25 @@
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Combat;
+using SolarPhobia.Application.Features.Phase.Reset;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
-using SolarPhobia.Infrastructure.Services;
-
-
-using SolarPhobia.Application.Strike;
-
-using SolarPhobia.Application.Consequences.WaterTrap;
-
-using SolarPhobia.Application.Rituals;
-
-using SolarPhobia.Application.Shrines;
-
-using SolarPhobia.Application.Day;
-
-using SolarPhobia.Application.Flow;
-
-using SolarPhobia.Application.Player.State;
-
-using SolarPhobia.Application.Player.Input;
-
-using SolarPhobia.Application.Player.Interactions;
-
-using SolarPhobia.Application.Player.Cursor;
-
-using SolarPhobia.Application.Player.Events;
-
-using SolarPhobia.Application.Combat;
-
-using SolarPhobia.Application.Phase.Reset;
+using SolarPhobia.Infrastructure.Features.Sensory;
+using SolarPhobia.Infrastructure.Features.Ward;
 
 namespace SolarPhobia.Infrastructure.Tests
 {
@@ -42,7 +28,7 @@ namespace SolarPhobia.Infrastructure.Tests
     /// Integration tests for Sensory Tiers with Ward Timer and HUD coordination.
     /// Story 009: Sensory Tiers — Detection Threshold Feedback
     /// </summary>
-    public class SensoryTierIntegrationTests
+    public class SensoryTierIntegrationTests : System.IDisposable
     {
         private TestPhaseStateMachine _phaseStateMachine;
         private WardTimerService _wardTimerService;
@@ -61,6 +47,11 @@ namespace SolarPhobia.Infrastructure.Tests
 
         [TearDown]
         public void TearDown()
+        {
+            _nightFailedSubject?.Dispose();
+        }
+
+        public void Dispose()
         {
             _nightFailedSubject?.Dispose();
         }
@@ -261,4 +252,8 @@ namespace SolarPhobia.Infrastructure.Tests
         }
     }
 }
+
+
+
+
 

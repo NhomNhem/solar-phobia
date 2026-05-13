@@ -1,4 +1,4 @@
-using SolarPhobia.Application.Hazards;
+using SolarPhobia.Application.Features.Hazards;
 using UnityEngine;
 
 namespace SolarPhobia.Infrastructure.Hazards
@@ -55,3 +55,4 @@ namespace SolarPhobia.Infrastructure.Hazards
         }
     }
 }
+

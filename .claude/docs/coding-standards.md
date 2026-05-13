@@ -1,7 +1,8 @@
 # Coding Standards
 
-- Feature-specific application code belongs under `Assets/_Project/Application/<Feature>/...`
-- `Assets/_Project/Application/Services/...` is reserved for cross-cutting services only
+- Feature-specific application code belongs under `Assets/_Project/Application/Features/<Feature>/...`
+- Feature-specific code in other layers belongs under `Assets/_Project/<Layer>/Features/<Feature>/...`
+- `Assets/_Project/Application/Services/...` is reserved for narrow cross-cutting services only during migration
 - Folder and namespace should match the feature or layer path 1:1
 - Do not use `Services` as a catch-all for unrelated gameplay code
 

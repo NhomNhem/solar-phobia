@@ -2,32 +2,32 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Player.Movement;
+using SolarPhobia.Application.Features.Player.Movement;
 using SolarPhobia.Domain.ValueObjects;
 
-using SolarPhobia.Application.Resources;
+using SolarPhobia.Application.Features.Resources;
 
-using SolarPhobia.Application.Strike;
+using SolarPhobia.Application.Features.Strike;
 
-using SolarPhobia.Application.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
 
-using SolarPhobia.Application.Rituals;
+using SolarPhobia.Application.Features.Rituals;
 
-using SolarPhobia.Application.Shrines;
+using SolarPhobia.Application.Features.Shrines;
 
-using SolarPhobia.Application.Day;
+using SolarPhobia.Application.Features.Day;
 
-using SolarPhobia.Application.Flow;
+using SolarPhobia.Application.Features.Phase.Flow;
 
-using SolarPhobia.Application.Player.State;
+using SolarPhobia.Application.Features.Player.State;
 
-using SolarPhobia.Application.Player.Input;
+using SolarPhobia.Application.Features.Player.Input;
 
-using SolarPhobia.Application.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Interactions;
 
-using SolarPhobia.Application.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Cursor;
 
-using SolarPhobia.Application.Player.Events;
+using SolarPhobia.Application.Features.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -229,4 +229,8 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
 
