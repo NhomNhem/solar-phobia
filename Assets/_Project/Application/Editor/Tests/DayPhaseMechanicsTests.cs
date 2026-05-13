@@ -1,15 +1,29 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using NhemDangFugBixs.NhemLogging;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Day;
-using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Phase.Day;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Audio;
+using SolarPhobia.Application.Features.Ward;
+using SolarPhobia.Domain;
+using SolarPhobia.Domain.Events;
+using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Domain.ValueObjects;
-
+using UnityEngine;
+using PhaseDayPhaseMechanicsService = SolarPhobia.Application.Features.Phase.Day.DayPhaseMechanicsService;
+using PhaseDayPhaseTimelineService = SolarPhobia.Application.Features.Phase.Timeline.DayPhaseTimelineService;
+using NightToDayResetService = SolarPhobia.Application.Features.Phase.Reset.NightToDayResetService;
+using ApplicationWardTimerService = SolarPhobia.Application.Features.Ward.IWardTimerPort;
+using PhaseWardTimerService = SolarPhobia.Infrastructure.Features.Ward.WardTimerService;
+using NgocCotService = SolarPhobia.Application.Features.Resources.NgocCotService;
+using RitualAssignmentService = SolarPhobia.Application.Features.Rituals.RitualAssignmentService;
+using WardDeathTriggerService = SolarPhobia.Application.Features.Phase.Reset.WardDeathTriggerService;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
@@ -30,7 +44,7 @@ namespace SolarPhobia.Application.Tests
             _soulRepo = new FakeSoulRepository();
             _animationService = new FakeAnimationService();
             _audioService = new FakeAudioService();
-            _service = new DayPhaseMechanicsService(_soulRepo, _animationService, _audioService);
+            _service = new DayPhaseMechanicsService(new NhemUnityLogger(), _soulRepo, _animationService, _audioService);
         }
 
         // ── Swap Tests ─────────────────────────────────────────────
@@ -174,16 +188,16 @@ namespace SolarPhobia.Application.Tests
         }
     }
 
-// ═══════════════════════════════════════════════════════════════
+// ───────────────────────────────────────────────────────────────
     // LEGACY TEST CLASS — DEPRECATED
     // This class tests the old SoulRepository directly.
     // The DayPhaseMechanicsTests below provides proper isolation
     // via FakeSoulRepository + FakePhaseStateMachine.
-    // ═══════════════════════════════════════════════════════════════
+    // ───────────────────────────────────────────────────────────────
 
     // ── Fake Implementations for Testing ─────────────────────────
 
-    public class FakeSoulRepository : ISoulRepository
+    public class FakeSoulRepository : ISoulRepository, System.IDisposable
     {
         public IReadOnlyList<Soul> Souls => _souls.Values.ToList();
         public Observable<SelectionChangedEvent> OnSelectionChanged => _selectionSubject;
@@ -250,6 +264,11 @@ public void MarkAbandoned(string soulId)
             SacrificedGhostId = soulId;
             SetSacrificedGhostIdCalled = true;
         }
+
+        public void Dispose()
+        {
+            _selectionSubject?.Dispose();
+        }
     }
 
     public class FakeAnimationService : IAnimationService
@@ -258,7 +277,7 @@ public void MarkAbandoned(string soulId)
         public void PlayShoveAnimation(string playerId, string soulId) { }
     }
 
-    public class FakeAudioService : IAudioService
+    public class FakeAudioService : IAudioCueService
     {
         public bool SprintSoundPlayed { get; private set; }
         public bool DashSoundPlayed { get; private set; }
@@ -273,3 +292,8 @@ public void MarkAbandoned(string soulId)
         public void PlaySwingSound() { SwingSoundPlayed = true; }
     }
 }
+
+
+
+
+

@@ -2,13 +2,37 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Player.Movement;
+using SolarPhobia.Application.Features.Player.Movement;
 using SolarPhobia.Domain.ValueObjects;
+
+using SolarPhobia.Application.Features.Resources;
+
+using SolarPhobia.Application.Features.Strike;
+
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Features.Rituals;
+
+using SolarPhobia.Application.Features.Shrines;
+
+using SolarPhobia.Application.Features.Day;
+
+using SolarPhobia.Application.Features.Phase.Flow;
+
+using SolarPhobia.Application.Features.Player.State;
+
+using SolarPhobia.Application.Features.Player.Input;
+
+using SolarPhobia.Application.Features.Player.Interactions;
+
+using SolarPhobia.Application.Features.Player.Cursor;
+
+using SolarPhobia.Application.Features.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: Master GDD V5.0 Section 3.1 — Spirit Dash (Khăn Tang burst skill).
+    /// Validates: Master GDD V5.0 Section 3.1 — Spirit Dash (KhÄƒn Tang burst skill).
     /// Story 003-v2: Spirit Dash — Ward cost -5.0s, cooldown, phase gate.
     /// </summary>
     [TestFixture]
@@ -236,3 +260,8 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+

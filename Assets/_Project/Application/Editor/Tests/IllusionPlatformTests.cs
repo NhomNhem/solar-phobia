@@ -1,12 +1,11 @@
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Features.Consequences;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Interfaces;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Phase.Reset;
 using SolarPhobia.Domain.ValueObjects;
-
 namespace SolarPhobia.Application.Editor.Tests
 {
     public class IllusionPlatformTests
@@ -172,7 +171,7 @@ namespace SolarPhobia.Application.Editor.Tests
 
         // ── Test Doubles ───────────────────────────────────────────
 
-        private class TestPhaseStateMachine : IPhaseStateMachine
+        private class TestPhaseStateMachine : IPhaseStateMachine, System.IDisposable
         {
             private readonly ReactiveProperty<PhaseState> _phase;
             private readonly Subject<PhaseChangedEvent> _phaseChangedSubject = new();
@@ -214,6 +213,20 @@ namespace SolarPhobia.Application.Editor.Tests
             {
                 _nightStartSubject.OnNext(new NightStartEvent());
             }
+
+            public void Dispose()
+            {
+                _phase?.Dispose();
+                _phaseChangedSubject?.Dispose();
+                _dayStartSubject?.Dispose();
+                _nightStartSubject?.Dispose();
+                _resolveSubject?.Dispose();
+            }
         }
     }
 }
+
+
+
+
+

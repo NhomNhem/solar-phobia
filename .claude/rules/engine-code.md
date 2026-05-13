@@ -13,6 +13,7 @@ paths:
 - Changes to public interfaces require a deprecation period and migration guide
 - Use RAII / deterministic cleanup for all resources
 - All engine systems must support graceful degradation
+- Feature-specific application code should live under `Application/Features/<Feature>/...`; keep `Application/Services` only for narrow cross-cutting services during migration
 - Before writing engine API code, consult `docs/engine-reference/` for the current engine version and verify APIs against the reference docs
 - Use **ZLinq** only in measured hot paths where allocation pressure is a verified concern
 - Prefer **R3** for local engine-adjacent reactive state; use **MessagePipe** only for cross-system notifications that should stay decoupled

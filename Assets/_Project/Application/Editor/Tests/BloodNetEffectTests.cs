@@ -1,12 +1,11 @@
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Features.Consequences;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Combat;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Combat;
+using SolarPhobia.Application.Features.Ward;
 using SolarPhobia.Domain.ValueObjects;
-
 namespace SolarPhobia.Application.Editor.Tests
 {
     public class BloodNetEffectTests
@@ -37,7 +36,6 @@ namespace SolarPhobia.Application.Editor.Tests
             _curseManager?.Dispose();
         }
 
-        // ── AC-1: Immediate penalty on contact ────────────────────
 
         [Test]
         public void AC1_BloodNetContact_Applies5WardPenalty()
@@ -61,7 +59,6 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.TotalPenaltyApplied, Is.EqualTo(5.0f).Within(0.001f));
         }
 
-        // ── AC-2: Slow applied for 3 seconds ──────────────────────
 
         [Test]
         public void AC2_BloodNetContact_StartsSlow()
@@ -88,7 +85,6 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_service.SlowTimeRemaining, Is.EqualTo(2.0f).Within(0.001f));
         }
 
-        // ── AC-3: Slow restores after 3 seconds ───────────────────
 
         [Test]
         public void AC3_SlowEnds_After3Seconds()
@@ -112,9 +108,7 @@ namespace SolarPhobia.Application.Editor.Tests
             _service.Tick(1.5f);
             Assert.That(_service.IsSlowed, Is.False);
         }
-
-        // ── Edge Cases ────────────────────────────────────────────
-
+        
         [Test]
         public void EdgeCase_OnlyBlockCurse_TriggersBloodNet()
         {
@@ -147,14 +141,17 @@ namespace SolarPhobia.Application.Editor.Tests
             Assert.That(_wardTimer.TotalCostApplied, Is.EqualTo(0f));
         }
 
-        // ── Test Doubles ───────────────────────────────────────────
 
-        private class TestWardTimerService : IWardTimerService
+        private class TestWardTimerService : IWardTimerPort
         {
             public float CurrentWard { get; set; } = 100f;
             public float TotalCostApplied { get; private set; }
             public float GetCurrentWard() => CurrentWard;
             public Observable<float> OnWardChanged => Observable.Empty<float>();
+            public ReadOnlyReactiveProperty<float> CurrentWardObservable => new ReactiveProperty<float>(CurrentWard);
+            public ReadOnlyReactiveProperty<SolarPhobia.Domain.ValueObjects.SensoryTier> CurrentTier => new ReactiveProperty<SolarPhobia.Domain.ValueObjects.SensoryTier>(SolarPhobia.Domain.ValueObjects.SensoryTier.Stable);
+            public float MaxWard => 100f;
+            public Observable<Unit> OnDepleted => Observable.Empty<Unit>();
 
             private bool _canApply = true;
 
@@ -176,7 +173,7 @@ namespace SolarPhobia.Application.Editor.Tests
             }
         }
 
-            private class TestPhaseStateMachine : IPhaseStateMachine
+            private class TestPhaseStateMachine : IPhaseStateMachine, System.IDisposable
             {
                 private readonly ReactiveProperty<PhaseState> _phase;
                 private readonly Subject<PhaseChangedEvent> _phaseChangedSubject = new();
@@ -218,6 +215,20 @@ namespace SolarPhobia.Application.Editor.Tests
                 {
                     _nightStartSubject.OnNext(new NightStartEvent());
                 }
+
+                public void Dispose()
+                {
+                    _phase?.Dispose();
+                    _phaseChangedSubject?.Dispose();
+                    _dayStartSubject?.Dispose();
+                    _nightStartSubject?.Dispose();
+                    _resolveSubject?.Dispose();
+                }
             }
         }
     }
+
+
+
+
+

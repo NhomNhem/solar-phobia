@@ -1,12 +1,39 @@
 // Assets/_Project/Application/Editor/Tests/NgocCotRelicPickupsTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Domain.Services;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Domain;
+
+
+using SolarPhobia.Application.Features.Strike;
+
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Features.Rituals;
+
+using SolarPhobia.Application.Features.Shrines;
+
+using SolarPhobia.Application.Features.Day;
+
+using SolarPhobia.Application.Features.Phase.Flow;
+
+using SolarPhobia.Application.Features.Player.State;
+
+using SolarPhobia.Application.Features.Player.Input;
+
+using SolarPhobia.Application.Features.Player.Interactions;
+
+using SolarPhobia.Application.Features.Player.Cursor;
+
+using SolarPhobia.Application.Features.Player.Events;
+
+using SolarPhobia.Application.Features.Combat;
+
+using SolarPhobia.Application.Features.Phase.Reset;
 
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
-    /// Validates: TR-state-005 — Ngọc Cốt relic pickups increase Ward drain multiplicatively.
+    /// Validates: TR-state-005 — Ngá»c Cá»‘t relic pickups increase Ward drain multiplicatively.
     /// </summary>
     public class NgocCotRelicPickupsTests
     {
@@ -213,3 +240,9 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+
+

@@ -1,22 +1,29 @@
+using System;
 using R3;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.ValueObjects;
-using System;
-using UnityEngine.UIElements;
+using SolarPhobia.Application.Features.Ward;
 using UnityEngine;
+using UnityEngine.UIElements;
 using VContainer;
-
 namespace SolarPhobia.Presentation.HUD
 {
     public class WardCountdownView : MonoBehaviour
     {
-        [Inject] internal SolarPhobia.Domain.IWardTimerService _wardTimer;
-        [Inject] internal IPhaseStateMachine _phaseStateMachine;
+        private IWardTimerPort _wardTimer;
+        private IPhaseStateMachine _phaseStateMachine;
 
         private UIDocument _document;
         private Label _timerLabel;
+
+        [Inject]
+        internal void Construct(IWardTimerPort wardTimer, IPhaseStateMachine phaseStateMachine)
+        {
+            _wardTimer = wardTimer;
+            _phaseStateMachine = phaseStateMachine;
+        }
         private VisualElement _barFill;
         private VisualElement _root;
         private IDisposable _wardSubscription;
@@ -93,3 +100,8 @@ namespace SolarPhobia.Presentation.HUD
         }
     }
 }
+
+
+
+
+

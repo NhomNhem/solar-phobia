@@ -1,12 +1,36 @@
 // Assets/_Project/Application/Editor/Tests/CoverDensityTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Map.Analysis;
+using SolarPhobia.Application.Features.Map.Analysis;
+
+using SolarPhobia.Application.Features.Resources;
+
+using SolarPhobia.Application.Features.Strike;
+
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Features.Rituals;
+
+using SolarPhobia.Application.Features.Shrines;
+
+using SolarPhobia.Application.Features.Day;
+
+using SolarPhobia.Application.Features.Phase.Flow;
+
+using SolarPhobia.Application.Features.Player.State;
+
+using SolarPhobia.Application.Features.Player.Input;
+
+using SolarPhobia.Application.Features.Player.Interactions;
+
+using SolarPhobia.Application.Features.Player.Cursor;
+
+using SolarPhobia.Application.Features.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
     /// Validates: TR-map-006 — Cover Density Validation.
-    /// Story 005: cover_density = mo_thuong_count / lane_length (target 0.02–0.08).
+    /// Story 005: cover_density = mo_thuong_count / lane_length (target 0.02â€“0.08).
     /// </summary>
     [TestFixture]
     public class CoverDensityTests
@@ -25,7 +49,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC1_DefaultCount_OnTypicalLane_IsValid()
         {
-            // Default 14 mounds on 200-unit lane = 0.07 ✓
+            // Default 14 mounds on 200-unit lane = 0.07 âœ“
             bool result = CoverDensityValidator.IsValid(
                 CoverDensityValidator.DefaultMoThuongCount, 200f);
 
@@ -126,3 +150,8 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+

@@ -2,7 +2,7 @@
 using System;
 using NhemDangFugBixs.NhemLogging;
 using R3;
-using SolarPhobia.Application.Player.Warnings;
+using SolarPhobia.Application.Features.Player.Warnings;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -22,7 +22,15 @@ namespace SolarPhobia.Presentation.Player
     [RequireComponent(typeof(UIDocument))]
     public class StrikeWarningView : MonoBehaviour
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
+        private INhemLogger _logger;
+        private IStrikeWarningController _controller;
+
+        [Inject]
+        internal void Construct(INhemLogger logger, IStrikeWarningController controller)
+        {
+            _logger = logger;
+            _controller = controller;
+        }
 
         // ── Inspector ──────────────────────────────────────────────
         [SerializeField] private string _warningIconName = "warning-icon";
@@ -30,9 +38,6 @@ namespace SolarPhobia.Presentation.Player
         // ── State ─────────────────────────────────────────────────
         private VisualElement _warningIcon;
         private IDisposable   _subscription;
-
-        // ── Dependencies (injected via VContainer) ─────────────────
-        [Inject] internal IStrikeWarningController _controller;
 
         // ── Unity Lifecycle ────────────────────────────────────────
         private void Start()

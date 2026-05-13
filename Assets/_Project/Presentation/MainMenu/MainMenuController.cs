@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NhemDangFugBixs.NhemLogging;
 using R3;
-using SolarPhobia.Application.MainMenu;
+using SolarPhobia.Application.Features.MainMenu;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VContainer;
@@ -11,13 +11,20 @@ namespace SolarPhobia.Presentation.MainMenu
 {
     public class MainMenuController : MonoBehaviour, IDisposable
     {
-        [Inject] internal INhemLogger _logger = new NhemUnityLogger();
-
         public static event Action OnNewGameRequested;
         public static event Action OnContinueRequested;
         public static event Action OnQuitRequested;
 
-        [Inject] internal IMainMenuApplicationService _mainMenuService;
+        private INhemLogger _logger;
+        private IMainMenuApplicationService _mainMenuService;
+
+        [Inject]
+        internal void Construct(INhemLogger logger, IMainMenuApplicationService mainMenuService)
+        {
+            _logger = logger;
+            _mainMenuService = mainMenuService;
+        }
+
         [SerializeField] private UIDocument _document;
 
         // ── UI Root ────────────────────────────────────────────────────
@@ -545,3 +552,4 @@ namespace SolarPhobia.Presentation.MainMenu
         }
     }
 }
+

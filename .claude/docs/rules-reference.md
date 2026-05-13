@@ -22,3 +22,11 @@ Rules in `.claude/rules/` are automatically enforced when editing files in match
 - **ObservableCollections**: collection delta observation only; not allowed in Domain or public cross-layer contracts.
 - **MessagePipe**: one-way cross-context events only; not state storage and not request/response.
 - **ZLinq**: hot-path optimization tool only; avoid in ordinary code and tests unless profiling justifies it.
+
+## Solar Phobia Folder Rule
+
+- Feature-specific application code lives under `Assets/_Project/Application/Features/<Feature>/...`
+- Feature-specific code in other layers lives under `Assets/_Project/<Layer>/Features/<Feature>/...`
+- `Assets/_Project/Application/Services/...` is reserved for narrow cross-cutting services only during migration
+- Namespace must match the folder path and the feature boundary
+- Do not use `Services` as a default bucket for unrelated gameplay modules

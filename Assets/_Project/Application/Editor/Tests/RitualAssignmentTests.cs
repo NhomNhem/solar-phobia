@@ -1,17 +1,44 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Resources;
 using SolarPhobia.Domain.ValueObjects;
+
+
+using SolarPhobia.Application.Features.Strike;
+
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Features.Rituals;
+
+using SolarPhobia.Application.Features.Shrines;
+
+using SolarPhobia.Application.Features.Day;
+
+using SolarPhobia.Application.Features.Phase.Flow;
+
+using SolarPhobia.Application.Features.Player.State;
+
+using SolarPhobia.Application.Features.Player.Input;
+
+using SolarPhobia.Application.Features.Player.Interactions;
+
+using SolarPhobia.Application.Features.Player.Cursor;
+
+using SolarPhobia.Application.Features.Player.Events;
+
+using SolarPhobia.Application.Features.Combat;
+
+using SolarPhobia.Application.Features.Phase.Reset;
 
 namespace SolarPhobia.Application.Tests
 {
     [TestFixture]
     public class RitualAssignmentTests
     {
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // AC-2: Ritual Assignment
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void AssignRitual_ValidSoul_Succeeds()
@@ -67,9 +94,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(service.Assignments["linh"], Is.EqualTo(RitualType.Offering));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // Ritual Removal
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void RemoveRitual_Existing_Succeeds()
@@ -103,9 +130,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(removed, Is.False);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // Clear
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Clear_RemovesAllAssignments()
@@ -119,9 +146,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(service.Assignments, Is.Empty);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // Preferred Ritual Bonus
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void IsPreferredRitual_LinhTea_ReturnsTrue()
@@ -173,9 +200,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(preferred, Is.False);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // Graceful Degradation (no IResourceEffectApplier)
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void GracefulDegradation_NoEffectApplier_AssignsWithoutCrash()
@@ -201,9 +228,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(service.Assignments.Count, Is.EqualTo(3));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // Edge Cases
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void MultipleSouls_SameRitualType_Allowed()
@@ -241,3 +268,9 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+
+

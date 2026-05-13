@@ -4,8 +4,20 @@ using System.Linq;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Phase.Reset;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Combat;
 using SolarPhobia.Domain.ValueObjects;
 
 namespace SolarPhobia.Application.Tests
@@ -21,7 +33,7 @@ namespace SolarPhobia.Application.Tests
     [SingleThreaded]
     public class PlayerStateMachinePhaseTests
     {
-        private class TestPhaseStateMachine : IPhaseStateMachine
+        private class TestPhaseStateMachine : IPhaseStateMachine, System.IDisposable
         {
             private readonly ReactiveProperty<PhaseState> _phase;
             private readonly Subject<PhaseChangedEvent> _phaseChangedSubject = new();
@@ -379,3 +391,9 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+
+

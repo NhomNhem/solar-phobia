@@ -1,14 +1,13 @@
-// Assets/_Project/Presentation/Player/PlayerController.cs
 using System;
 using R3;
-using SolarPhobia.Application.Map.Directors;
-using SolarPhobia.Application.Player.Warnings;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Map.Directors;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Warnings;
+using SolarPhobia.Application.Features.Resources;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
-
 namespace SolarPhobia.Presentation.Player
 {
     /// <summary>
@@ -33,10 +32,23 @@ namespace SolarPhobia.Presentation.Player
         public event Action<string> OnInteract;
 
         // ── Injected Dependencies ──────────────────────────────────
-        [Inject] internal IMapSpawnDirector        _mapDirector;
-        [Inject] internal IStrikeWarningController _strikeWarningController;
-        [Inject] internal IPlayerInputHandler      _inputHandler;
-        [Inject] internal IResourceEffectsService  _resourceEffectsService;
+        private IMapSpawnDirector        _mapDirector;
+        private IStrikeWarningController _strikeWarningController;
+        private IPlayerInputHandler      _inputHandler;
+        private IResourceEffectsService  _resourceEffectsService;
+
+        [Inject]
+        internal void Construct(
+            IMapSpawnDirector mapDirector,
+            IStrikeWarningController strikeWarningController,
+            IPlayerInputHandler inputHandler,
+            IResourceEffectsService resourceEffectsService)
+        {
+            _mapDirector = mapDirector;
+            _strikeWarningController = strikeWarningController;
+            _inputHandler = inputHandler;
+            _resourceEffectsService = resourceEffectsService;
+        }
 
         // ── Private State ──────────────────────────────────────────
         private PlayerInputMode _mode;
@@ -162,3 +174,6 @@ namespace SolarPhobia.Presentation.Player
         }
     }
 }
+
+
+

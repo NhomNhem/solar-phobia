@@ -1,9 +1,20 @@
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Objective;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Phase.Reset;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Combat;
 using SolarPhobia.Domain.ValueObjects;
 using System;
 
@@ -126,14 +137,16 @@ namespace SolarPhobia.Application.Editor.Tests
 
         // ── Test Doubles ───────────────────────────────────────────
 
-        private class TestWardTimer : SolarPhobia.Domain.IWardTimerService
+        private class TestWardTimer : SolarPhobia.Application.Features.Ward.IWardTimerPort, System.IDisposable
         {
             private readonly Subject<Unit> _depletedSubject = new();
 
             public float CurrentWard { get; set; } = 100f;
+            public float GetCurrentWard() => CurrentWard;
             public ReadOnlyReactiveProperty<float> CurrentWardObservable => new ReactiveProperty<float>(CurrentWard);
             public ReadOnlyReactiveProperty<SensoryTier> CurrentTier => new ReactiveProperty<SensoryTier>(SensoryTier.Stable);
             public Observable<Unit> OnDepleted => _depletedSubject;
+            public Observable<float> OnWardChanged => Observable.Empty<float>();
             public float MaxWard => 100f;
 
             public void Initialize(int ghostsSaved, int failedLightInterrupts, int soulPanicEvents) { }
@@ -145,6 +158,11 @@ namespace SolarPhobia.Application.Editor.Tests
             public void FireDepleted()
             {
                 _depletedSubject.OnNext(Unit.Default);
+            }
+
+            public void Dispose()
+            {
+                _depletedSubject?.Dispose();
             }
         }
 
@@ -202,3 +220,9 @@ namespace SolarPhobia.Application.Editor.Tests
             }
         }
     }
+
+
+
+
+
+

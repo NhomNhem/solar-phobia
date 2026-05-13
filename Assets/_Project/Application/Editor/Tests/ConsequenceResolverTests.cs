@@ -1,12 +1,35 @@
-// Assets/_Project/Application/Editor/Tests/ConsequenceResolverTests.cs
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Features.Consequences;
 using SolarPhobia.Application.Messages;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Repositories;
 using SolarPhobia.Domain.ValueObjects;
+
+using SolarPhobia.Application.Features.Resources;
+
+using SolarPhobia.Application.Features.Strike;
+
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Features.Rituals;
+
+using SolarPhobia.Application.Features.Shrines;
+
+using SolarPhobia.Application.Features.Day;
+
+using SolarPhobia.Application.Features.Phase.Flow;
+
+using SolarPhobia.Application.Features.Player.State;
+
+using SolarPhobia.Application.Features.Player.Input;
+
+using SolarPhobia.Application.Features.Player.Interactions;
+
+using SolarPhobia.Application.Features.Player.Cursor;
+
+using SolarPhobia.Application.Features.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -50,15 +73,15 @@ namespace SolarPhobia.Application.Tests
         {
             _ghostRepo = new StubGhostRepository();
             _ghostRepo.Add(new Ghost("linh", "Em Linh"));
-            _ghostRepo.Add(new Ghost("van", "Ông Văn"));
+            _ghostRepo.Add(new Ghost("van", "Ã”ng VÄƒn"));
             _ghostRepo.Add(new Ghost("minh", "Anh Minh"));
 
             _resolver = new ConsequenceResolver(_ghostRepo);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // ── AC-1: Curse Mapping — Deterministic Lookup ─────────────
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Resolve_Linh_ReturnsDrag()
@@ -103,9 +126,9 @@ namespace SolarPhobia.Application.Tests
             }
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // ── AC-2: One-Write Rule ───────────────────────────────────
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Resolve_SecondCall_ThrowsInvalidOperationException()
@@ -145,9 +168,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_resolver.HasResolved, Is.True);
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // ── AC-3: Invalid Soul ID ──────────────────────────────────
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Resolve_UnknownSoulId_DefaultsToDrag()
@@ -174,16 +197,16 @@ namespace SolarPhobia.Application.Tests
             Assert.That(payload.CurseType, Is.EqualTo(NightOutcomeState.Drag));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // ── AC-4: Duplicate Write Rejected ─────────────────────────
         // (Already covered by AC-2 one-write rule tests above)
         // ── AC-5: Payload Delivery ─────────────────────────────────
         // (Verified in every Resolve test: CurseType, Intensity, SpawnBias)
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // ── AC-6: Integration with Ghost Model ─────────────────────
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Resolve_WritesNightOutcomeOnGhost()
@@ -212,9 +235,9 @@ namespace SolarPhobia.Application.Tests
             Assert.That(payload.CurseType, Is.EqualTo(NightOutcomeState.Drag));
         }
 
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
         // ── Performance: Completes within 0.1ms ────────────────────
-        // ═══════════════════════════════════════════════════════════
+        // ───────────────────────────────────────────────────────────
 
         [Test]
         public void Resolve_CompletesQuickly()
@@ -228,3 +251,8 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+

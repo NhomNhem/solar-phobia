@@ -2,10 +2,22 @@ using System;
 using NUnit.Framework;
 using R3;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Strike;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+using SolarPhobia.Application.Features.Rituals;
+using SolarPhobia.Application.Features.Shrines;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Player.State;
+using SolarPhobia.Application.Features.Player.Input;
+using SolarPhobia.Application.Features.Player.Interactions;
+using SolarPhobia.Application.Features.Player.Cursor;
+using SolarPhobia.Application.Features.Player.Events;
+using SolarPhobia.Application.Features.Combat;
+using SolarPhobia.Application.Features.Phase.Reset;
 using SolarPhobia.Domain.ValueObjects;
-using SolarPhobia.Infrastructure.Camera;
+using SolarPhobia.Infrastructure.Features.CameraControl;
 using Unity.Cinemachine;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -38,7 +50,10 @@ namespace SolarPhobia.Infrastructure.Tests
             nightCamField.SetValue(_controller, _nightCam);
 
             _phaseStateMachine = new TestPhaseStateMachine();
-            _controller.Construct(_phaseStateMachine);
+            
+            // Use reflection to call internal Construct method
+            var constructMethod = type.GetMethod("Construct", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            constructMethod.Invoke(_controller, new object[] { _phaseStateMachine });
         }
 
         [TearDown]
@@ -115,3 +130,8 @@ namespace SolarPhobia.Infrastructure.Tests
         }
     }
 }
+
+
+
+
+

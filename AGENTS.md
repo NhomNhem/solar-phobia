@@ -2,7 +2,9 @@
 
 ## Project Overview
 Unity 6000.3.11f1 (Unity 6) project using C# 9.0 targeting .NET 4.7.1.
-Architecture follows clean layering with Assembly Definitions: Domain → Application → Infrastructure/Presentation → Composition.
+Architecture follows clean layering with Assembly Definitions and a feature-first structure:
+Domain → Application/Features → Infrastructure/Features → Presentation/Features → Composition → Shared.
+The official architecture standard is defined in `docs/architecture/target-architecture-v2.md` and should be treated as the source of truth for folder layout, namespace rules, scope wiring, and package policy.
 
 ## Build & Test Commands
 
@@ -32,21 +34,37 @@ Unity.exe -quit -batchmode -projectPath "I:\unityVers\Solar phobia" -buildTarget
 
 ## Code Style Guidelines
 
+### Layered Folder Rule
+- `Assets/_Project/<Layer>/Features/<Feature>/...` is the canonical home for feature-specific code in every layer
+- `Assets/_Project/Application/Services/...` MUST NOT be used as a catch-all — it is reserved only for narrow cross-cutting services during migration
+- `Assets/_Project/Application/Shared/...`, `Application/Contracts/...`, and `Application/Messages/...` are reserved for cross-cutting code only
+- Keep folder and namespace aligned 1:1 with the feature or layer path
+- **Canonical feature locations per layer**:
+  - Application: `Application/Features/<Feature>/...`
+  - Domain: `Domain/Features/<Feature>/...`
+  - Infrastructure: `Infrastructure/Features/<Feature>/...`
+  - Presentation: `Presentation/Features/<Feature>/...`
+
 ### Naming Conventions
-- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Services` (PascalCase with dots)
+- **Namespaces**: `SolarPhobia.Domain`, `SolarPhobia.Application.Features.Combat`, `SolarPhobia.Application.Features.Consequences` (PascalCase with dots; feature code uses `.Features.<Feature>` sub-namespace)
 - **Classes/Interfaces**: `PhaseStateMachine`, `ISoulRepository` (PascalCase, prefix I for interfaces)
 - **Methods**: `TrySetSelection`, `AdvancePhase` (PascalCase)
 - **Private fields**: `_mode`, `_subscriptions`, `_mapDirector` (underscore + camelCase)
-- **Internal injected fields**: `_mapDirector` (used with VContainer `[Inject]`) — must be `internal`, not `private`, for source generator compatibility (VCON0007)
 - **Local variables**: `tempRoot`, `snapshot` (camelCase)
 - **Constants**: `Rng` (static readonly), or UPPER_SNAKE_CASE for true constants
 - **Assembly Definitions**: `SolarPhobia.Domain.asmdef` matching namespace
+
+### Architecture Standard
+- Follow `docs/architecture/target-architecture-v2.md` for the official six-assembly layout, scope model, package policy, and migration phases.
+- Treat `Application/Features` as the canonical home for feature-specific application code.
+- Treat `Shared` as cross-cutting only; do not use it as a generic dumping ground.
+- Preserve the Option B boundary model when adding new folders, namespaces, or scope markers.
 
 ### File Structure
 ```csharp
 using System;                    // System imports first
 using System.Collections.Generic;
-using SolarPhobia.Application.Services; // Third-party/Project imports after
+using SolarPhobia.Application.Combat; // Third-party/Project imports after
 using UnityEditor;
 using UnityEngine;
 
@@ -103,7 +121,7 @@ namespace SolarPhobia.Application.Systems {
 - Use `rootNamespace` matching assembly name
 
 ## Key Packages
-- **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — `[Inject]` fields must be `internal` (not `private`) for source generator compatibility
+- **VContainer**: Dependency injection (jp.hadashikick.vcontainer) — see [Dependency Injection Rules](#dependency-injection-rules)
 - **NhemDangFugBixs.Logging**: Project logging abstraction — use `INhemLogger` in DI-managed classes; keep `NhemUnityLogger` construction limited to static loaders and non-DI runtime components
 - **R3**: Reactive programming (com.cysharp.r3) — replaces reactive patterns
 - **ObservableCollections**: Collection-level change tracking (Cysharp) — use for add/remove/move/replace deltas, never in Domain or public cross-layer contracts
@@ -112,6 +130,18 @@ namespace SolarPhobia.Application.Systems {
 - **DOTween**: Animation tweens (Demigiant)
 - **Odin Inspector**: Editor enhancements (Sirenix)
 - **MessagePipe**: Event/message bus (com.cysharp.messagepipe)
+
+## Dependency Injection Rules
+
+- **No `[Inject]` on public fields.** All injected dependencies must be private fields (underscore + camelCase naming).
+- **Injected fields**: If field injection is used in a legacy or exceptional case, the field must be `internal` for source generator compatibility.
+- **MonoBehaviour injection**: Use `[Inject] public void Construct(...)` method — never field injection.
+  - Example: `[Inject] public void Construct(IPhaseStateMachine phaseMachine) { _phaseMachine = phaseMachine; }`
+- **Plain C# class injection**: Use constructor injection — never field injection.
+  - Example: `public MyService(IPhaseStateMachine phaseMachine) { _phaseMachine = phaseMachine; }`
+- **Too many constructor parameters**: Split the class or group dependencies via facade/service pattern (aim for ≤4 parameters).
+- **INhemLogger in constructors**: Add `INhemLogger logger` as a constructor parameter; the DI container resolves it. Never assign `new NhemUnityLogger()` as a default.
+- **Parameterless constructors**: Do NOT add `[Inject]` to parameterless constructors. VContainer resolves via constructor automatically.
 
 ## Package Usage Policy
 

@@ -1,4 +1,4 @@
-using SolarPhobia.Application.MainMenu;
+using SolarPhobia.Application.Features.MainMenu;
 using UnityEngine;
 
 namespace SolarPhobia.Infrastructure.MainMenu
@@ -55,3 +55,4 @@ namespace SolarPhobia.Infrastructure.MainMenu
         }
     }
 }
+

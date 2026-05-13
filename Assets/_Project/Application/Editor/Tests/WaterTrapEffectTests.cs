@@ -1,11 +1,14 @@
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Consequences;
+using SolarPhobia.Application.Features.Consequences;
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Ward;
+using SolarPhobia.Application.Features.Phase.Reset;
 using SolarPhobia.Domain.ValueObjects;
-
+using UnityEngine;
 namespace SolarPhobia.Application.Tests
 {
     /// <summary>
@@ -187,11 +190,15 @@ namespace SolarPhobia.Application.Tests
 
         // ── Test Doubles ───────────────────────────────────────────
 
-        private class TestWardTimerService : IWardTimerService
+        private class TestWardTimerService : IWardTimerPort
         {
             public float CurrentWard { get; set; } = 100f;
             public float TotalCostApplied { get; private set; }
             public Observable<float> OnWardChanged => Observable.Empty<float>();
+            public ReadOnlyReactiveProperty<float> CurrentWardObservable => new ReactiveProperty<float>(CurrentWard);
+            public ReadOnlyReactiveProperty<SolarPhobia.Domain.ValueObjects.SensoryTier> CurrentTier => new ReactiveProperty<SolarPhobia.Domain.ValueObjects.SensoryTier>(SolarPhobia.Domain.ValueObjects.SensoryTier.Stable);
+            public float MaxWard => 100f;
+            public Observable<Unit> OnDepleted => Observable.Empty<Unit>();
 
             private bool _canApply = true;
 
@@ -211,7 +218,7 @@ namespace SolarPhobia.Application.Tests
             }
         }
 
-        private class TestPhaseStateMachine : IPhaseStateMachine
+        private class TestPhaseStateMachine : IPhaseStateMachine, System.IDisposable
         {
             private readonly ReactiveProperty<PhaseState> _phase;
             private readonly Subject<PhaseChangedEvent> _phaseChangedSubject = new();
@@ -254,6 +261,21 @@ namespace SolarPhobia.Application.Tests
             {
                 _nightStartSubject.OnNext(new NightStartEvent());
             }
+
+            public void Dispose()
+            {
+                _phase?.Dispose();
+                _phaseChangedSubject?.Dispose();
+                _dayStartSubject?.Dispose();
+                _nightStartSubject?.Dispose();
+                _resolveSubject?.Dispose();
+            }
         }
     }
 }
+
+
+
+
+
+

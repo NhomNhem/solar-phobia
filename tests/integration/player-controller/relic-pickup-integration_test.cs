@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Services;
+using SolarPhobia.Application.Features.Combat;
 using SolarPhobia.Domain.ValueObjects;
 using UnityEngine;
 

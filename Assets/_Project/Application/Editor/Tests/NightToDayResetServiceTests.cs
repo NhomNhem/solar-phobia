@@ -1,25 +1,30 @@
 using System;
 using NUnit.Framework;
 using R3;
-using SolarPhobia.Application.Consequences;
-using SolarPhobia.Application.Hazards;
+using SolarPhobia.Application.Features.Consequences;
+using SolarPhobia.Application.Features.Day;
+using SolarPhobia.Application.Features.Hazards;
 using SolarPhobia.Application.Messages;
-using SolarPhobia.Application.Phase.Flow;
-using SolarPhobia.Application.Repositories;
-using SolarPhobia.Application.Services;
-using SolarPhobia.Application.Services.Interfaces;
-using SolarPhobia.Application.Services.Objective;
+using SolarPhobia.Application.Features.Phase.Flow;
+using SolarPhobia.Application.Features.Phase.Timeline;
+using SolarPhobia.Domain.Repositories;
+using SolarPhobia.Application.Features.Resources;
+using SolarPhobia.Application.Features.Audio;
+using SolarPhobia.Application.Features.Ward;
+using SolarPhobia.Application.Features.Phase.Reset;
+using SolarPhobia.Application.Features.Phase.Day;
+using SolarPhobia.Application.Features.Shrines;
 using SolarPhobia.Domain.ValueObjects;
+using SolarPhobia.Infrastructure.Features.Soul;
 using UnityEngine;
-using PhaseDayPhaseMechanicsService = SolarPhobia.Application.Phase.Day.DayPhaseMechanicsService;
-using PhaseDayPhaseTimelineService = SolarPhobia.Application.Phase.Timeline.DayPhaseTimelineService;
-using NightToDayResetService = SolarPhobia.Application.Phase.Reset.NightToDayResetService;
-using ApplicationWardTimerService = SolarPhobia.Application.Services.IWardTimerService;
-using PhaseWardTimerService = SolarPhobia.Infrastructure.Services.WardTimerService;
-using NgocCotService = SolarPhobia.Application.Services.NgocCotService;
-using RitualAssignmentService = SolarPhobia.Application.Services.RitualAssignmentService;
-using WardDeathTriggerService = SolarPhobia.Application.Services.Objective.WardDeathTriggerService;
-
+using PhaseDayPhaseMechanicsService = SolarPhobia.Application.Features.Phase.Day.DayPhaseMechanicsService;
+using PhaseDayPhaseTimelineService = SolarPhobia.Application.Features.Phase.Timeline.DayPhaseTimelineService;
+using NightToDayResetService = SolarPhobia.Application.Features.Phase.Reset.NightToDayResetService;
+using ApplicationWardTimerService = SolarPhobia.Application.Features.Ward.IWardTimerPort;
+using PhaseWardTimerService = SolarPhobia.Infrastructure.Features.Ward.WardTimerService;
+using NgocCotService = SolarPhobia.Application.Features.Resources.NgocCotService;
+using RitualAssignmentService = SolarPhobia.Application.Features.Rituals.RitualAssignmentService;
+using WardDeathTriggerService = SolarPhobia.Application.Features.Phase.Reset.WardDeathTriggerService;
 namespace SolarPhobia.Application.Tests
 {
     [TestFixture]
@@ -168,7 +173,7 @@ namespace SolarPhobia.Application.Tests
             Assert.That(_phaseMachine.TryTransition(PhaseState.NightSurvival), Is.True);
         }
 
-        private sealed class NoOpAudioService : IAudioService
+        private sealed class NoOpAudioService : IAudioCueService
         {
             public void PlayDashSound() { }
             public void PlayShoveImpact() { }
@@ -329,3 +334,9 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+
+

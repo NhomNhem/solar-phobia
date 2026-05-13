@@ -4,7 +4,7 @@ using R3;
 using SolarPhobia.Domain;
 using SolarPhobia.Domain.Events;
 using SolarPhobia.Domain.ValueObjects;
-using SolarPhobia.Infrastructure.Services;
+using SolarPhobia.Infrastructure.Features.Sensory;
 
 namespace SolarPhobia.Infrastructure.Tests
 {
@@ -12,7 +12,7 @@ namespace SolarPhobia.Infrastructure.Tests
     /// Validates: TR-state-005 — Sensory Tiers — Detection Threshold Feedback
     /// Story 009: Sensory Tiers — Detection Threshold Feedback
     /// </summary>
-    public class SensoryTierTests
+    public class SensoryTierTests : System.IDisposable
     {
         private SensoryTierService _sensoryTierService;
         private Subject<NightFailedEvent> _nightFailedSubject;
@@ -28,6 +28,12 @@ namespace SolarPhobia.Infrastructure.Tests
 
         [TearDown]
         public void TearDown()
+        {
+            _nightFailedSubject?.Dispose();
+            _wardObservable?.Dispose();
+        }
+
+        public void Dispose()
         {
             _nightFailedSubject?.Dispose();
             _wardObservable?.Dispose();

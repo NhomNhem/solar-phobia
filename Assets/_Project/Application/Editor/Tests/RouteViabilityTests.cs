@@ -1,6 +1,30 @@
 // Assets/_Project/Application/Editor/Tests/RouteViabilityTests.cs
 using NUnit.Framework;
-using SolarPhobia.Application.Map.Analysis;
+using SolarPhobia.Application.Features.Map.Analysis;
+
+using SolarPhobia.Application.Features.Resources;
+
+using SolarPhobia.Application.Features.Strike;
+
+using SolarPhobia.Application.Features.Consequences.WaterTrap;
+
+using SolarPhobia.Application.Features.Rituals;
+
+using SolarPhobia.Application.Features.Shrines;
+
+using SolarPhobia.Application.Features.Day;
+
+using SolarPhobia.Application.Features.Phase.Flow;
+
+using SolarPhobia.Application.Features.Player.State;
+
+using SolarPhobia.Application.Features.Player.Input;
+
+using SolarPhobia.Application.Features.Player.Interactions;
+
+using SolarPhobia.Application.Features.Player.Cursor;
+
+using SolarPhobia.Application.Features.Player.Events;
 
 namespace SolarPhobia.Application.Tests
 {
@@ -16,7 +40,7 @@ namespace SolarPhobia.Application.Tests
         [Test]
         public void AC1_SufficientWard_IsViable_True()
         {
-            // distance=100, speed=5 → travel=20s; buffer=12; need >32s; ward=50 ✓
+            // distance=100, speed=5 → travel=20s; buffer=12; need >32s; ward=50 âœ“
             bool result = RouteViabilityCalculator.IsRouteViable(
                 wardRemaining: 50f, distanceToGoal: 100f,
                 effectiveMoveSpeed: 5f, safetyBufferSec: 12f);
@@ -107,3 +131,8 @@ namespace SolarPhobia.Application.Tests
         }
     }
 }
+
+
+
+
+
